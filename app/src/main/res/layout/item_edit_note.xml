@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/editBookNoteHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_note"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Book Heading Input -->
+    <EditText
+            android:id="@+id/bookNoteHeadingEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/heading"
+            android:inputType="text" />
+
+    <!-- Book Note Status Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/bookNoteStatusTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/book_status"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/bookNoteStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Book Note Description Input -->
+    <TextView
+            android:id="@+id/bookNoteDescriptionTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/note_description"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/bookNoteDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:autofillHints=""
+            android:gravity="top|start"
+            android:inputType="textMultiLine"
+            android:lines="5"
+            android:background="@android:drawable/edit_text"
+            android:hint="@string/enter_your_note_max_1000_chars"
+            android:maxLength="1000"
+            android:padding="12dp"
+            android:textSize="16sp"/>
+
+    <!-- Save Button -->
+    <!-- Add Button -->
+    <Button
+            android:id="@+id/editBookNoteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_note"/>
+    <Button
+            android:id="@+id/saveBookNoteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/cancelBookNoteButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:visibility="gone"/>
+
+</LinearLayout>

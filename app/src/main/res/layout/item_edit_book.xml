@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/editBookHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_book"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Book Name Input -->
+    <EditText
+            android:id="@+id/bookNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/book_name"
+            android:inputType="text" />
+
+    <!-- Book Genre Multi-Select Dropdown (TextView as a Button) -->
+    <TextView
+            android:id="@+id/bookGenreTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/book_genre"
+            android:layout_marginBottom="8dp" />
+
+    <TextView
+            android:id="@+id/bookGenreMultiSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:text="@string/select_genre"
+            android:drawableEnd="@android:drawable/arrow_down_float"
+            android:focusable="true"
+            android:clickable="true" />
+
+    <!-- Book Status Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/bookStatusTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/book_status"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/bookStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Author Name Input -->
+    <EditText
+            android:id="@+id/bookAuthorNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/book_author"
+            android:inputType="text" />
+
+    <!-- Publication Name Input -->
+    <EditText
+            android:id="@+id/bookPublicationNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/book_publication"
+            android:inputType="text" />
+
+    <!-- Purchased Radio Group -->
+    <TextView
+            android:id="@+id/purchasedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchased"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/purchasedBookGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchasedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/purchasedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Wishlist Radio Group -->
+    <TextView
+            android:id="@+id/wishlistTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wishlist"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/wishlistBookGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/wishlistYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/wishlistNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Started Radio Group -->
+    <TextView
+            android:id="@+id/startedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/started"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/startedBookGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/startedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/startedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Completed Radio Group -->
+    <TextView
+            android:id="@+id/completedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completed"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/completedBookGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/completedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/completedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Backlog Radio Group -->
+    <TextView
+            android:id="@+id/backlogTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backlog"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/backlogBookGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/backlogYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/backlogNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Save Button -->
+    <!-- Add Button -->
+    <Button
+            android:id="@+id/editBookButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_book"/>
+    <Button
+            android:id="@+id/saveBookButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/cancelBookButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:visibility="gone"/>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@android:color/darker_gray"
+            android:layout_marginVertical="8dp"/>
+
+    <Button
+            android:id="@+id/addBookNotesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_note"/>
+
+    <TextView
+            android:id="@+id/bookNoteListHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin"
+            android:text="@string/notes"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/bookNotesEmptyStateMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:text="@string/no_notes_available"
+            android:visibility="gone"/>
+    <!-- Initially hidden -->
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewBookNotes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="@dimen/fab_margin"
+            android:clickable="true"
+            android:isScrollContainer="true"
+            android:clipToPadding="false"/>
+
+</LinearLayout>

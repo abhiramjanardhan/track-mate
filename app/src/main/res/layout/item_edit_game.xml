@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/editGameHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/view_game"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Game Name Input -->
+    <EditText
+            android:id="@+id/gameNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/game_name"
+            android:text="@string/game_name"
+            android:inputType="text" />
+
+    <!-- Game Status Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/statusTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/game_status"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/gameStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Purchased Radio Group -->
+    <TextView
+            android:id="@+id/purchasedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchased"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/purchasedRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchasedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/purchasedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Wishlist Radio Group -->
+    <TextView
+            android:id="@+id/wishlistTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wishlist"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/wishlistRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/wishlistYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/wishlistNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Purchased Type Radio Group -->
+    <TextView
+            android:id="@+id/purchaseTypeTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_type"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:id="@+id/purchaseTypeGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchaseTypePhysical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/physical" />
+        <RadioButton
+                android:id="@+id/purchaseTypeDigital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/digital" />
+        <RadioButton
+                android:id="@+id/purchaseTypeNotDecided"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_decided" />
+    </RadioGroup>
+
+    <!-- Purchased Mode Radio Group -->
+    <TextView
+            android:id="@+id/purchaseModeTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_mode"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/purchaseModeRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchaseModePurchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase" />
+        <RadioButton
+                android:id="@+id/purchaseModeSubscription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/subscription" />
+        <RadioButton
+                android:id="@+id/purchaseModeNotYet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_yet" />
+    </RadioGroup>
+
+    <!-- Started Radio Group -->
+    <TextView
+            android:id="@+id/startedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/started"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/startedRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/startedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/startedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Completed Radio Group -->
+    <TextView
+            android:id="@+id/completedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completed"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/completedRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/completedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/completedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Want To Go for 100% Radio Group -->
+    <TextView
+            android:id="@+id/full100TextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/want_to_go_for_100"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/full100RadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/wantToGoFor100PercentYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/wantToGoFor100PercentNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Backlog Radio Group -->
+    <TextView
+            android:id="@+id/backlogTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backlog"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/backlogRadioGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/backlogYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/backlogNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Save Button -->
+    <!-- Add Button -->
+    <Button
+            android:id="@+id/editGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_game"/>
+    <Button
+            android:id="@+id/saveGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/cancelGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:visibility="gone"/>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@android:color/darker_gray"
+            android:layout_marginVertical="8dp"/>
+
+    <Button
+            android:id="@+id/addDLCButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_dlc"/>
+
+    <TextView
+            android:id="@+id/dlcListHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/fab_margin"
+            android:text="@string/dlcs"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/dlcsEmptyStateMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/fab_margin"
+            android:layout_marginTop="@dimen/fab_margin"
+            android:text="@string/no_dlcs_available"
+            android:visibility="gone"/>
+    <!-- Initially hidden -->
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewGameDLCs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="@dimen/fab_margin"
+            android:clickable="true"
+            android:isScrollContainer="true"
+            android:clipToPadding="false"/>
+</LinearLayout>

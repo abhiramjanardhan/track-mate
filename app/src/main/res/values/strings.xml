@@ -1,0 +1,248 @@
+<resources>
+    <string name="app_name">TrackMate</string>
+    <string name="settings">Settings</string>
+    <string name="welcome_to_track_mate">Welcome to TrackMate!</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="lorem_ipsum">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris volutpat, dolor id
+        interdum ullamcorper, risus dolor egestas lectus, sit amet mattis purus dui nec risus. Maecenas non sodales
+        nisi, vel dictum dolor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
+        himenaeos. Suspendisse blandit eleifend diam, vel rutrum tellus vulputate quis. Aliquam eget libero aliquet,
+        imperdiet nisl a, ornare ex. Sed rhoncus est ut libero porta lobortis. Fusce in dictum tellus.\n\n
+        Suspendisse interdum ornare ante. Aliquam nec cursus lorem. Morbi id magna felis. Vivamus egestas, est a
+        condimentum egestas, turpis nisl iaculis ipsum, in dictum tellus dolor sed neque. Morbi tellus erat, dapibus ut
+        sem a, iaculis tincidunt dui. Interdum et malesuada fames ac ante ipsum primis in faucibus. Curabitur et eros
+        porttitor, ultricies urna vitae, molestie nibh. Phasellus at commodo eros, non aliquet metus. Sed maximus nisl
+        nec dolor bibendum, vel congue leo egestas.\n\n
+        Sed interdum tortor nibh, in sagittis risus mollis quis. Curabitur mi odio, condimentum sit amet auctor at,
+        mollis non turpis. Nullam pretium libero vestibulum, finibus orci vel, molestie quam. Fusce blandit tincidunt
+        nulla, quis sollicitudin libero facilisis et. Integer interdum nunc ligula, et fermentum metus hendrerit id.
+        Vestibulum lectus felis, dictum at lacinia sit amet, tristique id quam. Cras eu consequat dui. Suspendisse
+        sodales nunc ligula, in lobortis sem porta sed. Integer id ultrices magna, in luctus elit. Sed a pellentesque
+        est.\n\n
+        Aenean nunc velit, lacinia sed dolor sed, ultrices viverra nulla. Etiam a venenatis nibh. Morbi laoreet, tortor
+        sed facilisis varius, nibh orci rhoncus nulla, id elementum leo dui non lorem. Nam mollis ipsum quis auctor
+        varius. Quisque elementum eu libero sed commodo. In eros nisl, imperdiet vel imperdiet et, scelerisque a mauris.
+        Pellentesque varius ex nunc, quis imperdiet eros placerat ac. Duis finibus orci et est auctor tincidunt. Sed non
+        viverra ipsum. Nunc quis augue egestas, cursus lorem at, molestie sem. Morbi a consectetur ipsum, a placerat
+        diam. Etiam vulputate dignissim convallis. Integer faucibus mauris sit amet finibus convallis.\n\n
+        Phasellus in aliquet mi. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis
+        egestas. In volutpat arcu ut felis sagittis, in finibus massa gravida. Pellentesque id tellus orci. Integer
+        dictum, lorem sed efficitur ullamcorper, libero justo consectetur ipsum, in mollis nisl ex sed nisl. Donec
+        maximus ullamcorper sodales. Praesent bibendum rhoncus tellus nec feugiat. In a ornare nulla. Donec rhoncus
+        libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus vestibulum. Fusce
+        dictum libero quis erat maximus, vitae volutpat diam dignissim.
+    </string>
+    <string name="platform_games">Platform Games</string>
+    <string name="moviePlatform">Platform</string>
+    <string name="game_name">Game Name</string>
+    <string name="purchased">Purchased</string>
+    <string name="wishlist">Wishlist</string>
+    <string name="started">Started</string>
+    <string name="completed">Completed</string>
+    <string name="status">Status</string>
+    <string name="game_platform">Platform</string>
+    <string name="backlog">Backlog</string>
+    <string name="want_to_go_for_100">Want to go for 100%</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="games_list">Games List</string>
+    <string name="no_information_available">No information available</string>
+    <string name="no_games_available">No games available</string>
+    <string name="game_status">Game Status</string>
+    <string name="select_a_subcategory">Select a Subcategory</string>
+    <string name="add_game">Add Game</string>
+    <string name="enter_game_name">Enter game name</string>
+    <string name="save_game">Save Game</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="purchase_mode">Purchase Mode</string>
+    <string name="purchase">Purchase</string>
+    <string name="subscription">Subscription</string>
+    <string name="not_yet">Not Yet</string>
+    <string name="add_new_game">Add New Game</string>
+    <string name="view_game">View Game</string>
+    <string name="edit_game">Edit Game</string>
+    <string name="go_back">Go Back</string>
+    <string name="category_list">Category List</string>
+    <string name="add_category">Add Category</string>
+    <string name="no_category_available">No Category Available</string>
+    <string name="book_name">Book Name</string>
+    <string name="book_status">Book Status</string>
+    <string name="music_name">Music Name</string>
+    <string name="music_status">Music Status</string>
+    <string name="movie_name">Movie Name</string>
+    <string name="movie_status">Movie Status</string>
+    <string name="television_series_name">Television Series Name</string>
+    <string name="television_series_status">Television Series Status</string>
+    <string name="television_series_total_episodes_count">Television Series Total Episodes Count</string>
+    <string name="add_new_movie">Add New Movie</string>
+    <string name="platform">Platform</string>
+    <string name="movie_genre">Movie Genre</string>
+    <string name="select_genre">Select Genre</string>
+    <string name="language">Language</string>
+    <string name="sub_category_description">Sub Category Description</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="manage_sub_application">Manage Sub Application</string>
+    <string name="todo">TODO</string>
+    <string name="sub_applications">Sub Applications</string>
+    <string name="add_sub_applications">Add Sub Applications</string>
+    <string name="no_sub_applications_available">No Sub Applications Available</string>
+    <string name="sub_application_description">Sub Application Description</string>
+    <string name="add_sub_application">Add Sub Application</string>
+    <string name="no_platforms_available">No Platforms Available</string>
+    <string name="edit_platform">Edit Platform</string>
+    <string name="add_platform">Add Platform</string>
+    <string name="platform_description">Platform Description</string>
+    <string name="delete">Delete</string>
+    <string name="purchase_type">Purchase Type</string>
+    <string name="physical">Physical</string>
+    <string name="digital">Digital</string>
+    <string name="not_decided">Not Decided</string>
+    <string name="movies_list">Movies List</string>
+    <string name="no_movies_available">No Movies Available</string>
+    <string name="television_series_list">Television Series List</string>
+    <string name="no_television_series_available">No Television Series Available</string>
+    <string name="no_music_available">No Music Available</string>
+    <string name="music_list">Music List</string>
+    <string name="books_list">Books List</string>
+    <string name="no_books_available">No Books Available</string>
+    <string name="manage_platform">Manage Platform</string>
+    <string name="no_dlcs_available">No DLCs Available</string>
+    <string name="add_dlc">Add DLC</string>
+    <string name="dlc_name">DLC Name</string>
+    <string name="dlc_status">DLC Status</string>
+    <string name="dlc_type">DLC Type</string>
+    <string name="add_new_dlc">Add New DLC</string>
+    <string name="game_dlc_name">Game DLC Name</string>
+    <string name="story">Story</string>
+    <string name="multi_player">Multi Player</string>
+    <string name="cosmetics">Cosmetics</string>
+    <string name="other">Other</string>
+    <string name="dlcs">DLCs</string>
+    <string name="edit_game_dlc">Edit Game DLC</string>
+    <string name="view_game_dlc">View Game DLC</string>
+    <string name="edit_movie">Edit Movie</string>
+    <string name="view_movie">View Movie</string>
+    <string name="add_new_television_series">Add New Television Series</string>
+    <string name="television_series_genre">Television Series Genre</string>
+    <string name="total_seasons">Total Seasons</string>
+    <string name="total_number_of_episodes_in_the_series">Total Number of Episodes in the Series</string>
+    <string name="current_season">Current Season</string>
+    <string name="current_season_episode_number">Current Season Episode Number</string>
+    <string name="edit_television_series">Edit Television Series</string>
+    <string name="add_new_book">Add New Book</string>
+    <string name="book_genre">Book Genre</string>
+    <string name="book_author">Book Author</string>
+    <string name="book_publication">Book Publication</string>
+    <string name="edit_book">Edit Book</string>
+    <string name="add_note">Add Note</string>
+    <string name="notes">Notes</string>
+    <string name="no_notes_available">No Notes Available</string>
+    <string name="view_book">View Book</string>
+    <string name="book_note_name">Book Note Name</string>
+    <string name="book_note_status">Book Note Status</string>
+    <string name="heading">Heading</string>
+    <string name="enter_your_note_max_1000_chars">Enter your note (max 1000 chars)</string>
+    <string name="note_description">Note Description</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="add_new_music">Add New Music</string>
+    <string name="album_name">Album Name</string>
+    <string name="artist_name">Artist Name</string>
+    <string name="edit_music">Edit Music</string>
+    <string name="follow_system">Follow System</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="light_mode">Light Mode</string>
+    <string name="theme">Theme</string>
+
+    <!-- Platforms -->
+    <string-array name="game_platforms">
+        <item>PlayStation</item>
+        <item>XBox</item>
+        <item>Nintendo</item>
+        <item>PC</item>
+    </string-array>
+
+    <!-- Game Statuses -->
+    <string-array name="game_statuses">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Story Completed</item>
+        <item>Story with DLC Completed</item>
+        <item>Fully Completed</item>
+    </string-array>
+
+    <string-array name="game_dlc_statuses">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Fully Completed</item>
+    </string-array>
+
+    <!-- Movie Statuses -->
+    <string-array name="movie_statuses">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+    </string-array>
+
+    <!-- Television Series Statuses -->
+    <string-array name="television_series_statuses">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Completed</item>
+    </string-array>
+
+    <!-- Movie Languages -->
+    <string-array name="movie_languages">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Malayalam</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Television Series Languages -->
+    <string-array name="television_series_languages">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Malayalam</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Music Languages -->
+    <string-array name="music_languages">
+        <item>English</item>
+        <item>Hindi</item>
+        <item>Kannada</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Malayalam</item>
+        <item>Other</item>
+    </string-array>
+
+    <!-- Book Statuses -->
+    <string-array name="book_statuses">
+        <item>Not Started</item>
+        <item>In Progress</item>
+        <item>Story Completed</item>
+        <item>Completed</item>
+    </string-array>
+
+    <!-- Book Note Statuses -->
+    <string-array name="book_note_statuses">
+        <item>Not Applicable</item>
+        <item>Started</item>
+        <item>Completed</item>
+    </string-array>
+</resources>

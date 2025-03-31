@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:padding="16dp"
+              tools:context=".activities.game.AddDLCActivity">
+
+    <TextView
+            android:id="@+id/addGameDLCHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_dlc"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Game Name Input -->
+    <EditText
+            android:id="@+id/gameDLCNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/game_dlc_name"
+            android:inputType="text" />
+
+    <!-- Game Status Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/gameDLCStatusTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dlc_status"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/gameDLCStatusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Purchased Radio Group -->
+    <TextView
+            android:id="@+id/purchasedDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchased"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchasedDLCYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/purchasedDLCNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Wishlist Radio Group -->
+    <TextView
+            android:id="@+id/wishlistDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wishlist"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/wishlistDLCYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/wishlistDLCNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- DLC Type Radio Group -->
+    <TextView
+            android:id="@+id/dlcTypeTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dlc_type"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/dlcTypeStory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/story" />
+        <RadioButton
+                android:id="@+id/dlcTypeMultiPlayer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/multi_player" />
+        <RadioButton
+                android:id="@+id/dlcTypeCosmetics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/cosmetics" />
+        <RadioButton
+                android:id="@+id/dlcTypeOther"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/other" />
+    </RadioGroup>
+
+    <!-- Purchased Type Radio Group -->
+    <TextView
+            android:id="@+id/purchaseTypeDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_type"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchaseTypeDLCPhysical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/physical" />
+        <RadioButton
+                android:id="@+id/purchaseTypeDLCDigital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/digital" />
+        <RadioButton
+                android:id="@+id/purchaseTypeDLCNotDecided"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_decided" />
+    </RadioGroup>
+
+    <!-- Purchased Mode Radio Group -->
+    <TextView
+            android:id="@+id/purchaseModeDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/purchase_mode"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/purchaseModeDLCPurchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/purchase" />
+        <RadioButton
+                android:id="@+id/purchaseModeDLCSubscription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/subscription" />
+        <RadioButton
+                android:id="@+id/purchaseModeDLCNotYet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_yet" />
+    </RadioGroup>
+
+    <!-- Started Radio Group -->
+    <TextView
+            android:id="@+id/startedDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/started"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/startedDLCYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/startedDLCNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Completed Radio Group -->
+    <TextView
+            android:id="@+id/completedDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completed"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/completedDLCYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/completedDLCNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Backlog Radio Group -->
+    <TextView
+            android:id="@+id/backlogDLCTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backlog"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/backlogDLCYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/backlogDLCNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Save Button -->
+    <Button
+            android:id="@+id/saveDLCButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save" />
+</LinearLayout>

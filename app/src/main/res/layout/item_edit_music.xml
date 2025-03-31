@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/editMusicHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_new_music"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Music Name Input -->
+    <EditText
+            android:id="@+id/musicNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/music_name"
+            android:inputType="text" />
+
+    <!-- Music Language Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/musicLanguageTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/musicLanguageSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Music Artist Name Input -->
+    <EditText
+            android:id="@+id/musicArtistNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/artist_name"
+            android:inputType="text" />
+
+    <!-- Music Album Name Input -->
+    <EditText
+            android:id="@+id/musicAlbumNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/album_name"
+            android:inputType="text" />
+
+    <!-- Save Button -->
+    <!-- Add Button -->
+    <Button
+            android:id="@+id/editMusicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_music"/>
+    <Button
+            android:id="@+id/saveMusicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/cancelMusicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:visibility="gone"/>
+
+</LinearLayout>

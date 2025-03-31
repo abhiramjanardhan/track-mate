@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:gravity="center">
+
+    <TextView
+            android:id="@+id/textViewEntertainmentCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/fab_margin"
+            android:text="@string/view_game"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="@dimen/fab_margin"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewEntertainmentCategory"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/emptySubCategoryStateMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_platforms_available"
+            android:visibility="gone" />
+    <!-- Initially hidden -->
+</LinearLayout>

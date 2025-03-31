@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/editTelevisionSeriesHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_television_series"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+    <!-- Television Series Name Input -->
+    <EditText
+            android:id="@+id/televisionSeriesNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:hint="@string/television_series_name"
+            android:inputType="text" />
+
+    <!-- Television Series Language Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/televisionSeriesLanguageTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/televisionSeriesLanguageEditSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    <!-- Television Series Genre Multi-Select Dropdown (TextView as a Button) -->
+    <TextView
+            android:id="@+id/televisionSeriesGenreTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/television_series_genre"
+            android:layout_marginBottom="8dp" />
+
+    <TextView
+            android:id="@+id/televisionSeriesGenreEditMultiSelect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/edit_text"
+            android:padding="12dp"
+            android:text="@string/select_genre"
+            android:drawableEnd="@android:drawable/arrow_down_float"
+            android:focusable="true"
+            android:clickable="true" />
+
+    <!-- Television Series Status Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/televisionSeriesStatusTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/television_series_status"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/televisionSeriesStatusEditSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    <!-- Wishlist Radio Group -->
+    <TextView
+            android:id="@+id/wishlistTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/wishlist"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/wishlistTelevisionSeriesGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/wishlistYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/wishlistNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Started Radio Group -->
+    <TextView
+            android:id="@+id/startedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/started"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/startedTelevisionSeriesGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/startedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/startedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Completed Radio Group -->
+    <TextView
+            android:id="@+id/completedTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/completed"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/completedTelevisionSeriesGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/completedYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/completedNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
+    <!-- Backlog Radio Group -->
+    <TextView
+            android:id="@+id/backlogTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/backlog"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/backlogTelevisionSeriesGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RadioButton
+                android:id="@+id/backlogYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes"/>
+
+        <RadioButton
+                android:id="@+id/backlogNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no"/>
+    </RadioGroup>
+
+    <!-- Television Series Total Seasons -->
+    <TextView
+            android:id="@+id/televisionSeriesTotalSeasonsTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_seasons"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/televisionSeriesEditTotalSeasons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/total_seasons"
+            android:digits="0123456789"/>
+
+    <!-- Television Series Total Episode Count -->
+    <TextView
+            android:id="@+id/televisionSeriesTotalSeasonsEpisodesTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total_number_of_episodes_in_the_series"
+            android:layout_marginBottom="8dp" />
+
+    <EditText
+            android:id="@+id/televisionSeriesEditTotalSeasonsEpisodes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/total_number_of_episodes_in_the_series"
+            android:digits="0123456789"/>
+
+    <!-- Television Series Current Season -->
+    <TextView
+            android:id="@+id/televisionSeriesCurrentSeasonTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_season"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/televisionSeriesEditCurrentSeason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/current_season"
+            android:digits="0123456789"/>
+
+    <!-- Television Series Current Season Episode Number -->
+    <TextView
+            android:id="@+id/televisionSeriesCurrentSeasonEpisodeNumberTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_season_episode_number"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/televisionSeriesEditCurrentSeasonEpisodeNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:hint="@string/current_season_episode_number"
+            android:digits="0123456789"/>
+
+    <!-- Save Button -->
+    <!-- Add Button -->
+    <Button
+            android:id="@+id/editTelevisionSeriesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_movie"/>
+    <Button
+            android:id="@+id/saveTelevisionSeriesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:visibility="gone"/>
+    <Button
+            android:id="@+id/cancelTelevisionSeriesButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:visibility="gone"/>
+</LinearLayout>
