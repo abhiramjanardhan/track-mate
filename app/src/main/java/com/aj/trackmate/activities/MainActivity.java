@@ -33,15 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-    private void refreshDB() {
-        executorService.execute(() -> {
-            //this.deleteDatabase("application_database");
-            //this.deleteDatabase("game_database");
-            this.deleteDatabase("book_database");
-            Log.d("Application", "Database deleted");
-        });
-    }
-
     private void refreshData() {
         // Use ViewModelProvider with Factory
         MainViewModelFactory factory = new MainViewModelFactory(this, this);
@@ -85,8 +76,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerViewCategories = findViewById(R.id.recyclerViewCategories);
         recyclerViewCategories.setLayoutManager(new LinearLayoutManager(this));
         emptyStateMessage = findViewById(R.id.mainEmptyStateMessage);
-
-        //refreshDB();
 
         refreshData();
     }
