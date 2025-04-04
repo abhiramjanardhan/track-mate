@@ -20,14 +20,11 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# Keep all ViewModels (to avoid errors)
--keep class com.aj.trackmate.models.view.** { *; }
-
-# Keep Retrofit model classes
--keep class com.aj.trackmate.models.application.** { *; }
-
-# Do not obfuscate the MainActivity (if used for reflection)
--keep class com.aj.trackmate.activities.MainActivity { *; }
+# Keep all classes in the package
+-keep class com.aj.trackmate.** { *; }
+-keepclassmembers class * {
+    @androidx.room.* <methods>;
+}
 
 # Prevent Log.d from being included in release builds
 -assumenosideeffects class android.util.Log {

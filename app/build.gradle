@@ -18,11 +18,18 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation":"$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false  // Disable code shrinking
+            shrinkResources false  // Disable resource shrinking
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
