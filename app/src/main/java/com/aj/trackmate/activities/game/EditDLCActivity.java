@@ -13,8 +13,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.aj.trackmate.R;
 import com.aj.trackmate.database.GameDatabase;
+import com.aj.trackmate.models.application.Currency;
 import com.aj.trackmate.models.game.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
@@ -25,8 +28,8 @@ public class EditDLCActivity extends AppCompatActivity {
     private String dlcName;
     private boolean isEditMode = false;
     private TextView editGameDLCHeading;
-    private EditText gameNameEditText;
-    private Spinner gameStatusSpinner;
+    private EditText gameNameEditText, gameAmount, gameYear;
+    private Spinner gameStatusSpinner, currencySpinner;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton dlcTypeStory, dlcTypeMultiPlayer, dlcTypeCosmetics, dlcTypeOther;
@@ -94,6 +97,10 @@ public class EditDLCActivity extends AppCompatActivity {
         backlogYes = findViewById(R.id.backlogDLCYes);
         backlogNo = findViewById(R.id.backlogDLCNo);
 
+        gameAmount = findViewById(R.id.gameAmount);
+        currencySpinner = findViewById(R.id.currencySpinner);
+        gameYear = findViewById(R.id.gameYear);
+
         purchasedDLCGroup = findViewById(R.id.purchasedDLCGroup);
         wishlistDLCGroup = findViewById(R.id.wishlistDLCGroup);
         dlcTypeGroup = findViewById(R.id.dlcTypeGroup);
@@ -114,6 +121,17 @@ public class EditDLCActivity extends AppCompatActivity {
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gameStatusSpinner.setAdapter(statusAdapter);
 
+        // Get currency values from enum
+        List<String> currencyList = new ArrayList<>();
+        for (Currency currency : Currency.values()) {
+            currencyList.add(currency.getCurrency());
+        }
+
+        // Set to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencyList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setAdapter(adapter);
+
         Log.d("Edit Game DLC", "Game Id: " + gameId);
         Log.d("Edit Game DLC", "DLC Id: " + dlcId);
 
@@ -123,10 +141,16 @@ public class EditDLCActivity extends AppCompatActivity {
 
             if (currentDLC != null) {
                 gameNameEditText.setText(dlcName);
+                gameAmount.setText(String.valueOf(currentDLC.getAmount()));
+                gameYear.setText(String.valueOf(currentDLC.getYear()));
 
                 ArrayAdapter gameStatusSpinnerAdapter = (ArrayAdapter) gameStatusSpinner.getAdapter();
                 int position = gameStatusSpinnerAdapter.getPosition(currentDLC.getStatus().getStatus());
                 gameStatusSpinner.setSelection(position);
+
+                ArrayAdapter currencySpinnerAdapter = (ArrayAdapter) currencySpinner.getAdapter();
+                int currencyPosition = currencySpinnerAdapter.getPosition(currentDLC.getCurrency().getCurrency());
+                currencySpinner.setSelection(currencyPosition);
 
                 DownloadableContentType dlcType = currentDLC.getDlcType();
                 if (dlcType.equals(DownloadableContentType.STORY)) {
@@ -256,6 +280,10 @@ public class EditDLCActivity extends AppCompatActivity {
         backlogYes.setEnabled(enabled);
         backlogNo.setEnabled(enabled);
 
+        gameAmount.setEnabled(enabled);
+        currencySpinner.setEnabled(enabled);
+        gameYear.setEnabled(enabled);
+
         editButton.setVisibility(enabled ? View.GONE : View.VISIBLE);
         saveButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
         cancelButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
@@ -268,6 +296,44 @@ public class EditDLCActivity extends AppCompatActivity {
             // Get values from the input fields
             String gameName = gameNameEditText.getText().toString();
             String gameStatus = gameStatusSpinner.getSelectedItem().toString();
+            String selectedCurrency = currencySpinner.getSelectedItem().toString();
+            Currency currency = Currency.fromCurrency(selectedCurrency);
+            String yearText = gameYear.getText().toString();
+
+            double amount = 0.0;
+            try {
+                amount = Double.parseDouble(gameAmount.getText().toString());
+            } catch (NumberFormatException e) {
+                // handle invalid input
+                if (!gameAmount.getText().toString().isEmpty()) {
+                    // handle invalid input
+                    gameAmount.setError("Amount is invalid");
+                    gameAmount.requestFocus();
+                    return;
+                }
+            }
+
+            int year = 0;
+            if (yearText.length() == 4) {
+                try {
+                    year = Integer.parseInt(yearText);
+                    // Additional validation if needed (e.g., year range)
+                } catch (NumberFormatException e) {
+                    // handle invalid input
+                    if (!gameYear.getText().toString().isEmpty()) {
+                        gameYear.setError("Year is invalid");
+                        gameYear.requestFocus();
+                        return;
+                    }
+                }
+            } else {
+                // handle invalid input
+                if (!gameYear.getText().toString().isEmpty()) {
+                    gameYear.setError("Year is invalid");
+                    gameYear.requestFocus();
+                    return;
+                }
+            }
 
             boolean isPurchased = purchasedYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
@@ -308,6 +374,9 @@ public class EditDLCActivity extends AppCompatActivity {
             currentDLC.setCompleted(isCompleted);
             currentDLC.setStatus(DLCStatus.fromStatus(gameStatus));  // Convert string to enum
             currentDLC.setBacklog(isBacklog);
+            currentDLC.setAmount(amount);
+            currentDLC.setCurrency(currency);
+            currentDLC.setYear(year);
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 GameDatabase.getInstance(this).gameDao().updateDLC(currentDLC);

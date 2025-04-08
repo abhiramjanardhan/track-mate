@@ -16,14 +16,16 @@ import com.aj.trackmate.models.entertainment.relations.EntertainmentWithTelevisi
 import java.util.List;
 
 public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeriesAdapter.TelevisionSeriesViewHolder> {
-    private Context context;
+    private final Context context;
     private List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries;
-    private OnTelevisionSeriesClickListener onTelevisionSeriesClickListener;
+    private final OnTelevisionSeriesClickListener onTelevisionSeriesClickListener;
+    private final OnTelevisionSeriesLongClickListener onTelevisionSeriesLongClickListener;
 
-    public TelevisionSeriesAdapter(Context context, List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries, OnTelevisionSeriesClickListener listener) {
+    public TelevisionSeriesAdapter(Context context, List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries, OnTelevisionSeriesClickListener listener, OnTelevisionSeriesLongClickListener onTelevisionSeriesLongClickListener) {
         this.context = context;
         this.entertainmentWithTelevisionSeries = entertainmentWithTelevisionSeries;
         this.onTelevisionSeriesClickListener = listener;
+        this.onTelevisionSeriesLongClickListener = onTelevisionSeriesLongClickListener;
     }
 
     @Override
@@ -54,6 +56,15 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
             if (onTelevisionSeriesClickListener != null) {
                 onTelevisionSeriesClickListener.onTelevisionSeriesClick(tvSeries);
             }
+        });
+
+        // handle item long press
+        holder.itemView.setOnLongClickListener(v -> {
+            Log.d("ItemClicked", "Item pressed: " + entertainment.getName());
+            if (onTelevisionSeriesLongClickListener != null) {
+                onTelevisionSeriesLongClickListener.onTelevisionSeriesClick(v, position);
+            }
+            return true; // Long press handled
         });
     }
 
@@ -89,5 +100,9 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
 
     public interface OnTelevisionSeriesClickListener {
         void onTelevisionSeriesClick(EntertainmentWithTelevisionSeries entertainmentWithTelevisionSeries);
+    }
+
+    public interface OnTelevisionSeriesLongClickListener {
+        void onTelevisionSeriesClick(View view, int position);
     }
 }

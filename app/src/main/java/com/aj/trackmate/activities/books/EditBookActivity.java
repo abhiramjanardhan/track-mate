@@ -11,29 +11,25 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.books.BookNotesAdapter;
 import com.aj.trackmate.database.BookDatabase;
-import com.aj.trackmate.models.books.Book;
-import com.aj.trackmate.models.books.BookGenre;
-import com.aj.trackmate.models.books.BookNote;
-import com.aj.trackmate.models.books.BookStatus;
+import com.aj.trackmate.models.books.*;
 import com.aj.trackmate.models.books.relations.BookWithNotes;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.*;
 
-public class EditBookActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class EditBookActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private int bookId;
     private String bookName;
@@ -173,14 +169,13 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                     intent.putExtra("BOOK_NOTE_ID", bookNote.getId());
                     intent.putExtra("BOOK_NOTE_HEADING", bookNote.getHeading());
                     startActivityForResult(intent, REQUEST_CODE_BOOK_NOTES_EDIT);
+                }, (view, position) -> {
+                    LongPressCallBack longPressCallBack = new LongPressCallBack(bookNotesAdapter, this, this, this);
+                    longPressCallBack.handleLongPress(view, position, "Book Note");
                 });
 
                 recyclerViewBookNotes.setAdapter(bookNotesAdapter);
                 bookNotesAdapter.updateBookNotes(bookNotes);  // Notify adapter of new data
-
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(bookNotesAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(recyclerViewBookNotes);
 
                 bookNameEditText.setText(bookName);
                 bookAuthorNameEditText.setText(book.getAuthor());
@@ -355,7 +350,7 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                 Log.d("Book Note Action", "Save:" + newBookNote);
 
                 if (bookNotesAdapter == null) {
-                    bookNotesAdapter = new BookNotesAdapter(this, bookNotes, null);
+                    bookNotesAdapter = new BookNotesAdapter(this, bookNotes, null, null);
                     recyclerViewBookNotes.setAdapter(bookNotesAdapter);
                 }
 
@@ -445,5 +440,32 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        BookNote bookNote = bookNotes.get(position);
+        return bookNote.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(BookNoteStatus.values()).map(BookNoteStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        BookNote bookNote = bookNotes.get(position);
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            bookNote.setStatus(BookNoteStatus.fromStatus(value));
+            BookDatabase.getInstance(this).bookDao().updateNote(bookNote);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

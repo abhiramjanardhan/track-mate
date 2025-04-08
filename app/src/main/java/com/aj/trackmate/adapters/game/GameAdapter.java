@@ -18,11 +18,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     private Context context;
     private List<GameWithDownloadableContent> games;
     private final OnGameClickListener onGameClickListener;
+    private final OnGameLongClickListener onGameLongClickListener;
 
-    public GameAdapter(Context context, List<GameWithDownloadableContent> games, OnGameClickListener listener) {
+    public GameAdapter(Context context, List<GameWithDownloadableContent> games, OnGameClickListener listener, OnGameLongClickListener onGameLongClickListener) {
         this.context = context;
         this.games = games;
         this.onGameClickListener = listener;
+        this.onGameLongClickListener = onGameLongClickListener;
     }
 
     @Override
@@ -50,6 +52,15 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             if (onGameClickListener != null) {
                 onGameClickListener.onGameClick(gameWithDLCs);
             }
+        });
+
+        // handle item long press
+        holder.itemView.setOnLongClickListener(v -> {
+            Log.d("ItemClicked", "Item pressed: " + game.getName());
+            if (onGameLongClickListener != null) {
+                onGameLongClickListener.onGameClick(v, position);
+            }
+            return true; // Long press handled
         });
     }
 
@@ -85,5 +96,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
     public interface OnGameClickListener {
         void onGameClick(GameWithDownloadableContent game);
+    }
+
+    public interface OnGameLongClickListener {
+        void onGameClick(View view, int position);
     }
 }

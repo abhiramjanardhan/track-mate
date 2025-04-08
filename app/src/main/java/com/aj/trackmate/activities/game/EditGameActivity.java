@@ -2,6 +2,7 @@ package com.aj.trackmate.activities.game;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -11,34 +12,35 @@ import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.game.GameDLCAdapter;
 import com.aj.trackmate.database.GameDatabase;
+import com.aj.trackmate.models.application.Currency;
 import com.aj.trackmate.models.game.*;
 import com.aj.trackmate.models.game.relations.GameWithDownloadableContent;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_DLC_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_DLC_EDIT;
 
-public class EditGameActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class EditGameActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private GameWithDownloadableContent currentGame;
     private List<DownloadableContent> dlcs;
     private GameDLCAdapter gameDLCAdapter;
     private TextView dlcsEmptyStateMessage, editGameHeading;
     private RecyclerView gameDLCsRecyclerView;
-    private EditText gameNameEditText;
-    private Spinner gameStatusSpinner;
+    private EditText gameNameEditText, gameAmount, gameYear;
+    private Spinner gameStatusSpinner, currencySpinner;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
@@ -98,6 +100,10 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         backlogYes = findViewById(R.id.backlogYes);
         backlogNo = findViewById(R.id.backlogNo);
 
+        gameAmount = findViewById(R.id.gameAmount);
+        currencySpinner = findViewById(R.id.currencySpinner);
+        gameYear = findViewById(R.id.gameYear);
+
         addDLCButton = findViewById(R.id.addDLCButton);
         editGameHeading = findViewById(R.id.editGameHeading);
         dlcsEmptyStateMessage = findViewById(R.id.dlcsEmptyStateMessage);
@@ -109,6 +115,17 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                 R.array.game_statuses, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gameStatusSpinner.setAdapter(statusAdapter);
+
+        // Get currency values from enum
+        List<String> currencyList = new ArrayList<>();
+        for (Currency currency : Currency.values()) {
+            currencyList.add(currency.getCurrency());
+        }
+
+        // Set to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencyList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setAdapter(adapter);
 
         purchasedGroup = findViewById(R.id.purchasedRadioGroup);
         wishlistGroup = findViewById(R.id.wishlistRadioGroup);
@@ -163,20 +180,25 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                     intent.putExtra("DLC_ID", dlc.getId());
                     intent.putExtra("DLC_NAME", dlc.getName());
                     startActivityForResult(intent, REQUEST_CODE_GAME_DLC_EDIT);
-                });
+                }, ((view, position) -> {
+                    LongPressCallBack longPressCallBack = new LongPressCallBack(gameDLCAdapter, this, this, this);
+                    longPressCallBack.handleLongPress(view, position, "Game DLC");
+                }));
 
                 gameDLCsRecyclerView.setAdapter(gameDLCAdapter);
                 gameDLCAdapter.updateGames(dlcs);  // Notify adapter of new data
 
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(gameDLCAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(gameDLCsRecyclerView);
-
                 gameNameEditText.setText(originalGameName);
+                gameAmount.setText(String.valueOf(game.getAmount()));
+                gameYear.setText(String.valueOf(game.getYear()));
 
                 ArrayAdapter gameStatusSpinnerAdapter = (ArrayAdapter) gameStatusSpinner.getAdapter();
                 int position = gameStatusSpinnerAdapter.getPosition(game.getStatus().getStatus());
                 gameStatusSpinner.setSelection(position);
+
+                ArrayAdapter currencySpinnerAdapter = (ArrayAdapter) currencySpinner.getAdapter();
+                int currencyPosition = currencySpinnerAdapter.getPosition(game.getCurrency().getCurrency());
+                currencySpinner.setSelection(currencyPosition);
 
                 GamePurchaseMode purchaseMode = game.getPurchaseMode();
                 if (purchaseMode.equals(GamePurchaseMode.PURCHASE)) {
@@ -299,6 +321,10 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         backlogYes.setEnabled(enabled);
         backlogNo.setEnabled(enabled);
 
+        gameAmount.setEnabled(enabled);
+        currencySpinner.setEnabled(enabled);
+        gameYear.setEnabled(enabled);
+
         editButton.setVisibility(enabled ? View.GONE : View.VISIBLE);
         saveButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
         cancelButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
@@ -311,6 +337,44 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
             // Get values from the input fields
             String gameName = gameNameEditText.getText().toString();
             String gameStatus = gameStatusSpinner.getSelectedItem().toString();
+            String selectedCurrency = currencySpinner.getSelectedItem().toString();
+            Currency currency = Currency.fromCurrency(selectedCurrency);
+            String yearText = gameYear.getText().toString();
+
+            double amount = 0.0;
+            try {
+                amount = Double.parseDouble(gameAmount.getText().toString());
+            } catch (NumberFormatException e) {
+                // handle invalid input
+                if (!gameAmount.getText().toString().isEmpty()) {
+                    // handle invalid input
+                    gameAmount.setError("Amount is invalid");
+                    gameAmount.requestFocus();
+                    return;
+                }
+            }
+
+            int year = 0;
+            if (yearText.length() == 4) {
+                try {
+                    year = Integer.parseInt(yearText);
+                    // Additional validation if needed (e.g., year range)
+                } catch (NumberFormatException e) {
+                    // handle invalid input
+                    if (!gameYear.getText().toString().isEmpty()) {
+                        gameYear.setError("Year is invalid");
+                        gameYear.requestFocus();
+                        return;
+                    }
+                }
+            } else {
+                // handle invalid input
+                if (!gameYear.getText().toString().isEmpty()) {
+                    gameYear.setError("Year is invalid");
+                    gameYear.requestFocus();
+                    return;
+                }
+            }
 
             boolean isPurchased = purchasedYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
@@ -343,6 +407,9 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
             currentGame.game.setStatus(GameStatus.fromStatus(gameStatus));  // Convert string to enum
             currentGame.game.setWantToGoFor100Percent(want100Percent);
             currentGame.game.setBacklog(isBacklog);
+            currentGame.game.setAmount(amount);
+            currentGame.game.setCurrency(currency);
+            currentGame.game.setYear(year);
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 GameDatabase.getInstance(this).gameDao().update(currentGame.game);
@@ -380,12 +447,12 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         if (resultCode == RESULT_OK) {
             // Retrieve the new game from the result
             DownloadableContent newGame = null;
-            if (requestCode == REQUEST_CODE_GAME_DLC_ADD && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            if (requestCode == REQUEST_CODE_GAME_DLC_ADD && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 newGame = data.getParcelableExtra("NEW_GAME", DownloadableContent.class);
                 Log.d("Game DLC Action", "Save:" + newGame);
 
                 if (gameDLCAdapter == null) {
-                    gameDLCAdapter = new GameDLCAdapter(this, dlcs, null);
+                    gameDLCAdapter = new GameDLCAdapter(this, dlcs, null, null);
                     gameDLCsRecyclerView.setAdapter(gameDLCAdapter);
                 }
 
@@ -435,5 +502,32 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        DownloadableContent dlc = dlcs.get(position);
+        return dlc.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(DLCStatus.values()).map(DLCStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        DownloadableContent dlc = dlcs.get(position);
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            dlc.setStatus(DLCStatus.fromStatus(value));
+            GameDatabase.getInstance(this).gameDao().updateDLC(dlc);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

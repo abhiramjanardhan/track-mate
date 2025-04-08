@@ -15,14 +15,16 @@ import com.aj.trackmate.models.books.relations.BookWithNotes;
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
-    private Context context;
+    private final Context context;
     private List<BookWithNotes> books;
-    private OnBookClickListener onBookClickListener;
+    private final OnBookClickListener onBookClickListener;
+    private final OnBookLongClickListener onBookLongClickListener;
 
-    public BookAdapter(Context context, List<BookWithNotes> books, OnBookClickListener listener) {
+    public BookAdapter(Context context, List<BookWithNotes> books, OnBookClickListener listener, OnBookLongClickListener onBookLongClickListener) {
         this.context = context;
         this.books = books;
         this.onBookClickListener = listener;
+        this.onBookLongClickListener = onBookLongClickListener;
     }
 
     @Override
@@ -50,6 +52,15 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             if (onBookClickListener != null) {
                 onBookClickListener.onBookClick(bookWithNotes);
             }
+        });
+
+        // handle item long press
+        holder.itemView.setOnLongClickListener(v -> {
+            Log.d("ItemClicked", "Item pressed: " + book.getName());
+            if (onBookLongClickListener != null) {
+                onBookLongClickListener.onBookClick(v, position);
+            }
+            return true; // Long press handled
         });
     }
 
@@ -85,5 +96,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     public interface OnBookClickListener {
         void onBookClick(BookWithNotes bookWithNotes);
+    }
+
+    public interface OnBookLongClickListener {
+        void onBookClick(View view, int position);
     }
 }

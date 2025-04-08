@@ -16,9 +16,9 @@ import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMusic;
 import java.util.List;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
-    private Context context;
+    private final Context context;
     private List<EntertainmentWithMusic> entertainmentWithMusics;
-    private OnMusicClickListener onMusicClickListener;
+    private final OnMusicClickListener onMusicClickListener;
 
     public MusicAdapter(Context context, List<EntertainmentWithMusic> entertainmentWithMusic, OnMusicClickListener listener) {
         this.context = context;

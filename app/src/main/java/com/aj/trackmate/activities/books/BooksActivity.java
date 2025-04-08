@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -21,20 +20,24 @@ import com.aj.trackmate.models.books.BookFor;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import com.aj.trackmate.models.books.BookNote;
+import com.aj.trackmate.models.books.BookStatus;
 import com.aj.trackmate.models.books.relations.BookWithNotes;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_BOOKS_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_BOOKS_EDIT;
 
-public class BooksActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class BooksActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private ListView listView;
     private RecyclerView booksRecyclerView;
@@ -101,14 +104,13 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                         intent.putExtra("BOOK_NAME", book.book.getName());
                         intent.putExtra("BOOK_STATUS", book.book.getStatus().getStatus());
                         startActivityForResult(intent, REQUEST_CODE_BOOKS_EDIT);
+                    }, (view, position) -> {
+                        LongPressCallBack longPressCallBack = new LongPressCallBack(bookAdapter, this, this, this);
+                        longPressCallBack.handleLongPress(view, position, "Book");
                     });
                     booksRecyclerView.setAdapter(bookAdapter);
                     bookAdapter.updateGames(books);  // Notify adapter of new data
                 }
-
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(bookAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(booksRecyclerView);
             });
         } else {
             books = new ArrayList<>();
@@ -129,7 +131,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 Log.d("Book Action", "Save:" + newBook);
 
                 if (bookAdapter == null) {
-                    bookAdapter = new BookAdapter(this, books, null);
+                    bookAdapter = new BookAdapter(this, books, null, null);
                     booksRecyclerView.setAdapter(bookAdapter);
                 }
 
@@ -195,5 +197,33 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        BookWithNotes bookWithNotes = books.get(position);
+        return bookWithNotes.book.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(BookStatus.values()).map(BookStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        BookWithNotes bookWithNotes = books.get(position);
+        Book book = bookWithNotes.book;
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            book.setStatus(BookStatus.fromStatus(value));
+            BookDatabase.getInstance(this).bookDao().update(book);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

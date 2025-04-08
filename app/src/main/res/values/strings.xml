@@ -160,6 +160,9 @@
     <string name="dark_mode">Dark Mode</string>
     <string name="light_mode">Light Mode</string>
     <string name="theme">Theme</string>
+    <string name="amount">Amount</string>
+    <string name="currency">Currency</string>
+    <string name="year">Year</string>
 
     <!-- Platforms -->
     <string-array name="game_platforms">

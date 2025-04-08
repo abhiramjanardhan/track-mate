@@ -15,7 +15,7 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     private final ItemTouchListener itemTouchListener;
 
     public SwipeToDeleteCallback(RecyclerView.Adapter adapter, ItemRemovalListener itemRemovalListener, ItemTouchListener itemTouchListener) {
-        super(0, ItemTouchHelper.RIGHT); // Swipe right to delete
+        super(0, ItemTouchHelper.RIGHT); // Swipe left to delete
         this.adapter = adapter;
         this.itemRemovalListener = itemRemovalListener;
         this.itemTouchListener = itemTouchListener;

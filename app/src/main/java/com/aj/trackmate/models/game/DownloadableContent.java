@@ -3,10 +3,14 @@ package com.aj.trackmate.models.game;
 import android.os.Parcel;
 import android.os.Parcelable;
 import androidx.room.*;
+import com.aj.trackmate.models.application.Currency;
+import com.aj.trackmate.models.application.converters.CurrencyConverter;
 import com.aj.trackmate.models.game.converters.DLCStatusConverter;
 import com.aj.trackmate.models.game.converters.DownloadableContentTypeConverter;
 import com.aj.trackmate.models.game.converters.GamePurchaseModeConverter;
 import com.aj.trackmate.models.game.converters.GamePurchaseTypeConverter;
+
+import java.util.Calendar;
 
 @Entity(
         tableName = "game_downloadable_content",
@@ -37,6 +41,10 @@ public class DownloadableContent implements Parcelable {
     private boolean started;
     private boolean completed;
     private boolean backlog;
+    private double amount;
+    @TypeConverters(CurrencyConverter.class)
+    private Currency currency;
+    private int year;
 
     public int getId() {
         return id;
@@ -134,6 +142,30 @@ public class DownloadableContent implements Parcelable {
         this.backlog = backlog;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     public DownloadableContent() {
         name = "";
         dlcType = DownloadableContentType.OTHER;
@@ -144,6 +176,9 @@ public class DownloadableContent implements Parcelable {
         started = false;
         completed = false;
         backlog = false;
+        amount = 0.0;
+        currency = Currency.INR;
+        year = Calendar.getInstance().get(Calendar.YEAR);
     }
 
     // Parcelable Implementation
@@ -159,6 +194,9 @@ public class DownloadableContent implements Parcelable {
         completed = in.readByte() != 0;
         status = DLCStatus.fromStatus(in.readString());
         backlog = in.readByte() != 0;
+        amount = in.readDouble();
+        currency = Currency.fromCurrency(in.readString());
+        year = in.readInt();
     }
 
     public static final Parcelable.Creator<DownloadableContent> CREATOR = new Parcelable.Creator<DownloadableContent>() {
@@ -186,6 +224,9 @@ public class DownloadableContent implements Parcelable {
         dest.writeByte((byte) (completed ? 1 : 0));
         dest.writeString(status.getStatus());
         dest.writeByte((byte) (backlog ? 1 : 0));
+        dest.writeDouble(amount);
+        dest.writeString(currency.getCurrency());
+        dest.writeInt(year);
     }
 
     @Override

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.MovieAdapter;
@@ -18,24 +17,28 @@ import com.aj.trackmate.database.EntertainmentDatabase;
 import com.aj.trackmate.models.entertainment.Entertainment;
 import com.aj.trackmate.models.entertainment.EntertainmentCategory;
 import com.aj.trackmate.models.entertainment.Movie;
+import com.aj.trackmate.models.entertainment.MovieStatus;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.aj.trackmate.R;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_MOVIES_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_MOVIES_EDIT;
 
-public class MoviesActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class MoviesActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private ListView listView;
     private RecyclerView moviesRecyclerView;
@@ -103,14 +106,13 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                         intent.putExtra("MOVIE_NAME", entertainmentWithMovies.entertainment.getName());
                         intent.putExtra("MOVIE_LANGUAGE", entertainmentWithMovies.entertainment.getLanguage().getLanguage());
                         startActivityForResult(intent, REQUEST_CODE_ENTERTAINMENT_MOVIES_EDIT);
+                    }, (view, position) -> {
+                        LongPressCallBack longPressCallBack = new LongPressCallBack(movieAdapter, this, this, this);
+                        longPressCallBack.handleLongPress(view, position, "Movie");
                     });
                     moviesRecyclerView.setAdapter(movieAdapter);
                     movieAdapter.updateMovies(movies);
                 }
-
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(movieAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(moviesRecyclerView);
             });
         } else {
             movies = new ArrayList<>();
@@ -140,7 +142,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 newMovie = data.getParcelableExtra("NEW_MOVIE", EntertainmentWithMovies.class);
 
                 if (movieAdapter == null) {
-                    movieAdapter = new MovieAdapter(this, movies, null);
+                    movieAdapter = new MovieAdapter(this, movies, null, null);
                     moviesRecyclerView.setAdapter(movieAdapter);
                 }
 
@@ -193,5 +195,33 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        EntertainmentWithMovies entertainmentWithMovies = movies.get(position);
+        return entertainmentWithMovies.movie.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(MovieStatus.values()).map(MovieStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        EntertainmentWithMovies entertainmentWithMovies = movies.get(position);
+        Movie movie = entertainmentWithMovies.movie;
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            movie.setStatus(MovieStatus.fromStatus(value));
+            EntertainmentDatabase.getInstance(this).movieDao().update(movie);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

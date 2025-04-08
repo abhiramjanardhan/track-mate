@@ -17,11 +17,13 @@ public class BookNotesAdapter extends RecyclerView.Adapter<BookNotesAdapter.Book
     private final Context context;
     private List<BookNote> notes;
     private final OnBookNoteClickListener onBookNoteClickListener;
+    private final OnBookLongClickListener onBookLongClickListener;
 
-    public BookNotesAdapter(Context context, List<BookNote> notes, OnBookNoteClickListener listener) {
+    public BookNotesAdapter(Context context, List<BookNote> notes, OnBookNoteClickListener listener, OnBookLongClickListener onBookLongClickListener) {
         this.context = context;
         this.notes = notes;
         this.onBookNoteClickListener = listener;
+        this.onBookLongClickListener = onBookLongClickListener;
     }
 
     @Override
@@ -48,6 +50,15 @@ public class BookNotesAdapter extends RecyclerView.Adapter<BookNotesAdapter.Book
             if (onBookNoteClickListener != null) {
                 onBookNoteClickListener.onBookNoteClick(bookNote);
             }
+        });
+
+        // handle item long press
+        holder.itemView.setOnLongClickListener(v -> {
+            Log.d("ItemClicked", "Item pressed: " + bookNote.getHeading());
+            if (onBookLongClickListener != null) {
+                onBookLongClickListener.onBookClick(v, position);
+            }
+            return true; // Long press handled
         });
     }
 
@@ -83,5 +94,9 @@ public class BookNotesAdapter extends RecyclerView.Adapter<BookNotesAdapter.Book
 
     public interface OnBookNoteClickListener {
         void onBookNoteClick(BookNote bookNote);
+    }
+
+    public interface OnBookLongClickListener {
+        void onBookClick(View view, int position);
     }
 }

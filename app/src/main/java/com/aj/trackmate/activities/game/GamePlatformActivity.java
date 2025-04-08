@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -21,21 +20,25 @@ import com.aj.trackmate.adapters.game.GameAdapter;
 import com.aj.trackmate.database.GameDatabase;
 import com.aj.trackmate.models.game.DownloadableContent;
 import com.aj.trackmate.models.game.Game;
+import com.aj.trackmate.models.game.GameStatus;
 import com.aj.trackmate.models.game.Platform;
 import com.aj.trackmate.models.game.relations.GameWithDownloadableContent;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_EDIT;
 
-public class GamePlatformActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class GamePlatformActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private ListView listView;
     private RecyclerView gamesRecyclerView;
@@ -103,14 +106,13 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                         intent.putExtra("GAME_NAME", gameWithDownloadableContent.game.getName());
                         intent.putExtra("GAME_STATUS", gameWithDownloadableContent.game.getStatus());
                         startActivityForResult(intent, REQUEST_CODE_GAME_EDIT);
+                    }, (view, position) -> {
+                        LongPressCallBack longPressCallBack = new LongPressCallBack(gameAdapter, this, this, this);
+                        longPressCallBack.handleLongPress(view, position, "Game");
                     });
                     gamesRecyclerView.setAdapter(gameAdapter);
                     gameAdapter.updateGames(games);  // Notify adapter of new data
                 }
-
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(gameAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(gamesRecyclerView);
             });
         } else {
             games = new ArrayList<>();
@@ -131,7 +133,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 Log.d("Game Action", "Save:" + newGame);
 
                 if (gameAdapter == null) {
-                    gameAdapter = new GameAdapter(this, games, null);
+                    gameAdapter = new GameAdapter(this, games, null, null);
                     gamesRecyclerView.setAdapter(gameAdapter);
                 }
 
@@ -199,5 +201,33 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        GameWithDownloadableContent gameWithDownloadableContent = games.get(position);
+        return gameWithDownloadableContent.game.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(GameStatus.values()).map(GameStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        GameWithDownloadableContent gameWithDownloadableContent = games.get(position);
+        Game game = gameWithDownloadableContent.game;
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            game.setStatus(GameStatus.fromStatus(value));
+            GameDatabase.getInstance(this).gameDao().update(game);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

@@ -10,32 +10,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.TelevisionSeriesAdapter;
 import com.aj.trackmate.database.EntertainmentDatabase;
-import com.aj.trackmate.models.entertainment.Entertainment;
-import com.aj.trackmate.models.entertainment.EntertainmentCategory;
-import com.aj.trackmate.models.entertainment.TelevisionSeries;
+import com.aj.trackmate.models.entertainment.*;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithTelevisionSeries;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import com.aj.trackmate.R;
-import com.aj.trackmate.operations.SwipeToDeleteCallback;
+import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
+import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_TV_SERIES_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_TV_SERIES_EDIT;
 
-public class TelevisionSeriesActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener {
+public class TelevisionSeriesActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
     private ListView listView;
     private RecyclerView televisionSeriesRecyclerView;
@@ -103,14 +103,13 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                         intent.putExtra("TELEVISION_SERIES_NAME", entertainmentWithTelevisionSeries.entertainment.getName());
                         intent.putExtra("TELEVISION_SERIES_LANGUAGE", entertainmentWithTelevisionSeries.entertainment.getLanguage().getLanguage());
                         startActivityForResult(intent, REQUEST_CODE_ENTERTAINMENT_TV_SERIES_EDIT);
+                    }, (view, position) -> {
+                        LongPressCallBack longPressCallBack = new LongPressCallBack(televisionSeriesAdapter, this, this, this);
+                        longPressCallBack.handleLongPress(view, position, "TV Series");
                     });
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                     televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
                 }
-
-                // Setup the swipe-to-delete functionality
-                ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new SwipeToDeleteCallback(televisionSeriesAdapter, this, this));
-                itemTouchHelper.attachToRecyclerView(televisionSeriesRecyclerView);
             });
         } else {
             televisionSeries = new ArrayList<>();
@@ -141,7 +140,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 Log.d("Television Series Action", "Save:" + newTvSeries);
 
                 if (televisionSeriesAdapter == null) {
-                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, televisionSeries, null);
+                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, televisionSeries, null, null);
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                 }
 
@@ -194,5 +193,33 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    @Override
+    public String getSavedItem(int position) {
+        EntertainmentWithTelevisionSeries entertainmentWithTelevisionSeries = televisionSeries.get(position);
+        return entertainmentWithTelevisionSeries.televisionSeries.getStatus().getStatus();
+    }
+
+    @Override
+    public List<String> getItems() {
+        return Arrays.stream(TelevisionSeriesStatus.values()).map(TelevisionSeriesStatus::getStatus).collect(Collectors.toList());
+    }
+
+    @Override
+    public void updateItem(int position, String value) {
+        EntertainmentWithTelevisionSeries entertainmentWithTelevisionSeries = televisionSeries.get(position);
+        TelevisionSeries series = entertainmentWithTelevisionSeries.televisionSeries;
+
+        // Perform database update in a background thread
+        Executors.newSingleThreadExecutor().execute(() -> {
+            series.setStatus(TelevisionSeriesStatus.fromStatus(value));
+            EntertainmentDatabase.getInstance(this).televisionSeriesDao().update(series);
+
+            // Show a Toast on the main thread after the update is successful
+            runOnUiThread(() -> {
+                Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }

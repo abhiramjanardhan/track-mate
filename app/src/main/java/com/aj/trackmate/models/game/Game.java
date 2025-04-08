@@ -5,10 +5,14 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
+import com.aj.trackmate.models.application.Currency;
+import com.aj.trackmate.models.application.converters.CurrencyConverter;
 import com.aj.trackmate.models.game.converters.GamePurchaseModeConverter;
 import com.aj.trackmate.models.game.converters.GamePurchaseTypeConverter;
 import com.aj.trackmate.models.game.converters.GameStatusConverter;
 import com.aj.trackmate.models.game.converters.GamePlatformConverter;
+
+import java.util.Calendar;
 
 @Entity(tableName = "games")
 public class Game implements Parcelable {
@@ -30,6 +34,10 @@ public class Game implements Parcelable {
     private GameStatus status;  // Not Started, In Progress, Story Completed, 100% done
     private boolean wantToGoFor100Percent;
     private boolean backlog;
+    private double amount;
+    @TypeConverters(CurrencyConverter.class)
+    private Currency currency;
+    private int year;
 
     // Getters and Setters
     public int getId() {
@@ -128,6 +136,30 @@ public class Game implements Parcelable {
         this.backlog = backlog;
     }
 
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
     // Blank constructor
     public Game() {
         // Initialize fields to default values if needed
@@ -141,6 +173,9 @@ public class Game implements Parcelable {
         this.purchaseMode = GamePurchaseMode.NOT_YET;
         this.wantToGoFor100Percent = false;
         this.backlog = false;
+        this.amount = 0.0;
+        this.currency = Currency.INR;
+        this.year = Calendar.getInstance().get(Calendar.YEAR);
     }
 
     // Parcelable Implementation
@@ -157,6 +192,9 @@ public class Game implements Parcelable {
         status = GameStatus.fromStatus(in.readString());
         wantToGoFor100Percent = in.readByte() != 0;
         backlog = in.readByte() != 0;
+        amount = in.readDouble();
+        currency = Currency.fromCurrency(in.readString());
+        year = in.readInt();
     }
 
     public static final Creator<Game> CREATOR = new Creator<Game>() {
@@ -185,6 +223,9 @@ public class Game implements Parcelable {
         dest.writeString(status.getStatus());
         dest.writeByte((byte) (wantToGoFor100Percent ? 1 : 0));
         dest.writeByte((byte) (backlog ? 1 : 0));
+        dest.writeDouble(amount);
+        dest.writeString(currency.getCurrency());
+        dest.writeInt(year);
     }
 
     @Override

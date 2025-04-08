@@ -11,14 +11,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import com.aj.trackmate.R;
 import com.aj.trackmate.database.GameDatabase;
+import com.aj.trackmate.models.application.Currency;
 import com.aj.trackmate.models.game.*;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.Executors;
 
 public class AddGameActivity extends AppCompatActivity {
 
-    private EditText gameNameEditText;
-    private Spinner gameStatusSpinner;
+    private EditText gameNameEditText, gameAmount, gameYear;
+    private Spinner gameStatusSpinner, currencySpinner;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
@@ -82,6 +86,10 @@ public class AddGameActivity extends AppCompatActivity {
         backlogYes = findViewById(R.id.backlogYes);
         backlogNo = findViewById(R.id.backlogNo);
 
+        gameAmount = findViewById(R.id.gameAmount);
+        currencySpinner = findViewById(R.id.currencySpinner);
+        gameYear = findViewById(R.id.gameYear);
+
         saveButton = findViewById(R.id.saveButton);
 
         purchasedNo.setChecked(true);
@@ -93,22 +101,75 @@ public class AddGameActivity extends AppCompatActivity {
         wantToGoFor100PercentNo.setChecked(true);
         backlogNo.setChecked(true);
 
+        // Get current year
+        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        gameYear.setText(String.valueOf(currentYear));
+
         // Set up the Game Status Spinner (Dropdown)
         ArrayAdapter<CharSequence> statusAdapter = ArrayAdapter.createFromResource(this,
                 R.array.game_statuses, android.R.layout.simple_spinner_item);
         statusAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gameStatusSpinner.setAdapter(statusAdapter);
 
+        // Get currency values from enum
+        List<String> currencyList = new ArrayList<>();
+        for (Currency currency : Currency.values()) {
+            currencyList.add(currency.getCurrency());
+        }
+
+        // Set to spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, currencyList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        currencySpinner.setAdapter(adapter);
+
         // Save button click listener
         saveButton.setOnClickListener(v -> {
             // Get values from the input fields
             String gameName = gameNameEditText.getText().toString();
             String gameStatus = gameStatusSpinner.getSelectedItem().toString();
+            String selectedCurrency = currencySpinner.getSelectedItem().toString();
+            Currency currency = Currency.fromCurrency(selectedCurrency);
+            String yearText = gameYear.getText().toString();
 
             if (gameName.isEmpty()) {
                 gameNameEditText.setError("Game Name is required");
                 gameNameEditText.requestFocus();
                 return;
+            }
+
+            double amount = 0.0;
+            try {
+                amount = Double.parseDouble(gameAmount.getText().toString());
+            } catch (NumberFormatException e) {
+                // handle invalid input
+                if (!gameAmount.getText().toString().isEmpty()) {
+                    // handle invalid input
+                    gameAmount.setError("Amount is invalid");
+                    gameAmount.requestFocus();
+                    return;
+                }
+            }
+
+            int year = 0;
+            if (yearText.length() == 4) {
+                try {
+                    year = Integer.parseInt(yearText);
+                    // Additional validation if needed (e.g., year range)
+                } catch (NumberFormatException e) {
+                    // handle invalid input
+                    if (!gameYear.getText().toString().isEmpty()) {
+                        gameYear.setError("Year is invalid");
+                        gameYear.requestFocus();
+                        return;
+                    }
+                }
+            } else {
+                // handle invalid input
+                if (!gameYear.getText().toString().isEmpty()) {
+                    gameYear.setError("Year is invalid");
+                    gameYear.requestFocus();
+                    return;
+                }
             }
 
             boolean isPurchased = purchasedYes.isChecked();
@@ -147,6 +208,9 @@ public class AddGameActivity extends AppCompatActivity {
             newGame.setStatus(GameStatus.fromStatus(gameStatus));  // Convert string to enum
             newGame.setWantToGoFor100Percent(want100Percent);
             newGame.setBacklog(isBacklog);
+            newGame.setAmount(amount);
+            newGame.setCurrency(currency);
+            newGame.setYear(year);
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 GameDatabase.getInstance(this).gameDao().insert(newGame);

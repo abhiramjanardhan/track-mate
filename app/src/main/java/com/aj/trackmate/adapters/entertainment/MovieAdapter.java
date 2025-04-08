@@ -16,14 +16,16 @@ import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
-    private Context context;
+    private final Context context;
     private List<EntertainmentWithMovies> entertainmentWithMovies;
-    private OnMovieClickListener onMovieClickListener;
+    private final OnMovieClickListener onMovieClickListener;
+    private final OnMovieLongClickListener onMovieLongClickListener;
 
-    public MovieAdapter(Context context, List<EntertainmentWithMovies> entertainmentWithMovies, OnMovieClickListener listener) {
+    public MovieAdapter(Context context, List<EntertainmentWithMovies> entertainmentWithMovies, OnMovieClickListener listener, OnMovieLongClickListener onMovieLongClickListener) {
         this.context = context;
         this.entertainmentWithMovies = entertainmentWithMovies;
         this.onMovieClickListener = listener;
+        this.onMovieLongClickListener = onMovieLongClickListener;
     }
 
     @Override
@@ -53,6 +55,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             if (onMovieClickListener != null) {
                 onMovieClickListener.onMovieClick(movies);
             }
+        });
+
+        // handle item long press
+        holder.itemView.setOnLongClickListener(v -> {
+            Log.d("ItemClicked", "Item pressed: " + entertainment.getName());
+            if (onMovieLongClickListener != null) {
+                onMovieLongClickListener.onMovieClick(v, position);
+            }
+            return true; // Long press handled
         });
     }
 
@@ -88,5 +99,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public interface OnMovieClickListener {
         void onMovieClick(EntertainmentWithMovies entertainmentWithMovies);
+    }
+
+    public interface OnMovieLongClickListener {
+        void onMovieClick(View view, int position);
     }
 }

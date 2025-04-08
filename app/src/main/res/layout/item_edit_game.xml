@@ -35,7 +35,8 @@
     <Spinner
             android:id="@+id/gameStatusSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
 
     <!-- Purchased Radio Group -->
     <TextView
@@ -238,6 +239,49 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no" />
     </RadioGroup>
+
+    <TextView
+            android:id="@+id/gameAmountTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/amount"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/gameAmount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Enter Amount"
+            android:inputType="numberDecimal"
+            android:hint="@string/amount" />
+
+    <!-- Currency Dropdown (Spinner) -->
+    <TextView
+            android:id="@+id/currencyTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/currency"
+            android:layout_marginBottom="8dp" />
+    <Spinner
+            android:id="@+id/currencySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+
+    <TextView
+            android:id="@+id/gameYearTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/year"
+            android:layout_marginBottom="8dp" />
+    <EditText
+            android:id="@+id/gameYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="Enter Year"
+            android:hint="@string/year"
+            android:inputType="number"
+            android:maxLength="4"
+            android:layout_marginBottom="8dp"/>
 
     <!-- Save Button -->
     <!-- Add Button -->

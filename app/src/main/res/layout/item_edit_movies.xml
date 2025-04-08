@@ -33,8 +33,8 @@
     <Spinner
             android:id="@+id/movieLanguageSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
 
     <!-- Movie Genre Multi-Select Dropdown (TextView as a Button) -->
     <TextView
@@ -53,7 +53,8 @@
             android:text="@string/select_genre"
             android:drawableEnd="@android:drawable/arrow_down_float"
             android:focusable="true"
-            android:clickable="true" />
+            android:clickable="true"
+            android:layout_marginBottom="8dp"/>
 
     <!-- Movie Status Dropdown (Spinner) -->
     <TextView
@@ -65,7 +66,8 @@
     <Spinner
             android:id="@+id/movieStatusSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
 
     <!-- Wishlist Radio Group -->
     <TextView
