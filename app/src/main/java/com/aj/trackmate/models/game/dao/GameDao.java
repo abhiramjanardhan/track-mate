@@ -77,6 +77,9 @@ public interface GameDao {
     @Query("SELECT SUM(amount) as amount, currency FROM games WHERE platform = :platform GROUP BY currency")
     LiveData<List<AmountWithCurrency>> getTotalAmountSpent(Platform platform);
 
+    @Query("SELECT SUM(amount) as amount, currency FROM games WHERE platform = :platform AND year = :year GROUP BY currency")
+    LiveData<List<AmountWithCurrency>> getTotalAmountSpentForYear(Platform platform, int year);
+
     @Query("SELECT * FROM games WHERE platform = :platform AND currency = :currency")
     LiveData<List<Game>> getGamesByCurrency(Platform platform, Currency currency);
 

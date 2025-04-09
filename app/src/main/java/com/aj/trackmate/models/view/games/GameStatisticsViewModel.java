@@ -31,6 +31,10 @@ public class GameStatisticsViewModel extends ViewModel {
         return gameDao.getTotalAmountSpent(platform);
     }
 
+    public LiveData<List<AmountWithCurrency>> getTotalAmountSpentForYear(Platform platform, int year) {
+        return gameDao.getTotalAmountSpentForYear(platform, year);
+    }
+
     public LiveData<List<StatusCount>> getGameCountByStatus(Platform platform) {
         return gameDao.getGameCountByStatus(platform);
     }

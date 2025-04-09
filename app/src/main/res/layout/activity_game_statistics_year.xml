@@ -27,7 +27,47 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/list_statistics_details"/>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+            <TextView
+                    android:id="@+id/currencyYearDistributionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/total_amount_spent"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="16dp" />
+
+            <!-- Empty state message -->
+            <TextView
+                    android:id="@+id/currencyYearDistributionEmptyMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_data_available"
+                    android:visibility="gone"/>
+
+            <!-- RecyclerView for the list of games -->
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/amountCurrencyYearRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:focusable="true"
+                    android:padding="16dp"
+                    android:clickable="true"
+                    android:isScrollContainer="true"
+                    android:layout_marginTop="8dp"
+                    android:clipToPadding="false"/>
+
+            <include layout="@layout/list_statistics_details"/>
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

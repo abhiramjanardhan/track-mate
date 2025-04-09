@@ -28,7 +28,7 @@ public class StatisticsDetailsAdapter extends RecyclerView.Adapter<StatisticsDet
     private void configureValueMap() {
         valueMap.put(STATISTICS_CURRENCY, "AMOUNT");
         valueMap.put(STATISTICS_STATUS, "");
-        valueMap.put(STATISTICS_YEAR, "");
+        valueMap.put(STATISTICS_YEAR, "YEAR");
     }
 
     public StatisticsDetailsAdapter(Context context, List<Game> games, String statisticsType) {
@@ -61,6 +61,7 @@ public class StatisticsDetailsAdapter extends RecyclerView.Adapter<StatisticsDet
             String displayValue = "";
             switch (value) {
                 case "AMOUNT" -> displayValue = String.valueOf(game.getAmount());
+                case "YEAR" -> displayValue = game.getAmount() + " " + game.getCurrency().getCurrency();
                 default -> displayValue = "NA";
             }
             holder.statisticsValue.setText(displayValue);

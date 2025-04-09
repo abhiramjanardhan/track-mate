@@ -1,8 +1,10 @@
 package com.aj.trackmate.activities.game.statistics;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
+import com.aj.trackmate.adapters.game.statistics.StatisticsCurrencyAdapter;
 import com.aj.trackmate.adapters.game.statistics.StatisticsDetailsAdapter;
 import com.aj.trackmate.database.GameDatabase;
 import com.aj.trackmate.models.game.Platform;
@@ -20,12 +23,14 @@ import com.aj.trackmate.models.view.factory.ViewModelFactory;
 import com.aj.trackmate.models.view.games.GameStatisticsViewModel;
 
 import static com.aj.trackmate.adapters.game.statistics.StatisticsDetailsAdapter.STATISTICS_YEAR;
+import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_STATISTICS_CURRENCY;
 
 public class GameStatisticsYearActivity extends AppCompatActivity {
 
     private StatisticsDetailsAdapter detailsAdapter;
-    private TextView statisticsDetailTitle, statisticsDetailEmptyMessage;
-    private RecyclerView statisticsDetailRecyclerView;
+    private StatisticsCurrencyAdapter currencyAdapter;
+    private TextView statisticsDetailTitle, statisticsDetailEmptyMessage, currencyYearDistributionTitle, currencyYearDistributionEmptyMessage;
+    private RecyclerView statisticsDetailRecyclerView, amountCurrencyYearRecyclerView;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -47,7 +52,12 @@ public class GameStatisticsYearActivity extends AppCompatActivity {
         statisticsDetailEmptyMessage = findViewById(R.id.statisticsDetailEmptyMessage);
         statisticsDetailRecyclerView = findViewById(R.id.statisticsDetailRecyclerView);
 
+        currencyYearDistributionTitle = findViewById(R.id.currencyYearDistributionTitle);
+        currencyYearDistributionEmptyMessage = findViewById(R.id.currencyYearDistributionEmptyMessage);
+        amountCurrencyYearRecyclerView = findViewById(R.id.amountCurrencyYearRecyclerView);
+
         statisticsDetailRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        amountCurrencyYearRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Get the platform name from the Intent
         Platform platform = Platform.fromName(getIntent().getStringExtra("GAME_PLATFORM"));
@@ -62,7 +72,8 @@ public class GameStatisticsYearActivity extends AppCompatActivity {
         ViewModelFactory factory = new ViewModelFactory(this, this);
         GameStatisticsViewModel viewModel = new ViewModelProvider(this, factory).get(GameStatisticsViewModel.class);
 
-        statisticsDetailTitle.setText("Games purchased in year: " + year);
+        statisticsDetailTitle.setText("Games purchased in the year: " + year);
+        currencyYearDistributionTitle.setText("Amount spent in the year: " + year);
 
         viewModel.getGamesByYear(platform, year).observe(this, games -> {
             if (games == null || games.isEmpty()) {
@@ -75,6 +86,20 @@ public class GameStatisticsYearActivity extends AppCompatActivity {
                 detailsAdapter = new StatisticsDetailsAdapter(this, games, STATISTICS_YEAR);
                 statisticsDetailRecyclerView.setAdapter(detailsAdapter);
                 detailsAdapter.updateGames(games);  // Notify adapter of new data
+            }
+        });
+
+        viewModel.getTotalAmountSpentForYear(platform, year).observe(this, amountWithCurrencies -> {
+            if (amountWithCurrencies == null || amountWithCurrencies.isEmpty()) {
+                currencyYearDistributionEmptyMessage.setVisibility(View.VISIBLE);
+                amountCurrencyYearRecyclerView.setVisibility(View.GONE);
+            } else {
+                currencyYearDistributionEmptyMessage.setVisibility(View.GONE);
+                amountCurrencyYearRecyclerView.setVisibility(View.VISIBLE);
+
+                currencyAdapter = new StatisticsCurrencyAdapter(this, platform, amountWithCurrencies, null);
+                amountCurrencyYearRecyclerView.setAdapter(currencyAdapter);
+                currencyAdapter.updateGames(amountWithCurrencies);  // Notify adapter of new data
             }
         });
     }
