@@ -17,7 +17,6 @@ import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.game.statistics.StatisticsCurrencyAdapter;
 import com.aj.trackmate.adapters.game.statistics.StatisticsStatusAdapter;
 import com.aj.trackmate.adapters.game.statistics.StatisticsYearAdapter;
-import com.aj.trackmate.database.GameDatabase;
 import com.aj.trackmate.models.game.Platform;
 import com.aj.trackmate.models.view.factory.ViewModelFactory;
 import com.aj.trackmate.models.view.games.GameStatisticsViewModel;
