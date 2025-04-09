@@ -65,7 +65,7 @@ public class GameStatisticsStatusActivity extends AppCompatActivity {
 
         statisticsDetailTitle.setText("Games in Status: " + status.getStatus());
 
-        GameDatabase.getInstance(this).gameDao().getGamesByStatus(platform, status).observe(this, games -> {
+        viewModel.getGamesByStatus(platform, status).observe(this, games -> {
             if (games == null || games.isEmpty()) {
                 statisticsDetailEmptyMessage.setVisibility(View.VISIBLE);
                 statisticsDetailRecyclerView.setVisibility(View.GONE);

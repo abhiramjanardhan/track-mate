@@ -64,7 +64,7 @@ public class GameStatisticsYearActivity extends AppCompatActivity {
 
         statisticsDetailTitle.setText("Games purchased in year: " + year);
 
-        GameDatabase.getInstance(this).gameDao().getGamesByYear(platform, year).observe(this, games -> {
+        viewModel.getGamesByYear(platform, year).observe(this, games -> {
             if (games == null || games.isEmpty()) {
                 statisticsDetailEmptyMessage.setVisibility(View.VISIBLE);
                 statisticsDetailRecyclerView.setVisibility(View.GONE);

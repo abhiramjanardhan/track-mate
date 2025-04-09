@@ -78,11 +78,11 @@ public class GameStatisticsActivity extends AppCompatActivity {
         ViewModelFactory factory = new ViewModelFactory(this, this);
         GameStatisticsViewModel viewModel = new ViewModelProvider(this, factory).get(GameStatisticsViewModel.class);
 
-        GameDatabase.getInstance(this).gameDao().getTotalGamesCount(platform).observe(this, totalGames -> {
+        viewModel.getTotalGamesCount(platform).observe(this, totalGames -> {
             totalGamesTextView.setText(String.valueOf(totalGames));
         });
 
-        GameDatabase.getInstance(this).gameDao().getTotalAmountSpent(platform).observe(this, amountWithCurrencies -> {
+        viewModel.getTotalAmountSpent(platform).observe(this, amountWithCurrencies -> {
             if (amountWithCurrencies == null || amountWithCurrencies.isEmpty()) {
                 currencyEmptyMessage.setVisibility(View.VISIBLE);
                 currencyRecyclerView.setVisibility(View.GONE);
@@ -101,7 +101,7 @@ public class GameStatisticsActivity extends AppCompatActivity {
             }
         });
 
-        GameDatabase.getInstance(this).gameDao().getGameCountByStatus(platform).observe(this, statusCounts -> {
+        viewModel.getGameCountByStatus(platform).observe(this, statusCounts -> {
             if (statusCounts == null || statusCounts.isEmpty()) {
                 statusEmptyMessage.setVisibility(View.VISIBLE);
                 statusRecyclerView.setVisibility(View.GONE);
@@ -120,7 +120,7 @@ public class GameStatisticsActivity extends AppCompatActivity {
             }
         });
 
-        GameDatabase.getInstance(this).gameDao().getGameCountByYear(platform).observe(this, yearCounts -> {
+        viewModel.getGameCountByYear(platform).observe(this, yearCounts -> {
             if (yearCounts == null || yearCounts.isEmpty()) {
                 yearEmptyMessage.setVisibility(View.VISIBLE);
                 yearRecyclerView.setVisibility(View.GONE);

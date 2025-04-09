@@ -65,7 +65,7 @@ public class GameStatisticsCurrencyActivity extends AppCompatActivity {
 
         statisticsDetailTitle.setText("Games paid in Currency: " + currency.getCurrency());
 
-        GameDatabase.getInstance(this).gameDao().getGamesByCurrency(platform, currency).observe(this, games -> {
+        viewModel.getGamesByCurrency(platform, currency).observe(this, games -> {
             if (games == null || games.isEmpty()) {
                 statisticsDetailEmptyMessage.setVisibility(View.VISIBLE);
                 statisticsDetailRecyclerView.setVisibility(View.GONE);
