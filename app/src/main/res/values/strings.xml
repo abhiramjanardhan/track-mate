@@ -163,6 +163,17 @@
     <string name="amount">Amount</string>
     <string name="currency">Currency</string>
     <string name="year">Year</string>
+    <string name="total_games">Total Games:</string>
+    <string name="total_amount_spent">Total Amount Spent:</string>
+    <string name="statistics">Statistics</string>
+    <string name="games_by_status">Games by Status</string>
+    <string name="games_by_year">Games by Year</string>
+    <string name="label">Label</string>
+    <string name="value">Value</string>
+    <string name="_0_00">₹0.00</string>
+    <string name="_0">0</string>
+    <string name="no_data_available">No Data Available</string>
+    <string name="statistics_details">Statistics Details</string>
 
     <!-- Platforms -->
     <string-array name="game_platforms">

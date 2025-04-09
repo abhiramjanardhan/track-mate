@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.CategoryAdapter;
 import com.aj.trackmate.models.view.MainViewModel;
-import com.aj.trackmate.models.view.factory.MainViewModelFactory;
+import com.aj.trackmate.models.view.factory.ViewModelFactory;
 import com.aj.trackmate.utils.ThemeUtils;
 
 import java.util.concurrent.ExecutorService;
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void refreshData() {
         // Use ViewModelProvider with Factory
-        MainViewModelFactory factory = new MainViewModelFactory(this, this);
+        ViewModelFactory factory = new ViewModelFactory(this, this);
         MainViewModel viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
 
         // Observe initialization state

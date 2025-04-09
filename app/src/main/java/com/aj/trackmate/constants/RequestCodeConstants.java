@@ -13,6 +13,10 @@ public class RequestCodeConstants {
     public static final int REQUEST_CODE_GAME_EDIT = 2008;
     public static final int REQUEST_CODE_GAME_DLC_ADD = 2009;
     public static final int REQUEST_CODE_GAME_DLC_EDIT = 2010;
+    public static final int REQUEST_CODE_GAME_STATISTICS = 2011;
+    public static final int REQUEST_CODE_GAME_STATISTICS_CURRENCY = 2012;
+    public static final int REQUEST_CODE_GAME_STATISTICS_STATUS = 2013;
+    public static final int REQUEST_CODE_GAME_STATISTICS_YEAR = 2014;
 
     public static final int REQUEST_CODE_ENTERTAINMENT_MOVIES = 3001;
     public static final int REQUEST_CODE_ENTERTAINMENT_TV_SERIES = 3002;

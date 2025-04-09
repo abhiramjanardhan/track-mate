@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/statisticsDetailTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/statistics_details"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/statisticsDetailEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:visibility="gone"/>
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/statisticsDetailRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="16dp"
+            android:clickable="false"
+            android:isScrollContainer="true"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"/>
+
+</LinearLayout>

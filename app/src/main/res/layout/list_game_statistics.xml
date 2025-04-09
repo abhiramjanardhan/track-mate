@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <!-- Section 1: Totals -->
+    <TextView
+            android:id="@+id/headingGeneral"
+            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/statistics"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+            <!-- Total Games Row -->
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        android:id="@+id/labelTotalGames"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/total_games"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                <TextView
+                        android:id="@+id/valueTotalGames"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/_0"
+                        android:textSize="16sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Section 2: Currency Distribution -->
+    <TextView
+            android:id="@+id/currencyDistributionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/total_amount_spent"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/currencyDistributionEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:visibility="gone"/>
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/amountCurrencyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="16dp"
+            android:clickable="true"
+            android:isScrollContainer="true"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"/>
+
+    <!-- Section 3: Status Distribution -->
+    <TextView
+            android:id="@+id/statusDistributionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/games_by_status"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/statusDistributionEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:visibility="gone"/>
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/statusRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="16dp"
+            android:clickable="true"
+            android:isScrollContainer="true"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"/>
+
+    <!-- Section 4: Year Distribution -->
+    <TextView
+            android:id="@+id/yearDistributionTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/games_by_year"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingStart="16dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="16dp" />
+
+    <!-- Empty state message -->
+    <TextView
+            android:id="@+id/yearDistributionEmptyMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_data_available"
+            android:visibility="gone"/>
+
+    <!-- RecyclerView for the list of games -->
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/yearRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:padding="16dp"
+            android:clickable="true"
+            android:isScrollContainer="true"
+            android:layout_marginTop="8dp"
+            android:clipToPadding="false"/>
+
+</LinearLayout>

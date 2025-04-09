@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -16,6 +17,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
+import com.aj.trackmate.activities.game.statistics.GameStatisticsActivity;
 import com.aj.trackmate.adapters.game.GameAdapter;
 import com.aj.trackmate.database.GameDatabase;
 import com.aj.trackmate.models.game.DownloadableContent;
@@ -35,11 +37,11 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_ADD;
-import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_GAME_EDIT;
+import static com.aj.trackmate.constants.RequestCodeConstants.*;
 
 public class GamePlatformActivity extends AppCompatActivity implements ItemRemovalListener, ItemTouchListener, ItemUpdateListener {
 
+    private String platform;
     private ListView listView;
     private RecyclerView gamesRecyclerView;
     private GameAdapter gameAdapter;
@@ -72,7 +74,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
         emptyStateMessage.setText("No Games Available");
 
         // Get the platform name from the Intent
-        String platform = getIntent().getStringExtra("CATEGORY");
+        platform = getIntent().getStringExtra("CATEGORY");
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(platform);  // Change the title dynamically
@@ -104,7 +106,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                         Intent intent = new Intent(GamePlatformActivity.this, EditGameActivity.class);
                         intent.putExtra("GAME_ID", gameWithDownloadableContent.game.getId());
                         intent.putExtra("GAME_NAME", gameWithDownloadableContent.game.getName());
-                        intent.putExtra("GAME_STATUS", gameWithDownloadableContent.game.getStatus());
+                        intent.putExtra("GAME_STATUS", gameWithDownloadableContent.game.getStatus().getStatus());
                         startActivityForResult(intent, REQUEST_CODE_GAME_EDIT);
                     }, (view, position) -> {
                         LongPressCallBack longPressCallBack = new LongPressCallBack(gameAdapter, this, this, this);
@@ -164,11 +166,22 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.statistics_menu, menu);
+        return true;
+    }
+
     // Handle back button click
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish(); // Close the activity when the back button is pressed
+            return true;
+        } else if (item.getItemId() == R.id.action_statistics) {
+            Intent intent = new Intent(this, GameStatisticsActivity.class);
+            intent.putExtra("CATEGORY", platform);
+            startActivityForResult(intent, REQUEST_CODE_GAME_STATISTICS);
             return true;
         }
         return super.onOptionsItemSelected(item);
