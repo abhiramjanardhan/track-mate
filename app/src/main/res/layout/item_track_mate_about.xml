@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="16dp">
+
+    <TextView
+            android:id="@+id/aboutTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_title"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_marginBottom="12dp" />
+
+    <TextView
+            android:id="@+id/aboutIntro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about_intro"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp" />
+
+    <TextView
+            android:id="@+id/sectionHowToUse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/section_how_to_use"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_marginBottom="8dp" />
+
+    <TextView
+            android:id="@+id/howToUseDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/how_to_use_details"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp" />
+
+    <TextView
+            android:id="@+id/thankYouNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/thank_you"
+            android:textStyle="italic"
+            android:textSize="16sp"
+            android:gravity="center" />
+</LinearLayout>

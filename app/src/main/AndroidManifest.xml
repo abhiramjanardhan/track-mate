@@ -112,7 +112,10 @@
                 android:name=".activities.game.GamePlatformActivity"
                 android:exported="false"/>
         <activity
-                android:name=".activities.SettingsActivity"
+                android:name=".activities.settings.MainSettingsActivity"
+                android:exported="false"/>
+        <activity
+                android:name=".activities.settings.TrackMateAboutActivity"
                 android:exported="false"/>
         <activity
                 android:name=".activities.MainActivity"

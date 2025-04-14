@@ -259,4 +259,19 @@
         <item>Started</item>
         <item>Completed</item>
     </string-array>
+
+    <string name="about_title">About TrackMate</string>
+    <string name="about_intro">TrackMate helps you organize and manage your favorite games, movies, television series, books, and more in one place.</string>
+
+    <string name="section_how_to_use">How to Use</string>
+    <string name="how_to_use_details">
+        1. Choose a category from the home screen like Games, Movies, or Books.\n
+        2. Inside each category, you can add, edit, or remove items.\n
+        3. Use filters to view wishlist, completed, in progress, or backlog items.\n
+        4. Enable Dark or Light mode in Settings.\n
+        5. View statistics to track your habits and progress.
+    </string>
+
+    <string name="thank_you">Thank you for using TrackMate! 🎮📚🎬</string>
+    <string name="about_app">About App</string>
 </resources>

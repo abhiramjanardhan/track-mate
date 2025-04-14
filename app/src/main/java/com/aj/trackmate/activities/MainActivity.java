@@ -16,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
+import com.aj.trackmate.activities.settings.MainSettingsActivity;
+import com.aj.trackmate.activities.settings.TrackMateAboutActivity;
 import com.aj.trackmate.adapters.CategoryAdapter;
 import com.aj.trackmate.models.view.MainViewModel;
 import com.aj.trackmate.models.view.factory.ViewModelFactory;
@@ -24,6 +26,7 @@ import com.aj.trackmate.utils.ThemeUtils;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_APPLICATION_INFORMATION;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_APPLICATION_SETTINGS;
 
 public class MainActivity extends AppCompatActivity {
@@ -89,7 +92,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_settings) {
-            startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CODE_APPLICATION_SETTINGS);
+            startActivityForResult(new Intent(this, MainSettingsActivity.class), REQUEST_CODE_APPLICATION_SETTINGS);
+            return true;
+        } else if (item.getItemId() == R.id.action_about) {
+            startActivityForResult(new Intent(this, TrackMateAboutActivity.class), REQUEST_CODE_APPLICATION_INFORMATION);
             return true;
         }
         return super.onOptionsItemSelected(item);

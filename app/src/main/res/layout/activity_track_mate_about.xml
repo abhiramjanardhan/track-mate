@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".activities.settings.MainSettingsActivity">
+        tools:context=".activities.settings.TrackMateAboutActivity">
 
     <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/list_settings"/>
+        <include layout="@layout/item_track_mate_about"/>
 
     </androidx.core.widget.NestedScrollView>
 

@@ -2,6 +2,7 @@ package com.aj.trackmate.constants;
 
 public class RequestCodeConstants {
     public static final int REQUEST_CODE_APPLICATION_SETTINGS = 1001;
+    public static final int REQUEST_CODE_APPLICATION_INFORMATION = 1002;
 
     public static final int REQUEST_CODE_GAME_PLAYSTATION = 2001;
     public static final int REQUEST_CODE_GAME_XBOX = 2002;

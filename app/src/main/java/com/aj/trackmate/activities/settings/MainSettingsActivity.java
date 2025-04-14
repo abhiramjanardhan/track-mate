@@ -1,4 +1,4 @@
-package com.aj.trackmate.activities;
+package com.aj.trackmate.activities.settings;
 
 import android.os.Bundle;
 
@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.aj.trackmate.R;
 import com.aj.trackmate.utils.ThemeUtils;
 
-public class SettingsActivity extends AppCompatActivity {
+public class MainSettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
