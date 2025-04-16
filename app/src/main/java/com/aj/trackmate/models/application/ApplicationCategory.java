@@ -6,6 +6,7 @@ public class ApplicationCategory {
     private String title;
     private String description;
     private boolean canAddSubApplications;
+    private boolean visible;
     private List<CategoryDetail> categories;
 
     public String getTitle() {
@@ -30,6 +31,14 @@ public class ApplicationCategory {
 
     public void setCanAddSubApplications(boolean canAddSubApplications) {
         this.canAddSubApplications = canAddSubApplications;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public List<CategoryDetail> getCategories() {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -16,12 +17,14 @@ import android.view.View;
 
 import com.aj.trackmate.R;
 
+import java.util.Objects;
 import java.util.concurrent.Executors;
 
 public class EditPlatformsActivity extends AppCompatActivity {
 
     private int platformId;
     private boolean isEditMode = false;
+    private TextView editPlatformHeading;
     private String originalPlatformName, originalPlatformDescription;
     private SubApplication currentPlatform;
     private EditText platformName, platformDescription;
@@ -33,6 +36,7 @@ public class EditPlatformsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_edit_platforms);
+        editPlatformHeading = findViewById(R.id.editPlatformHeading);
         platformName = findViewById(R.id.editPlatformName);
         platformDescription = findViewById(R.id.editPlatformDescription);
         saveButton = findViewById(R.id.platformSaveButton);
@@ -54,9 +58,11 @@ public class EditPlatformsActivity extends AppCompatActivity {
         ApplicationDatabase applicationDatabase = ApplicationDatabase.getInstance(this);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Edit Platform");  // Change the title dynamically
+            getSupportActionBar().setTitle("View Platform");  // Change the title dynamically
             getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Enable back button if needed
         }
+
+        editPlatformHeading.setText("View Platform");
 
         if (platformId != -1) {
             applicationDatabase.subApplicationDao().getSubApplicationById(platformId).observe(this, subApplication -> {
@@ -74,10 +80,22 @@ public class EditPlatformsActivity extends AppCompatActivity {
                         editButton.setVisibility(View.VISIBLE);
                     }
                 }
+
+                applicationDatabase.applicationDao().getApplicationById(subApplication.getApplicationId()).observe(this, application -> {
+                    if (!application.isHasSubApplication()) {
+                        editButton.setVisibility(View.GONE);
+                        cancelButton.setVisibility(View.GONE);
+                    } else {
+                        editButton.setVisibility(View.VISIBLE);
+                        cancelButton.setVisibility(View.VISIBLE);
+                    }
+                });
             });
 
             // Handle Edit button click
             editButton.setOnClickListener(v -> {
+                editPlatformHeading.setText("Edit Platform");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("Edit Platform");
                 setEditMode(true);
                 isEditMode = true;
             });
@@ -90,6 +108,8 @@ public class EditPlatformsActivity extends AppCompatActivity {
 
             // Handle Cancel button click
             cancelButton.setOnClickListener(v -> {
+                editPlatformHeading.setText("View Platform");
+                Objects.requireNonNull(getSupportActionBar()).setTitle("View Platform");
                 resetToOriginalState();
                 setEditMode(false);
             });

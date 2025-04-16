@@ -5,6 +5,7 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import com.aj.trackmate.models.view.MainViewModel;
+import com.aj.trackmate.models.view.MainVisibleViewModel;
 import com.aj.trackmate.models.view.games.GameStatisticsViewModel;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +22,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> @NotNull T create(Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             return (T) new MainViewModel(context, lifecycleOwner);
+        }
+        if (modelClass.isAssignableFrom(MainVisibleViewModel.class)) {
+            return (T) new MainVisibleViewModel(context);
         }
         if (modelClass.isAssignableFrom(GameStatisticsViewModel.class)) {
             return (T) new GameStatisticsViewModel(context);

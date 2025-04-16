@@ -4,25 +4,30 @@
       "title": "Games",
       "description": "A list to keep track of the games that is currently being played or completed or to be played in the future",
       "canAddSubApplications": false,
+      "visible": true,
       "categories": [
         {
           "title": "PlayStation",
           "description": "A tracker of the list of games played on the PlayStation",
+          "visible": true,
           "subCategories": []
         },
         {
           "title": "Xbox",
           "description": "A tracker of the list of games played on the XBox",
+          "visible": true,
           "subCategories": []
         },
         {
           "title": "Nintendo",
           "description": "A tracker of the list of games played on the Nintendo",
+          "visible": true,
           "subCategories": []
         },
         {
           "title": "PC",
           "description": "A tracker of the list of games played on the PC",
+          "visible": true,
           "subCategories": []
         }
       ]
@@ -31,117 +36,140 @@
       "title": "Entertainment",
       "description": "A list to keep track of the entertainment that is currently being watched or completed or to be watched in the future",
       "canAddSubApplications": true,
+      "visible": true,
       "categories": [
         {
           "title": "Movies",
           "description": "A tracker of the list of movies watched on multiple platforms",
+          "visible": true,
           "subCategories": [
             {
               "title": "Theatre Movies",
               "description": "A list of movies to be watched in theatre",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Netflix Movies",
               "description": "A list of movies to be watched in Netflix",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Amazon Prime Movies",
               "description": "A list of movies to be watched in Amazon Prime",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Apple Plus Movies",
               "description": "A list of movies to be watched in Apple Plus",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Hot Star Movies",
               "description": "A list of movies to be watched in Hot Star",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Zee5 Movies",
               "description": "A list of movies to be watched in Zee5",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Sony Liv Movies",
               "description": "A list of movies to be watched in Sony Liv",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "HBO Max Movies",
               "description": "A list of movies to be watched in HBO Max",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             }
           ]
         },
         {
           "title": "TV Series",
           "description": "A tracker of the list of television series watched on multiple platforms",
+          "visible": true,
           "subCategories": [
             {
               "title": "Netflix TV Series",
               "description": "A list of television series to be watched in Netflix",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Amazon Prime TV Series",
               "description": "A list of television series to be watched in Amazon Prime",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Apple Plus TV Series",
               "description": "A list of television series to be watched in Apple Plus",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Hot Star TV Series",
               "description": "A list of television series to be watched in Hot Star",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Zee5 TV Series",
               "description": "A list of television series to be watched in Zee5",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Sony Liv TV Series",
               "description": "A list of television series to be watched in Sony Liv",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "HBO Max TV Series",
               "description": "A list of television series to be watched in HBO Max",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             }
           ]
         },
         {
           "title": "Music",
           "description": "A tracker of the list of music listened to on multiple platforms",
+          "visible": true,
           "subCategories": [
             {
               "title": "Spotify Music",
               "description": "A list of music to be listened to in Spotify",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Apple Music Music",
               "description": "A list of music to be listened to in Apple Music",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "YouTube Music",
               "description": "A list of music to be listened to in YouTube Music",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             },
             {
               "title": "Amazon Prime Music",
               "description": "A list of music to be listened to in Amazon Prime Music",
-              "readOnly": true
+              "readOnly": true,
+              "visible": true
             }
           ]
         }
@@ -151,15 +179,18 @@
       "title": "Books",
       "description": "A list to keep track of the books that is currently being read/written or completed or to be read/written in the future",
       "canAddSubApplications": false,
+      "visible": true,
       "categories": [
         {
           "title": "Reading",
           "description": "A tracker of the list of books currently being read",
+          "visible": true,
           "subCategories": []
         },
         {
           "title": "Writing",
           "description": "A tracker of the list of books currently being written",
+          "visible": true,
           "subCategories": []
         }
       ]

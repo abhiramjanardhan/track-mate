@@ -97,6 +97,8 @@ public class ApplicationDataManager {
                 Category category = new Category();
                 category.setTitle(applicationCategory.getTitle());
                 category.setDescription(applicationCategory.getDescription());
+                category.setVisible(applicationCategory.isVisible());
+
                 categoryId = (int) categoryDao.insert(category);
             }
 
@@ -129,6 +131,7 @@ public class ApplicationDataManager {
                                 subApplication.setName(subCategoryDetail.getTitle());
                                 subApplication.setDescription(subCategoryDetail.getDescription());
                                 subApplication.setReadOnly(subCategoryDetail.isReadOnly());
+                                subApplication.setVisible(subCategoryDetail.isVisible());
 
                                 subApplicationDao.insert(subApplication);
                             }
@@ -143,6 +146,7 @@ public class ApplicationDataManager {
                         application.setDescription(categoryDetail.getDescription());
                         application.setCategory(category);
                         application.setHasSubApplication(applicationCategory.isCanAddSubApplications());
+                        application.setVisible(categoryDetail.isVisible());
 
                         applicationDao.insert(application);
 
@@ -164,6 +168,7 @@ public class ApplicationDataManager {
                             subApplication.setName(subCategoryDetail.getTitle());
                             subApplication.setDescription(subCategoryDetail.getDescription());
                             subApplication.setReadOnly(subCategoryDetail.isReadOnly());
+                            subApplication.setVisible(subCategoryDetail.isVisible());
 
                             subApplicationDao.insert(subApplication);
                         });

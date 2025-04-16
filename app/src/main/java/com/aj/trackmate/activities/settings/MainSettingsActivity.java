@@ -1,18 +1,21 @@
 package com.aj.trackmate.activities.settings;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.MenuItem;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import com.aj.trackmate.R;
-import com.aj.trackmate.utils.ThemeUtils;
+
+import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_APPLICATION_SETTINGS_THEME;
+import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_APPLICATION_SETTINGS_APPLICATION;
 
 public class MainSettingsActivity extends AppCompatActivity {
+
+    private CardView themeSettingsCard, visibilitySettingsCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,38 +36,14 @@ public class MainSettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Enable back button if needed
         }
 
-        handleTheme();
-    }
+        themeSettingsCard = findViewById(R.id.themeSettingsCard);
+        visibilitySettingsCard = findViewById(R.id.visibilitySettingsCard);
 
-    private void handleTheme() {
-        RadioGroup radioGroup = findViewById(R.id.radio_group_theme);
-        RadioButton radioLight = findViewById(R.id.radio_light);
-        RadioButton radioDark = findViewById(R.id.radio_dark);
-        RadioButton radioSystem = findViewById(R.id.radio_system);
+        themeSettingsCard.setOnClickListener(v ->
+                startActivityForResult(new Intent(this, ThemeSettingsActivity.class), REQUEST_CODE_APPLICATION_SETTINGS_THEME));
 
-        int selectedTheme = getSharedPreferences("theme_prefs", MODE_PRIVATE)
-                .getInt("selected_theme", AppCompatDelegate.MODE_NIGHT_NO); // Default Light Mode
-
-        if (selectedTheme == AppCompatDelegate.MODE_NIGHT_NO) {
-            radioLight.setChecked(true);
-        } else if (selectedTheme == AppCompatDelegate.MODE_NIGHT_YES) {
-            radioDark.setChecked(true);
-        } else {
-            radioSystem.setChecked(true);
-        }
-
-        radioGroup.setOnCheckedChangeListener((group, checkedId) -> {
-            int mode;
-            if (checkedId == R.id.radio_light) {
-                mode = AppCompatDelegate.MODE_NIGHT_NO;
-            } else if (checkedId == R.id.radio_dark) {
-                mode = AppCompatDelegate.MODE_NIGHT_YES;
-            } else {
-                mode = AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-            }
-
-            updateTheme(mode);
-        });
+        visibilitySettingsCard.setOnClickListener(v ->
+                startActivityForResult(new Intent(this, ApplicationSettingsActivity.class), REQUEST_CODE_APPLICATION_SETTINGS_APPLICATION));
     }
 
     // Handle back button click
@@ -75,10 +54,5 @@ public class MainSettingsActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void updateTheme(int mode) {
-        ThemeUtils.setTheme(this, mode);
-        recreate();  // Restart activity to apply theme
     }
 }

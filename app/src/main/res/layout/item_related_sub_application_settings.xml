@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:card_view="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:clickable="true"
+              android:focusable="true"
+              android:paddingBottom="16dp">
+
+    <!-- Section Heading -->
+    <TextView
+            android:id="@+id/categorySettingsHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/categories"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:paddingStart="@dimen/fab_margin"
+            android:layout_marginTop="16dp"
+            card_view:ignore="RtlSymmetry"/>
+
+    <!-- Row with label and switch -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingVertical="8dp">
+
+        <TextView
+                android:id="@+id/visible_label"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/visible"
+                android:paddingStart="@dimen/fab_margin"
+                android:textSize="16sp" />
+
+        <Switch
+                android:id="@+id/categoryVisibleSwitch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@android:color/darker_gray"
+            android:layout_marginVertical="8dp"/>
+</LinearLayout>

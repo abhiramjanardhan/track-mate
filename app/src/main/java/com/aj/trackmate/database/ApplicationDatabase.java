@@ -6,6 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+import com.aj.trackmate.database.migrations.application.DatabaseMigration1to2;
 import com.aj.trackmate.models.application.Application;
 import com.aj.trackmate.models.application.Category;
 import com.aj.trackmate.models.application.SubApplication;
@@ -16,7 +17,7 @@ import com.aj.trackmate.utils.ConfigManager;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {Category.class, Application.class, SubApplication.class}, version = 1, exportSchema = false)
+@Database(entities = {Category.class, Application.class, SubApplication.class}, version = 2, exportSchema = false)
 public abstract class ApplicationDatabase extends RoomDatabase {
     private static ApplicationDatabase instance;
 
@@ -32,7 +33,7 @@ public abstract class ApplicationDatabase extends RoomDatabase {
             RoomDatabase.Builder<ApplicationDatabase> builder = Room.databaseBuilder(
                     context.getApplicationContext(),
                     ApplicationDatabase.class, "application_database"
-            );
+            ).addMigrations(DatabaseMigration1to2.MIGRATION_1_2);
 
             // Enable foreign key constraints
             builder.addCallback(new RoomDatabase.Callback() {

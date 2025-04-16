@@ -28,6 +28,7 @@ public class Application implements Parcelable {
     private CategoryEnum category;
     private boolean hasSubApplication;
     private String description;
+    private boolean visible;
 
     public int getId() {
         return id;
@@ -85,6 +86,14 @@ public class Application implements Parcelable {
         this.description = description;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     // Blank Constructor
     public Application() {
         name = "";
@@ -92,6 +101,7 @@ public class Application implements Parcelable {
         description = "";
         hasSubApplication = false;
         category = null;
+        visible = true;
     }
 
     // Parcelable Implementation
@@ -104,6 +114,7 @@ public class Application implements Parcelable {
         description = in.readString();
         category = CategoryEnum.valueOf(in.readString());
         hasSubApplication = in.readBoolean();
+        visible = in.readBoolean();
     }
 
     public static final Creator<Application> CREATOR = new Creator<>() {
@@ -129,6 +140,7 @@ public class Application implements Parcelable {
         dest.writeString(description);
         dest.writeString(category.name());
         dest.writeBoolean(hasSubApplication);
+        dest.writeBoolean(visible);
     }
 
     @Override

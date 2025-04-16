@@ -274,4 +274,13 @@
 
     <string name="thank_you">Thank you for using TrackMate! 🎮📚🎬</string>
     <string name="about_app">About App</string>
+    <string name="theme_settings">Theme Settings</string>
+    <string name="application_settings">Application Settings</string>
+    <string name="visibility_settings">Visibility Settings</string>
+    <string name="categories">Categories</string>
+    <string name="visible">Visible</string>
+    <string name="applications">Applications</string>
+    <string name="application_management">Application Management</string>
+    <string name="no_applications_available">No Applications Available</string>
+    <string name="can_add_sub_applications">Can Add Sub-Applications?</string>
 </resources>

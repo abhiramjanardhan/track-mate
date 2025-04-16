@@ -15,6 +15,18 @@
             tools:ignore="HardcodedDebugMode"
             tools:targetApi="31">
         <activity
+                android:name=".activities.settings.RelatedSubApplicationSettingsActivity"
+                android:exported="false"/>
+        <activity
+                android:name=".activities.settings.RelatedApplicationSettingsActivity"
+                android:exported="false"/>
+        <activity
+                android:name=".activities.settings.ApplicationSettingsActivity"
+                android:exported="false"/>
+        <activity
+                android:name=".activities.settings.ThemeSettingsActivity"
+                android:exported="false"/>
+        <activity
                 android:name=".activities.game.statistics.GameStatisticsYearActivity"
                 android:exported="false"/>
         <activity

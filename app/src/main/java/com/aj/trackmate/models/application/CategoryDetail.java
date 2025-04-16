@@ -5,6 +5,7 @@ import java.util.List;
 public class CategoryDetail {
     private String title;
     private String description;
+    private boolean visible;
     private List<SubCategoryDetail> subCategories;
 
     public String getTitle() {
@@ -21,6 +22,14 @@ public class CategoryDetail {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
     public List<SubCategoryDetail> getSubCategories() {

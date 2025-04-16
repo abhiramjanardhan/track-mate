@@ -53,4 +53,11 @@ public interface ApplicationDao {
     @Transaction
     @Query("SELECT * FROM application")
     LiveData<List<ApplicationWithSubApplication>> getAllApplicationsWithSubApplications();
+
+    @Transaction
+    @Query("SELECT * FROM application WHERE categoryId = :categoryId")
+    LiveData<List<ApplicationWithSubApplication>> getApplicationsWithSubApplicationsByCategory(int categoryId);
+
+    @Query("SELECT * FROM application WHERE categoryId = :categoryId AND visible = 1")
+    List<Application> getVisibleApplicationsForCategory(int categoryId);
 }

@@ -14,6 +14,7 @@ public class Category implements Parcelable {
     private int id;
     private String title;
     private String description;
+    private boolean visible;
 
     public int getId() {
         return id;
@@ -39,10 +40,19 @@ public class Category implements Parcelable {
         this.description = description;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     // Blank Constructor
     public Category() {
         title = "";
         description = "";
+        visible = true;
     }
 
     // Parcelable Implementation
@@ -51,6 +61,7 @@ public class Category implements Parcelable {
         id = in.readInt();
         title = in.readString();
         description = in.readString();
+        visible = in.readBoolean();
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -72,6 +83,7 @@ public class Category implements Parcelable {
         dest.writeInt(id);
         dest.writeString(title);
         dest.writeString(description);
+        dest.writeBoolean(visible);
     }
 
     @Override

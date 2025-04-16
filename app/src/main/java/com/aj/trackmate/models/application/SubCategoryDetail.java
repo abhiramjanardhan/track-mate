@@ -4,6 +4,7 @@ public class SubCategoryDetail {
     private String title;
     private String description;
     private boolean readOnly;
+    private boolean visible;
 
     public String getTitle() {
         return title;
@@ -27,5 +28,13 @@ public class SubCategoryDetail {
 
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }

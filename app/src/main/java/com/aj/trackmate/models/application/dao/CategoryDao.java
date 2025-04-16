@@ -47,4 +47,10 @@ public interface CategoryDao {
     @Transaction
     @Query("SELECT * FROM category WHERE id = :categoryId")
     LiveData<CategoryWithApplicationsAndSubApplications> getCategoryWithAppsAndSubApps(int categoryId);
+
+    @Query("SELECT * FROM category WHERE visible = 1")
+    LiveData<List<Category>> getVisibleCategories();
+
+    @Query("SELECT * FROM category WHERE visible = 1")
+    List<Category> getVisibleCategoriesSync();
 }

@@ -20,6 +20,7 @@ import com.aj.trackmate.activities.settings.MainSettingsActivity;
 import com.aj.trackmate.activities.settings.TrackMateAboutActivity;
 import com.aj.trackmate.adapters.CategoryAdapter;
 import com.aj.trackmate.models.view.MainViewModel;
+import com.aj.trackmate.models.view.MainVisibleViewModel;
 import com.aj.trackmate.models.view.factory.ViewModelFactory;
 import com.aj.trackmate.utils.ThemeUtils;
 
@@ -39,30 +40,23 @@ public class MainActivity extends AppCompatActivity {
     private void refreshData() {
         // Use ViewModelProvider with Factory
         ViewModelFactory factory = new ViewModelFactory(this, this);
-        MainViewModel viewModel = new ViewModelProvider(this, factory).get(MainViewModel.class);
+        MainVisibleViewModel viewModel = new ViewModelProvider(this, factory).get(MainVisibleViewModel.class);
 
         // Observe initialization state
-        viewModel.getIsDataInitialized().observe(this, isInitialized -> {
-            if (isInitialized) {
-                viewModel.getCategories().observe(this, applications -> {
-                    Log.d("Application", "Applications Size: " + applications.size());
+        viewModel.getCategories().observe(this, applications -> {
+            Log.d("Application", "Applications Size: " + applications.size());
 
-                    if (applications.isEmpty()) {
-                        emptyStateMessage.setVisibility(View.VISIBLE);
-                        recyclerViewCategories.setVisibility(View.GONE);
-                    } else {
-                        emptyStateMessage.setVisibility(View.GONE);
-                        recyclerViewCategories.setVisibility(View.VISIBLE);
-                    }
-
-                    categoryAdapter = new CategoryAdapter(this, applications);
-                    recyclerViewCategories.setAdapter(categoryAdapter);
-                });
+            if (applications.isEmpty()) {
+                emptyStateMessage.setVisibility(View.VISIBLE);
+                recyclerViewCategories.setVisibility(View.GONE);
+            } else {
+                emptyStateMessage.setVisibility(View.GONE);
+                recyclerViewCategories.setVisibility(View.VISIBLE);
             }
-        });
 
-        // Start data initialization
-        viewModel.initializeData(null);
+            categoryAdapter = new CategoryAdapter(this, applications);
+            recyclerViewCategories.setAdapter(categoryAdapter);
+        });
     }
 
     @SuppressLint("MissingInflatedId")

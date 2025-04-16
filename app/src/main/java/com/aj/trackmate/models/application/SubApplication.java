@@ -26,6 +26,7 @@ public class SubApplication implements Parcelable {
     private String name;
     private String description;
     private boolean readOnly;
+    private boolean visible;
 
     public int getId() {
         return id;
@@ -63,6 +64,14 @@ public class SubApplication implements Parcelable {
         return readOnly;
     }
 
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
     public void setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
     }
@@ -72,6 +81,7 @@ public class SubApplication implements Parcelable {
         name = "";
         description = "";
         readOnly = false;
+        visible = true;
     }
 
     // Parcelable Implementation
@@ -82,6 +92,7 @@ public class SubApplication implements Parcelable {
         name = in.readString();
         description = in.readString();
         readOnly = in.readBoolean();
+        visible = in.readBoolean();
     }
 
     public static final Creator<SubApplication> CREATOR = new Creator<SubApplication>() {
@@ -105,6 +116,7 @@ public class SubApplication implements Parcelable {
         dest.writeString(name);
         dest.writeString(description);
         dest.writeBoolean(readOnly);
+        dest.writeBoolean(visible);
     }
 
     @Override

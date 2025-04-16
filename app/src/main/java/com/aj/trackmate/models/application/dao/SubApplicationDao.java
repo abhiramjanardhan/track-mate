@@ -31,4 +31,7 @@ public interface SubApplicationDao {
 
     @Query("SELECT * FROM sub_application WHERE id = :subApplicationId LIMIT 1")
     LiveData<SubApplication> getSubApplicationById(int subApplicationId);
+
+    @Query("SELECT * FROM sub_application WHERE applicationId = :applicationId AND visible = 1")
+    List<SubApplication> getVisibleSubApplicationsForApplication(int applicationId);
 }
