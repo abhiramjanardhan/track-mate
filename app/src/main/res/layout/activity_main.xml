@@ -1,43 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:gravity="center"
-              tools:context=".activities.MainActivity">
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-    <!-- Toolbar for the top bar -->
-    <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            style="@style/CustomToolbarStyle"/>
-
-    <!-- Welcome Text -->
-    <TextView
-            android:id="@+id/textViewWelcome"
-            android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
             android:layout_height="wrap_content"
-            android:text="@string/welcome_to_track_mate"
-            android:textSize="24sp"
-            android:textStyle="bold"/>
-
-    <!-- RecyclerView for Categories -->
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewCategories"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never"/>
+            android:fitsSystemWindows="true"
+            >
 
-    <!-- Empty state message -->
-    <TextView
-            android:id="@+id/mainEmptyStateMessage"
+        <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="#090909"
+                app:titleTextColor="@color/white"/>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Ensure the content starts below the toolbar -->
+    <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/no_information_available"
-            android:visibility="gone" />
-    <!-- Initially hidden -->
-</LinearLayout>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:gravity="center"
+                      tools:context=".activities.MainActivity">
+
+            <!-- Spacer View for Top Padding -->
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp" />
+
+            <!-- RecyclerView for Categories -->
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerViewCategories"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"/>
+
+            <!-- Empty state message -->
+            <TextView
+                    android:id="@+id/mainEmptyStateMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/no_information_available"
+                    android:visibility="gone" />
+            <!-- Initially hidden -->
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
