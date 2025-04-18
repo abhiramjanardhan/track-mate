@@ -157,20 +157,20 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 Log.d("Game Action", "Save:" + newGame);
 
                 if (gameAdapter == null) {
-                    gameAdapter = new GameAdapter(this, games, null, null);
+                    gameAdapter = new GameAdapter(this, allGames, null, null);
                     gamesRecyclerView.setAdapter(gameAdapter);
                 }
 
                 // Add the new game to the list
                 if (newGame != null) {
-                    games.add(newGame);
-                    gameAdapter.notifyDataSetChanged();  // Notify the adapter to refresh the RecyclerView
+                    allGames.add(newGame);
+                    gameAdapter.updateGames(allGames);  // Notify the adapter to refresh the RecyclerView
                 }
 
-                Log.d("Game Action", "List count:" + games.size());
+                Log.d("Game Action", "List count:" + allGames.size());
 
                 // Update empty state visibility
-                if (games.isEmpty()) {
+                if (allGames.isEmpty()) {
                     emptyStateMessage.setVisibility(View.VISIBLE);
                     gamesRecyclerView.setVisibility(View.GONE);
                 } else {

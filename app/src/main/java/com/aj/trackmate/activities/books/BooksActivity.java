@@ -150,20 +150,20 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 Log.d("Book Action", "Save:" + newBook);
 
                 if (bookAdapter == null) {
-                    bookAdapter = new BookAdapter(this, books, null, null);
+                    bookAdapter = new BookAdapter(this, allBooks, null, null);
                     booksRecyclerView.setAdapter(bookAdapter);
                 }
 
                 // Add the new book to the list
                 if (newBook != null) {
-                    books.add(newBook);
-                    bookAdapter.updateBooks(books);  // Notify the adapter to refresh the RecyclerView
+                    allBooks.add(newBook);
+                    bookAdapter.updateBooks(allBooks);  // Notify the adapter to refresh the RecyclerView
                 }
 
-                Log.d("Book Action", "List count:" + books.size());
+                Log.d("Book Action", "List count:" + allBooks.size());
 
                 // Update empty state visibility
-                if (books.isEmpty()) {
+                if (allBooks.isEmpty()) {
                     emptyStateMessage.setVisibility(View.VISIBLE);
                     booksRecyclerView.setVisibility(View.GONE);
                 } else {

@@ -371,20 +371,20 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                 Log.d("Book Note Action", "Save:" + newBookNote);
 
                 if (bookNotesAdapter == null) {
-                    bookNotesAdapter = new BookNotesAdapter(this, bookNotes, null, null);
+                    bookNotesAdapter = new BookNotesAdapter(this, allNotes, null, null);
                     recyclerViewBookNotes.setAdapter(bookNotesAdapter);
                 }
 
                 // Add the new game to the list
                 if (newBookNote != null) {
-                    bookNotes.add(newBookNote);
-                    bookNotesAdapter.updateBookNotes(bookNotes);
+                    allNotes.add(newBookNote);
+                    bookNotesAdapter.updateBookNotes(allNotes);
                 }
 
-                Log.d("Book Note Action", "List count:" + bookNotes.size());
+                Log.d("Book Note Action", "List count:" + allNotes.size());
 
                 // Update empty state visibility
-                if (bookNotes.isEmpty()) {
+                if (allNotes.isEmpty()) {
                     bookNotesEmptyStateMessage.setVisibility(View.VISIBLE);
                     recyclerViewBookNotes.setVisibility(View.GONE);
                 } else {

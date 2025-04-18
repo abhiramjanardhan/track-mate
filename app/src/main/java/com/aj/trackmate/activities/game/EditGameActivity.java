@@ -473,20 +473,20 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                 Log.d("Game DLC Action", "Save:" + newGame);
 
                 if (gameDLCAdapter == null) {
-                    gameDLCAdapter = new GameDLCAdapter(this, dlcs, null, null);
+                    gameDLCAdapter = new GameDLCAdapter(this, allDLCs, null, null);
                     gameDLCsRecyclerView.setAdapter(gameDLCAdapter);
                 }
 
                 // Add the new game to the list
                 if (newGame != null) {
-                    dlcs.add(newGame);
-                    gameDLCAdapter.updateGames(dlcs);
+                    allDLCs.add(newGame);
+                    gameDLCAdapter.updateGames(allDLCs);
                 }
 
-                Log.d("Game DLC Action", "List count:" + dlcs.size());
+                Log.d("Game DLC Action", "List count:" + allDLCs.size());
 
                 // Update empty state visibility
-                if (dlcs.isEmpty()) {
+                if (allDLCs.isEmpty()) {
                     dlcsEmptyStateMessage.setVisibility(View.VISIBLE);
                     gameDLCsRecyclerView.setVisibility(View.GONE);
                 } else {

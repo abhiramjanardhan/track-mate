@@ -152,20 +152,20 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                 Log.d("Music Action", "Save:" + newMusic);
 
                 if (musicAdapter == null) {
-                    musicAdapter = new MusicAdapter(this, musics, null);
+                    musicAdapter = new MusicAdapter(this, allMusics, null);
                     musicRecyclerView.setAdapter(musicAdapter);
                 }
 
                 // Add the new music to the list
                 if (newMusic != null) {
-                    musics.add(newMusic);
-                    musicAdapter.updateMusics(musics);  // Notify the adapter to refresh the RecyclerView
+                    allMusics.add(newMusic);
+                    musicAdapter.updateMusics(allMusics);  // Notify the adapter to refresh the RecyclerView
                 }
 
-                Log.d("Music Action", "List count:" + musics.size());
+                Log.d("Music Action", "List count:" + allMusics.size());
 
                 // Update empty state visibility
-                if (musics.isEmpty()) {
+                if (allMusics.isEmpty()) {
                     emptyStateMessage.setVisibility(View.VISIBLE);
                     musicRecyclerView.setVisibility(View.GONE);
                 } else {

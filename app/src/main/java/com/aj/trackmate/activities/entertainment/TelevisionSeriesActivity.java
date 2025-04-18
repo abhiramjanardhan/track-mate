@@ -161,20 +161,20 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 Log.d("Television Series Action", "Save:" + newTvSeries);
 
                 if (televisionSeriesAdapter == null) {
-                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, televisionSeries, null, null);
+                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, allTelevisionSeries, null, null);
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                 }
 
                 // Add the new movie to the list
                 if (newTvSeries != null) {
-                    televisionSeries.add(newTvSeries);
-                    televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
+                    allTelevisionSeries.add(newTvSeries);
+                    televisionSeriesAdapter.updateTelevisionSeries(allTelevisionSeries);
                 }
 
-                Log.d("Television Series Action", "List count:" + televisionSeries.size());
+                Log.d("Television Series Action", "List count:" + allTelevisionSeries.size());
 
                 // Update empty state visibility
-                if (televisionSeries.isEmpty()) {
+                if (allTelevisionSeries.isEmpty()) {
                     emptyStateMessage.setVisibility(View.VISIBLE);
                     televisionSeriesRecyclerView.setVisibility(View.GONE);
                 } else {

@@ -160,20 +160,20 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 newMovie = data.getParcelableExtra("NEW_MOVIE", EntertainmentWithMovies.class);
 
                 if (movieAdapter == null) {
-                    movieAdapter = new MovieAdapter(this, movies, null, null);
+                    movieAdapter = new MovieAdapter(this, allMovies, null, null);
                     moviesRecyclerView.setAdapter(movieAdapter);
                 }
 
                 // Add the new movie to the list
                 if (newMovie != null) {
-                    movies.add(newMovie);
-                    movieAdapter.updateMovies(movies);
+                    allMovies.add(newMovie);
+                    movieAdapter.updateMovies(allMovies);
                 }
 
-                Log.d("Movies Action", "List count:" + movies.size());
+                Log.d("Movies Action", "List count:" + allMovies.size());
 
                 // Update empty state visibility
-                if (movies.isEmpty()) {
+                if (allMovies.isEmpty()) {
                     emptyStateMessage.setVisibility(View.VISIBLE);
                     moviesRecyclerView.setVisibility(View.GONE);
                 } else {
