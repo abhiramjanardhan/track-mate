@@ -3,8 +3,11 @@ package com.aj.trackmate.activities.entertainment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,10 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.MovieAdapter;
 import com.aj.trackmate.database.EntertainmentDatabase;
-import com.aj.trackmate.models.entertainment.Entertainment;
-import com.aj.trackmate.models.entertainment.EntertainmentCategory;
-import com.aj.trackmate.models.entertainment.Movie;
-import com.aj.trackmate.models.entertainment.MovieStatus;
+import com.aj.trackmate.models.entertainment.*;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -47,6 +47,9 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
     private TextView title, emptyStateMessage;
     private FloatingActionButton addButton;
 
+    private EditText searchEditText;
+    private List<EntertainmentWithMovies> allMovies;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,21 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
         title = findViewById(R.id.moviesTitle);
         emptyStateMessage = findViewById(R.id.moviesEmptyStateMessage);
 
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMovies(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
         Log.d("Movie", "Category: " + category);
@@ -88,8 +106,8 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
 
         if (category != null) {
             EntertainmentDatabase.getInstance(this).entertainmentDao().getAllEntertainmentForMovies(EntertainmentCategory.MOVIES, category).observe(this, moviesList -> {
-                movies = moviesList;
-
+                allMovies = moviesList;
+                movies = new ArrayList<>(allMovies);
                 Log.d("Movies", "List size: " + movies.size());
 
                 if (movies == null || movies.isEmpty()) {
@@ -223,5 +241,32 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterMovies(String query) {
+        String lower = query.toLowerCase();
+
+        List<EntertainmentWithMovies> filtered = allMovies.stream()
+                .filter(entertainmentWithMovies -> {
+                    Entertainment entertainment = entertainmentWithMovies.entertainment;
+                    Movie movie = entertainmentWithMovies.movie;
+
+                    boolean matchesName = entertainment.getName().toLowerCase().contains(lower);
+                    boolean matchesStatus = movie.getStatus().getStatus().toLowerCase().contains(lower);
+                    boolean matchesLanguage = entertainment.getLanguage().getLanguage().toLowerCase().contains(lower);
+
+                    // Match genre
+                    boolean matchesGenre = movie.getGenre().stream()
+                            .map(MovieGenre::getGenre)  // assuming getGenre() returns the string name like "Fantasy"
+                            .anyMatch(genre -> genre.toLowerCase().contains(lower));
+
+                    return matchesName || matchesStatus || matchesLanguage || matchesGenre;
+                })
+                .collect(Collectors.toList());
+
+        movieAdapter.updateMovies(filtered);
+
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        moviesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

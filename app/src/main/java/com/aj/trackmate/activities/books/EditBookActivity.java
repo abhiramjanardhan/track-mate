@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,9 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
     private boolean[] selectedGenres;
     private List<BookGenre> selectedGenreList = new ArrayList<>();
     private String[] genreArray;
+
+    private EditText searchEditText;
+    private List<BookNote> allNotes;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -120,6 +125,21 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
         recyclerViewBookNotes = findViewById(R.id.recyclerViewBookNotes);
         recyclerViewBookNotes.setLayoutManager(new LinearLayoutManager(this));
 
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterBooks(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // Convert Enum to String Array
         BookGenre[] genres = BookGenre.values();
         genreArray = new String[genres.length];
@@ -151,7 +171,8 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
 
             if (currentBook != null) {
                 Book book = currentBook.book;
-                bookNotes = currentBook.notes;
+                allNotes = currentBook.notes;
+                bookNotes = new ArrayList<>(allNotes);
 
                 Log.d("Edit Book", "Book Notes Size: " + bookNotes.size());
 
@@ -467,5 +488,24 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterBooks(String query) {
+        String lower = query.toLowerCase();
+
+        List<BookNote> filtered = allNotes.stream()
+                .filter(bookWithNote -> {
+                    boolean matchesName = bookWithNote.getHeading().toLowerCase().contains(lower);
+                    boolean matchesStatus = bookWithNote.getStatus().getStatus().toLowerCase().contains(lower);
+                    boolean matchesDescription = bookWithNote.getDescription().toLowerCase().contains(lower);
+
+                    return matchesName || matchesStatus || matchesDescription;
+                })
+                .collect(Collectors.toList());
+
+        bookNotesAdapter.updateBookNotes(filtered);
+
+        bookNotesEmptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        recyclerViewBookNotes.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

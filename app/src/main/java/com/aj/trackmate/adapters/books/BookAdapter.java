@@ -69,7 +69,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         return books.size();
     }
 
-    public void updateGames(List<BookWithNotes> newBooks) {
+    public void updateBooks(List<BookWithNotes> newBooks) {
         this.books = newBooks;
         notifyDataSetChanged();
     }

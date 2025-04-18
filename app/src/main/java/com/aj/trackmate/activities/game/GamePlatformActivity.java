@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +52,9 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
     private TextView title, emptyStateMessage;
     private FloatingActionButton addButton;
 
+    private EditText searchEditText;
+    private List<GameWithDownloadableContent> allGames = new ArrayList<>();
+
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +75,21 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
         title = findViewById(R.id.categoryTitle);
         emptyStateMessage = findViewById(R.id.gamesEmptyStateMessage);
         addButton = findViewById(R.id.gamesFloatingButton);
+
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterGames(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         title.setText("Games List");
         emptyStateMessage.setText("No Games Available");
@@ -92,7 +113,8 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
         // Fetch the games based on the platform
         if (platform != null) {
             GameDatabase.getInstance(this).gameDao().getGamesWithDLCsByPlatform(Platform.fromName(platform)).observe(this, gameList -> {
-                games = gameList;
+                allGames = gameList;
+                games = new ArrayList<>(allGames);
                 Log.d("Games", "List: " + games);
 
                 if (games == null || games.isEmpty()) {
@@ -242,5 +264,25 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterGames(String query) {
+        String lower = query.toLowerCase();
+
+        List<GameWithDownloadableContent> filtered = allGames.stream().filter(gameWithDLC -> {
+            Game game = gameWithDLC.game;
+            boolean matchesName = game.getName().toLowerCase().contains(lower);
+            boolean matchesStatus = game.getStatus().getStatus().toLowerCase().contains(lower);
+            boolean matchesPurchaseMode = game.getPurchaseMode().name().toLowerCase().contains(lower);
+            boolean matchesPurchaseType = game.getPurchaseType().name().toLowerCase().contains(lower);
+            boolean matchesCurrency = game.getCurrency().getCurrency().toLowerCase().contains(lower);
+
+            return  matchesName || matchesStatus || matchesPurchaseMode || matchesPurchaseType || matchesCurrency;
+        }).collect(Collectors.toList());
+
+        gameAdapter.updateGames(filtered);
+
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        gamesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

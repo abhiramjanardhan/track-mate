@@ -3,8 +3,11 @@ package com.aj.trackmate.activities.books;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,12 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.books.BookAdapter;
 import com.aj.trackmate.database.BookDatabase;
-import com.aj.trackmate.models.books.Book;
-import com.aj.trackmate.models.books.BookFor;
+import com.aj.trackmate.models.books.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
-import com.aj.trackmate.models.books.BookNote;
-import com.aj.trackmate.models.books.BookStatus;
 import com.aj.trackmate.models.books.relations.BookWithNotes;
 import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
@@ -46,6 +46,9 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
     private TextView title, emptyStateMessage;
     private FloatingActionButton addButton;
 
+    private EditText searchEditText;
+    private List<BookWithNotes> allBooks;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +69,21 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
         addButton = findViewById(R.id.booksFloatingButton);
         title = findViewById(R.id.booksTitle);
         emptyStateMessage = findViewById(R.id.booksEmptyStateMessage);
+
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterBooks(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         title.setText("Books List");
         emptyStateMessage.setText("No Books Available");
@@ -88,7 +106,8 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
 
         if (bookFor != null) {
             BookDatabase.getInstance(this).bookDao().getBooksWithNotesByFor(BookFor.fromGenre(bookFor)).observe(this, booksList -> {
-                books = booksList;
+                allBooks = booksList;
+                books = new ArrayList<>(allBooks);
                 Log.d("Books", "List: " + books.size());
 
                 if (books == null || books.isEmpty()) {
@@ -109,7 +128,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                         longPressCallBack.handleLongPress(view, position, "Book");
                     });
                     booksRecyclerView.setAdapter(bookAdapter);
-                    bookAdapter.updateGames(books);  // Notify adapter of new data
+                    bookAdapter.updateBooks(books);  // Notify adapter of new data
                 }
             });
         } else {
@@ -138,7 +157,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 // Add the new book to the list
                 if (newBook != null) {
                     books.add(newBook);
-                    bookAdapter.notifyDataSetChanged();  // Notify the adapter to refresh the RecyclerView
+                    bookAdapter.updateBooks(books);  // Notify the adapter to refresh the RecyclerView
                 }
 
                 Log.d("Book Action", "List count:" + books.size());
@@ -225,5 +244,32 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterBooks(String query) {
+        String lower = query.toLowerCase();
+
+        List<BookWithNotes> filtered = allBooks.stream()
+                .filter(bookWithNotes -> {
+                    Book book = bookWithNotes.book;
+
+                    boolean matchesName = book.getName().toLowerCase().contains(lower);
+                    boolean matchesStatus = book.getStatus().getStatus().toLowerCase().contains(lower);
+                    boolean matchesAuthor = book.getAuthor().toLowerCase().contains(lower);
+                    boolean matchesPublication = book.getPublication().toLowerCase().contains(lower);
+
+                    // Match genre
+                    boolean matchesGenre = book.getGenre().stream()
+                            .map(BookGenre::getGenre)  // assuming getGenre() returns the string name like "Fantasy"
+                            .anyMatch(genre -> genre.toLowerCase().contains(lower));
+
+                    return matchesName || matchesStatus || matchesAuthor || matchesPublication || matchesGenre;
+                })
+                .collect(Collectors.toList());
+
+        bookAdapter.updateBooks(filtered);
+
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        booksRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

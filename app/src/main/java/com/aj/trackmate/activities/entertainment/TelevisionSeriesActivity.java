@@ -3,8 +3,11 @@ package com.aj.trackmate.activities.entertainment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,6 +47,9 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
     private TextView title, emptyStateMessage;
     private FloatingActionButton addButton;
 
+    private EditText searchEditText;
+    private List<EntertainmentWithTelevisionSeries> allTelevisionSeries;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +71,21 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
         emptyStateMessage = findViewById(R.id.televisionSeriesEmptyStateMessage);
         title = findViewById(R.id.televisionSeriesTitle);
 
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterTelevisionSeries(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
         Log.d("Television Series", "Category: " + category);
@@ -85,8 +106,8 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
 
         if (category != null) {
             EntertainmentDatabase.getInstance(this).entertainmentDao().getAllEntertainmentForTelevisionSeries(EntertainmentCategory.TELEVISION_SERIES, category).observe(this, televisionSeriesList -> {
-                televisionSeries = televisionSeriesList;
-
+                allTelevisionSeries = televisionSeriesList;
+                televisionSeries = new ArrayList<>(allTelevisionSeries);
                 Log.d("Television Series", "List: " + televisionSeries.size());
 
                 if (televisionSeries == null || televisionSeries.isEmpty()) {
@@ -221,5 +242,32 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterTelevisionSeries(String query) {
+        String lower = query.toLowerCase();
+
+        List<EntertainmentWithTelevisionSeries> filtered = allTelevisionSeries.stream()
+                .filter(entertainmentWithTelevisionSeries -> {
+                    Entertainment entertainment = entertainmentWithTelevisionSeries.entertainment;
+                    TelevisionSeries tvSeries = entertainmentWithTelevisionSeries.televisionSeries;
+
+                    boolean matchesName = entertainment.getName().toLowerCase().contains(lower);
+                    boolean matchesStatus = tvSeries.getStatus().getStatus().toLowerCase().contains(lower);
+                    boolean matchesLanguage = entertainment.getLanguage().getLanguage().toLowerCase().contains(lower);
+
+                    // Match genre
+                    boolean matchesGenre = tvSeries.getGenre().stream()
+                            .map(TelevisionSeriesGenre::getGenre)  // assuming getGenre() returns the string name like "Fantasy"
+                            .anyMatch(genre -> genre.toLowerCase().contains(lower));
+
+                    return matchesName || matchesStatus || matchesLanguage || matchesGenre;
+                })
+                .collect(Collectors.toList());
+
+        televisionSeriesAdapter.updateTelevisionSeries(filtered);
+
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        televisionSeriesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

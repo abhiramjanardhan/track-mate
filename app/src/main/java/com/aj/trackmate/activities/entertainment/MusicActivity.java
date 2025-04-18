@@ -3,8 +3,11 @@ package com.aj.trackmate.activities.entertainment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_MUSIC_ADD;
 import static com.aj.trackmate.constants.RequestCodeConstants.REQUEST_CODE_ENTERTAINMENT_MUSIC_EDIT;
@@ -43,6 +47,9 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
     private List<EntertainmentWithMusic> musics;
     private TextView title, emptyStateMessage;
     private FloatingActionButton addButton;
+
+    private EditText searchEditText;
+    private List<EntertainmentWithMusic> allMusics;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -65,6 +72,21 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
         emptyStateMessage = findViewById(R.id.musicEmptyStateMessage);
         title = findViewById(R.id.musicTitle);
 
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterMusics(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
         title.setText(category + " List");
@@ -84,8 +106,8 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
 
         if (category != null) {
             EntertainmentDatabase.getInstance(this).entertainmentDao().getAllEntertainmentForMusic(EntertainmentCategory.MUSIC, category).observe(this, musicList -> {
-                musics = musicList;
-
+                allMusics = musicList;
+                musics = new ArrayList<>(allMusics);
                 Log.d("Music", "List: " + musics);
 
                 if (musics == null || musics.isEmpty()) {
@@ -193,5 +215,28 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
     @Override
     public boolean isReadOnly(int position) {
         return false;
+    }
+
+    private void filterMusics(String query) {
+        String lower = query.toLowerCase();
+
+        List<EntertainmentWithMusic> filtered = allMusics.stream()
+                .filter(entertainmentWithMusic -> {
+                    Entertainment entertainment = entertainmentWithMusic.entertainment;
+                    Music music = entertainmentWithMusic.music;
+
+                    boolean matchesName = entertainment.getName().toLowerCase().contains(lower);
+                    boolean matchesAlbum = music.getAlbum().toLowerCase().contains(lower);
+                    boolean matchesArtist = music.getAlbum().toLowerCase().contains(lower);
+                    boolean matchesLanguage = entertainment.getLanguage().getLanguage().toLowerCase().contains(lower);
+
+                    return matchesName || matchesLanguage || matchesAlbum || matchesArtist;
+                })
+                .collect(Collectors.toList());
+
+        musicAdapter.updateMusics(filtered);
+
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        musicRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }

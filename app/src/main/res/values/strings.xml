@@ -283,4 +283,5 @@
     <string name="application_management">Application Management</string>
     <string name="no_applications_available">No Applications Available</string>
     <string name="can_add_sub_applications">Can Add Sub-Applications?</string>
+    <string name="search">Search</string>
 </resources>

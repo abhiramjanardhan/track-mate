@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,6 +56,9 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
     private boolean isEditMode = false;
     private String originalGameName, originalGameStatus; // Store original values for cancel functionality
     private int gameId;
+
+    private EditText searchEditText;
+    private List<DownloadableContent> allDLCs = new ArrayList<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -140,6 +145,21 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         cancelButton = findViewById(R.id.cancelGameButton);
         saveButton = findViewById(R.id.saveGameButton);
 
+        searchEditText = findViewById(R.id.searchEditText);
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filterGames(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
         gameId = getIntent().getIntExtra("GAME_ID", -1);
         originalGameName = getIntent().getStringExtra("GAME_NAME");
         originalGameStatus = getIntent().getStringExtra("GAME_STATUS");
@@ -162,7 +182,8 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
             currentGame = gameWithDownloadableContent;
             if (currentGame != null) {
                 Game game = currentGame.game;
-                dlcs = currentGame.dlcs;
+                allDLCs = currentGame.dlcs;
+                dlcs = new ArrayList<>(allDLCs);
 
                 Log.d("Edit Game", "DLC Size: " + dlcs.size());
 
@@ -529,5 +550,25 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                 Toast.makeText(this, "Updated successfully", Toast.LENGTH_SHORT).show();
             });
         });
+    }
+
+    private void filterGames(String query) {
+        String lower = query.toLowerCase();
+
+        List<DownloadableContent> filtered = allDLCs.stream().filter(dlc -> {
+            boolean matchesName = dlc.getName().toLowerCase().contains(lower);
+            boolean matchesStatus = dlc.getStatus().getStatus().toLowerCase().contains(lower);
+            boolean matchesDLCType = dlc.getDlcType().getDLCType().toLowerCase().contains(lower);
+            boolean matchesPurchaseMode = dlc.getPurchaseMode().name().toLowerCase().contains(lower);
+            boolean matchesPurchaseType = dlc.getPurchaseType().name().toLowerCase().contains(lower);
+            boolean matchesCurrency = dlc.getCurrency().getCurrency().toLowerCase().contains(lower);
+
+            return  matchesName || matchesStatus || matchesDLCType || matchesPurchaseMode || matchesPurchaseType || matchesCurrency;
+        }).collect(Collectors.toList());
+
+        gameDLCAdapter.updateGames(filtered);
+
+        dlcsEmptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        gameDLCsRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
 }
