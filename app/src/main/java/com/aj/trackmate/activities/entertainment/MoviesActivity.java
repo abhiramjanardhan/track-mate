@@ -104,6 +104,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 @Override
                 public void onClearFilters() {
                     movieAdapter.updateMovies(allMovies); // Reset
+                    movieAdapter.sortMovie();
                     emptyStateMessage.setVisibility(allMovies.isEmpty() ? View.VISIBLE : View.GONE);
                     moviesRecyclerView.setVisibility(allMovies.isEmpty() ? View.GONE : View.VISIBLE);
                 }

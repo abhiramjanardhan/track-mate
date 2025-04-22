@@ -103,6 +103,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                 @Override
                 public void onClearFilters() {
                     musicAdapter.updateMusics(allMusics); // Reset
+                    musicAdapter.sortMusics();
                     emptyStateMessage.setVisibility(allMusics.isEmpty() ? View.VISIBLE : View.GONE);
                     musicRecyclerView.setVisibility(allMusics.isEmpty() ? View.GONE : View.VISIBLE);
                 }

@@ -100,6 +100,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 @Override
                 public void onClearFilters() {
                     gameAdapter.updateGames(allGames); // Reset
+                    gameAdapter.sortGames();
                     emptyStateMessage.setVisibility(allGames.isEmpty() ? View.VISIBLE : View.GONE);
                     gamesRecyclerView.setVisibility(allGames.isEmpty() ? View.GONE : View.VISIBLE);
                 }

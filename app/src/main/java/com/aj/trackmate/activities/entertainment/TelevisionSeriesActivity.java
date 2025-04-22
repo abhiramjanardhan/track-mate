@@ -104,6 +104,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 @Override
                 public void onClearFilters() {
                     televisionSeriesAdapter.updateTelevisionSeries(allTelevisionSeries); // Reset
+                    televisionSeriesAdapter.sortTelevisionSeries();
                     emptyStateMessage.setVisibility(allTelevisionSeries.isEmpty() ? View.VISIBLE : View.GONE);
                     televisionSeriesRecyclerView.setVisibility(allTelevisionSeries.isEmpty() ? View.GONE : View.VISIBLE);
                 }

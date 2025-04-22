@@ -100,6 +100,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 @Override
                 public void onClearFilters() {
                     bookAdapter.updateBooks(allBooks); // Reset
+                    bookAdapter.sortBooks();
                     emptyStateMessage.setVisibility(allBooks.isEmpty() ? View.VISIBLE : View.GONE);
                     booksRecyclerView.setVisibility(allBooks.isEmpty() ? View.GONE : View.VISIBLE);
                 }
