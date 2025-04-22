@@ -149,6 +149,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                     });
                     booksRecyclerView.setAdapter(bookAdapter);
                     bookAdapter.updateBooks(books);  // Notify adapter of new data
+                    bookAdapter.sortBooks();
                 }
             });
         } else {

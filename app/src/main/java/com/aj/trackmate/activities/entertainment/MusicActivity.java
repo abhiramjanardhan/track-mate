@@ -147,6 +147,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                     });
                     musicRecyclerView.setAdapter(musicAdapter);
                     musicAdapter.updateMusics(musics);  // Notify adapter of new data
+                    musicAdapter.sortMusics();
                 }
 
                 // Setup the swipe-to-delete functionality

@@ -153,6 +153,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                     });
                     gamesRecyclerView.setAdapter(gameAdapter);
                     gameAdapter.updateGames(games);  // Notify adapter of new data
+                    gameAdapter.sortGames();
                 }
             });
         } else {

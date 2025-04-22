@@ -151,6 +151,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                     });
                     moviesRecyclerView.setAdapter(movieAdapter);
                     movieAdapter.updateMovies(movies);
+                    movieAdapter.sortMovie();
                 }
             });
         } else {

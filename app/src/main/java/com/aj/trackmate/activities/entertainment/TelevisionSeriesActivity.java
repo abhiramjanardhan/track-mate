@@ -151,6 +151,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                     });
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                     televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
+                    televisionSeriesAdapter.sortTelevisionSeries();
                 }
             });
         } else {
