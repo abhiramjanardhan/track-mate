@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.entertainment.Entertainment;
+import com.aj.trackmate.models.entertainment.MovieStatus;
 import com.aj.trackmate.models.entertainment.Music;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMusic;
 
@@ -71,6 +72,12 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             entertainmentWithMusics.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void sortMusics() {
+        // Default sort based on status priority
+        entertainmentWithMusics.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
+        updateMusics(entertainmentWithMusics);
     }
 
     // ViewHolder class to hold the views for each item

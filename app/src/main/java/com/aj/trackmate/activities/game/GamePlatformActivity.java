@@ -23,10 +23,9 @@ import com.aj.trackmate.R;
 import com.aj.trackmate.activities.game.statistics.GameStatisticsActivity;
 import com.aj.trackmate.adapters.game.GameAdapter;
 import com.aj.trackmate.database.GameDatabase;
-import com.aj.trackmate.models.game.DownloadableContent;
-import com.aj.trackmate.models.game.Game;
-import com.aj.trackmate.models.game.GameStatus;
-import com.aj.trackmate.models.game.Platform;
+import com.aj.trackmate.managers.filter.FilterBarManager;
+import com.aj.trackmate.managers.filter.FilterBottomSheetDialog;
+import com.aj.trackmate.models.game.*;
 import com.aj.trackmate.models.game.relations.GameWithDownloadableContent;
 import com.aj.trackmate.operations.LongPressCallBack;
 import com.aj.trackmate.operations.templates.ItemRemovalListener;
@@ -34,9 +33,7 @@ import com.aj.trackmate.operations.templates.ItemTouchListener;
 import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -54,6 +51,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
 
     private EditText searchEditText;
     private List<GameWithDownloadableContent> allGames = new ArrayList<>();
+    private Map<String, String> selectedFilters = new HashMap<>();
 
     @SuppressLint({"MissingInflatedId", "SetTextI18n"})
     @Override
@@ -89,6 +87,25 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
 
             @Override
             public void afterTextChanged(Editable s) {}
+        });
+
+        findViewById(R.id.advancedGameFilters).setOnClickListener(v -> {
+            FilterBottomSheetDialog bottomSheet = new FilterBottomSheetDialog(platform, selectedFilters, new FilterBottomSheetDialog.FilterListener() {
+                @Override
+                public void onApplyFilters(Map<String, String> filters) {
+                    selectedFilters = filters;
+                    applyFilters(filters); // Your existing method
+                }
+
+                @Override
+                public void onClearFilters() {
+                    gameAdapter.updateGames(allGames); // Reset
+                    emptyStateMessage.setVisibility(allGames.isEmpty() ? View.VISIBLE : View.GONE);
+                    gamesRecyclerView.setVisibility(allGames.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            bottomSheet.show(getSupportFragmentManager(), "GameFilterBottomSheet");
         });
 
         title.setText("Games List");
@@ -165,6 +182,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 if (newGame != null) {
                     allGames.add(newGame);
                     gameAdapter.updateGames(allGames);  // Notify the adapter to refresh the RecyclerView
+                    searchEditText.setText("");
                 }
 
                 Log.d("Game Action", "List count:" + allGames.size());
@@ -282,6 +300,47 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
 
         gameAdapter.updateGames(filtered);
 
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        gamesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    private void applyFilters(Map<String, String> filters) {
+        List<GameWithDownloadableContent> filtered = allGames.stream().filter(gameWithDLC -> {
+            Game g = gameWithDLC.game;
+
+            boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || g.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
+            boolean type = Objects.equals(filters.get(FilterBarManager.FILTER_PURCHASE_TYPE), "All") || g.getPurchaseType().getPurchaseType().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_PURCHASE_TYPE));
+            boolean mode = Objects.equals(filters.get(FilterBarManager.FILTER_PURCHASE_MODE), "All") || g.getPurchaseMode().getPurchaseMode().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_PURCHASE_MODE));
+            boolean currency = Objects.equals(filters.get(FilterBarManager.FILTER_CURRENCY), "All") || g.getCurrency().getCurrency().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_CURRENCY));
+            boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == g.isBacklog();
+            boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == g.isWishlist();
+            boolean year = Objects.requireNonNull(filters.get(FilterBarManager.FILTER_YEAR)).isEmpty() || String.valueOf(g.getYear()).equals(filters.get(FilterBarManager.FILTER_YEAR));
+
+            return status && mode && type && currency && backlog && watchlist && year;
+        }).collect(Collectors.toList());
+
+        // Sorting Logic
+        String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Name":
+                    filtered.sort((a, b) -> a.game.getName().compareToIgnoreCase(b.game.getName()));
+                    break;
+                case "Year":
+                    filtered.sort(Comparator.comparingInt(a -> a.game.getYear()));
+                    break;
+                case "Amount":
+                    filtered.sort(Comparator.comparingDouble(a -> a.game.getAmount()));
+                    break;
+                default:
+                    gameAdapter.sortGames();
+                    break;
+            }
+        } else {
+            gameAdapter.sortGames();
+        }
+
+        gameAdapter.updateGames(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         gamesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

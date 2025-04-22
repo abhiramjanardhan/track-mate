@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.entertainment.Entertainment;
 import com.aj.trackmate.models.entertainment.TelevisionSeries;
+import com.aj.trackmate.models.entertainment.TelevisionSeriesStatus;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithTelevisionSeries;
 
 import java.util.List;
@@ -83,6 +84,16 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
             entertainmentWithTelevisionSeries.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void sortTelevisionSeries() {
+        // Default sort based on status priority
+        entertainmentWithTelevisionSeries.sort((a, b) -> {
+            int aPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(a.televisionSeries.getStatus(), Integer.MAX_VALUE);
+            int bPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(b.televisionSeries.getStatus(), Integer.MAX_VALUE);
+            return Integer.compare(aPriority, bPriority);
+        });
+        updateTelevisionSeries(entertainmentWithTelevisionSeries);
     }
 
     // ViewHolder class to hold the views for each item

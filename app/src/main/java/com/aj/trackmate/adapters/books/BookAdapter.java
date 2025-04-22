@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.books.Book;
+import com.aj.trackmate.models.books.BookStatus;
 import com.aj.trackmate.models.books.relations.BookWithNotes;
 
 import java.util.List;
@@ -79,6 +80,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             books.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void sortBooks() {
+        // Default sort based on status priority
+        books.sort((a, b) -> {
+            int aPriority = BookStatus.getStatusPriority().getOrDefault(a.book.getStatus(), Integer.MAX_VALUE);
+            int bPriority = BookStatus.getStatusPriority().getOrDefault(b.book.getStatus(), Integer.MAX_VALUE);
+            return Integer.compare(aPriority, bPriority);
+        });
+        updateBooks(books);
     }
 
     // ViewHolder class to hold the views for each item

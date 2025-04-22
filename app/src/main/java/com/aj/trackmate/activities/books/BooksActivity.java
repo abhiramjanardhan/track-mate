@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.adapters.books.BookAdapter;
 import com.aj.trackmate.database.BookDatabase;
+import com.aj.trackmate.managers.filter.FilterBarManager;
+import com.aj.trackmate.managers.filter.FilterBottomSheetDialog;
 import com.aj.trackmate.models.books.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -28,9 +30,7 @@ import com.aj.trackmate.operations.templates.ItemTouchListener;
 import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -48,6 +48,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
 
     private EditText searchEditText;
     private List<BookWithNotes> allBooks;
+    private Map<String, String> selectedFilters = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -72,6 +73,9 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
 
         searchEditText = findViewById(R.id.searchEditText);
 
+        // Get the platform name from the Intent
+        String bookFor = getIntent().getStringExtra("CATEGORY");
+
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -85,11 +89,27 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
             public void afterTextChanged(Editable s) {}
         });
 
+        findViewById(R.id.advancedBooksFilters).setOnClickListener(v -> {
+            FilterBottomSheetDialog bottomSheet = new FilterBottomSheetDialog(bookFor, selectedFilters, new FilterBottomSheetDialog.FilterListener() {
+                @Override
+                public void onApplyFilters(Map<String, String> filters) {
+                    selectedFilters = filters;
+                    applyFilters(filters); // Your existing method
+                }
+
+                @Override
+                public void onClearFilters() {
+                    bookAdapter.updateBooks(allBooks); // Reset
+                    emptyStateMessage.setVisibility(allBooks.isEmpty() ? View.VISIBLE : View.GONE);
+                    booksRecyclerView.setVisibility(allBooks.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            bottomSheet.show(getSupportFragmentManager(), "BooksFilterBottomSheet");
+        });
+
         title.setText("Books List");
         emptyStateMessage.setText("No Books Available");
-
-        // Get the platform name from the Intent
-        String bookFor = getIntent().getStringExtra("CATEGORY");
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(bookFor);  // Change the title dynamically
@@ -158,6 +178,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 if (newBook != null) {
                     allBooks.add(newBook);
                     bookAdapter.updateBooks(allBooks);  // Notify the adapter to refresh the RecyclerView
+                    searchEditText.setText("");
                 }
 
                 Log.d("Book Action", "List count:" + allBooks.size());
@@ -269,6 +290,38 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
 
         bookAdapter.updateBooks(filtered);
 
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        booksRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    private void applyFilters(Map<String, String> filters) {
+        List<BookWithNotes> filtered = allBooks.stream().filter(bookWithNotes -> {
+            Book b = bookWithNotes.book;
+
+            boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || b.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
+            boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || b.getGenre().contains(BookGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == b.isBacklog();
+            boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == b.isWishlist();
+
+            return status && genre && backlog && watchlist;
+        }).collect(Collectors.toList());
+
+        // Sorting Logic
+        String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Name":
+                    filtered.sort((a, b) -> a.book.getName().compareToIgnoreCase(b.book.getName()));
+                    break;
+                default:
+                    bookAdapter.sortBooks();
+                    break;
+            }
+        } else {
+            bookAdapter.sortBooks();
+        }
+
+        bookAdapter.updateBooks(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         booksRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

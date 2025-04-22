@@ -18,9 +18,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.MusicAdapter;
 import com.aj.trackmate.database.EntertainmentDatabase;
-import com.aj.trackmate.models.entertainment.Entertainment;
-import com.aj.trackmate.models.entertainment.EntertainmentCategory;
-import com.aj.trackmate.models.entertainment.Music;
+import com.aj.trackmate.managers.filter.FilterBarManager;
+import com.aj.trackmate.managers.filter.FilterBottomSheetDialog;
+import com.aj.trackmate.models.entertainment.*;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMusic;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
@@ -31,8 +31,7 @@ import com.aj.trackmate.operations.templates.ItemRemovalListener;
 import com.aj.trackmate.operations.templates.ItemTouchListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -50,6 +49,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
 
     private EditText searchEditText;
     private List<EntertainmentWithMusic> allMusics;
+    private Map<String, String> selectedFilters = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -89,7 +89,27 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
 
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
+        String platform = getIntent().getStringExtra("PLATFORM");
         title.setText(category + " List");
+
+        findViewById(R.id.advancedMusicFilters).setOnClickListener(v -> {
+            FilterBottomSheetDialog bottomSheet = new FilterBottomSheetDialog(platform, selectedFilters, new FilterBottomSheetDialog.FilterListener() {
+                @Override
+                public void onApplyFilters(Map<String, String> filters) {
+                    selectedFilters = filters;
+                    applyFilters(filters); // Your existing method
+                }
+
+                @Override
+                public void onClearFilters() {
+                    musicAdapter.updateMusics(allMusics); // Reset
+                    emptyStateMessage.setVisibility(allMusics.isEmpty() ? View.VISIBLE : View.GONE);
+                    musicRecyclerView.setVisibility(allMusics.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            bottomSheet.show(getSupportFragmentManager(), "MusicsFilterBottomSheet");
+        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title.getText());  // Change the title dynamically
@@ -160,6 +180,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                 if (newMusic != null) {
                     allMusics.add(newMusic);
                     musicAdapter.updateMusics(allMusics);  // Notify the adapter to refresh the RecyclerView
+                    searchEditText.setText("");
                 }
 
                 Log.d("Music Action", "List count:" + allMusics.size());
@@ -236,6 +257,39 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
 
         musicAdapter.updateMusics(filtered);
 
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        musicRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    private void applyFilters(Map<String, String> filters) {
+        List<EntertainmentWithMusic> filtered = allMusics.stream().filter(entertainmentWithMusic -> {
+            Entertainment e = entertainmentWithMusic.entertainment;
+            Music m = entertainmentWithMusic.music;
+
+            boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
+
+            return language;
+        }).collect(Collectors.toList());
+
+        // Sorting Logic
+        String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Name":
+                    filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
+                    break;
+                case "Language":
+                    filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
+                    break;
+                default:
+                    musicAdapter.sortMusics();
+                    break;
+            }
+        } else {
+            musicAdapter.sortMusics();
+        }
+
+        musicAdapter.updateMusics(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         musicRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

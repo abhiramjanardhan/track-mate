@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.TelevisionSeriesAdapter;
 import com.aj.trackmate.database.EntertainmentDatabase;
+import com.aj.trackmate.managers.filter.FilterBarManager;
+import com.aj.trackmate.managers.filter.FilterBottomSheetDialog;
 import com.aj.trackmate.models.entertainment.*;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithTelevisionSeries;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,9 +31,7 @@ import com.aj.trackmate.operations.templates.ItemTouchListener;
 import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -49,6 +49,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
 
     private EditText searchEditText;
     private List<EntertainmentWithTelevisionSeries> allTelevisionSeries;
+    private Map<String, String> selectedFilters = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -88,8 +89,28 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
 
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
+        String platform = getIntent().getStringExtra("PLATFORM");
         Log.d("Television Series", "Category: " + category);
         title.setText(category + " List");
+
+        findViewById(R.id.advancedTelevisionSeriesFilters).setOnClickListener(v -> {
+            FilterBottomSheetDialog bottomSheet = new FilterBottomSheetDialog(platform, selectedFilters, new FilterBottomSheetDialog.FilterListener() {
+                @Override
+                public void onApplyFilters(Map<String, String> filters) {
+                    selectedFilters = filters;
+                    applyFilters(filters); // Your existing method
+                }
+
+                @Override
+                public void onClearFilters() {
+                    televisionSeriesAdapter.updateTelevisionSeries(allTelevisionSeries); // Reset
+                    emptyStateMessage.setVisibility(allTelevisionSeries.isEmpty() ? View.VISIBLE : View.GONE);
+                    televisionSeriesRecyclerView.setVisibility(allTelevisionSeries.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            bottomSheet.show(getSupportFragmentManager(), "TelevisionSeriesFilterBottomSheet");
+        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title.getText());  // Change the title dynamically
@@ -169,6 +190,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 if (newTvSeries != null) {
                     allTelevisionSeries.add(newTvSeries);
                     televisionSeriesAdapter.updateTelevisionSeries(allTelevisionSeries);
+                    searchEditText.setText("");
                 }
 
                 Log.d("Television Series Action", "List count:" + allTelevisionSeries.size());
@@ -267,6 +289,43 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
 
         televisionSeriesAdapter.updateTelevisionSeries(filtered);
 
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        televisionSeriesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    private void applyFilters(Map<String, String> filters) {
+        List<EntertainmentWithTelevisionSeries> filtered = allTelevisionSeries.stream().filter(entertainmentWithTelevisionSeries -> {
+            Entertainment e = entertainmentWithTelevisionSeries.entertainment;
+            TelevisionSeries t = entertainmentWithTelevisionSeries.televisionSeries;
+
+            boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || t.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
+            boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
+            boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || t.getGenre().contains(TelevisionSeriesGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == t.isBacklog();
+            boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == t.isWishlist();
+
+            return status && language && genre && backlog && watchlist;
+        }).collect(Collectors.toList());
+
+        // Sorting Logic
+        String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Name":
+                    filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
+                    break;
+                case "Language":
+                    filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
+                    break;
+                default:
+                    televisionSeriesAdapter.sortTelevisionSeries();
+                    break;
+            }
+        } else {
+            televisionSeriesAdapter.sortTelevisionSeries();
+        }
+
+        televisionSeriesAdapter.updateTelevisionSeries(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         televisionSeriesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

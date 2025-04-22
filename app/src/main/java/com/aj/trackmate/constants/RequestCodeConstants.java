@@ -7,6 +7,7 @@ public class RequestCodeConstants {
     public static final int REQUEST_CODE_APPLICATION_SETTINGS_APPLICATION = 1004;
     public static final int REQUEST_CODE_APPLICATION_SETTINGS_APPLICATION_RELATED = 1005;
     public static final int REQUEST_CODE_APPLICATION_SETTINGS_APPLICATION_SUB_APPLICATIONS_RELATED = 1006;
+    public static final int REQUEST_CODE_ADVANCED_FILTERS = 1007;
 
     public static final int REQUEST_CODE_GAME_PLAYSTATION = 2001;
     public static final int REQUEST_CODE_GAME_XBOX = 2002;

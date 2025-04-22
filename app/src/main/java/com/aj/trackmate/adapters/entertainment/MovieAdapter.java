@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.entertainment.Entertainment;
 import com.aj.trackmate.models.entertainment.Movie;
+import com.aj.trackmate.models.entertainment.MovieStatus;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 
 import java.util.List;
@@ -82,6 +83,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             entertainmentWithMovies.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void sortMovie() {
+        // Default sort based on status priority
+        entertainmentWithMovies.sort((a, b) -> {
+            int aPriority = MovieStatus.getStatusPriority().getOrDefault(a.movie.getStatus(), Integer.MAX_VALUE);
+            int bPriority = MovieStatus.getStatusPriority().getOrDefault(b.movie.getStatus(), Integer.MAX_VALUE);
+            return Integer.compare(aPriority, bPriority);
+        });
+        updateMovies(entertainmentWithMovies);
     }
 
     // ViewHolder class to hold the views for each item

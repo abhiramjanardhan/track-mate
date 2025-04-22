@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.adapters.entertainment.MovieAdapter;
 import com.aj.trackmate.database.EntertainmentDatabase;
+import com.aj.trackmate.managers.filter.FilterBarManager;
+import com.aj.trackmate.managers.filter.FilterBottomSheetDialog;
 import com.aj.trackmate.models.entertainment.*;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,9 +31,7 @@ import com.aj.trackmate.operations.templates.ItemTouchListener;
 import com.aj.trackmate.operations.templates.ItemUpdateListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
@@ -49,6 +49,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
 
     private EditText searchEditText;
     private List<EntertainmentWithMovies> allMovies;
+    private Map<String, String> selectedFilters = new HashMap<>();
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -88,8 +89,28 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
 
         // Get the platform name from the Intent
         String category = getIntent().getStringExtra("CATEGORY");
+        String platform = getIntent().getStringExtra("PLATFORM");
         Log.d("Movie", "Category: " + category);
         title.setText(category + " List");
+
+        findViewById(R.id.advancedMoviesFilters).setOnClickListener(v -> {
+            FilterBottomSheetDialog bottomSheet = new FilterBottomSheetDialog(platform, selectedFilters, new FilterBottomSheetDialog.FilterListener() {
+                @Override
+                public void onApplyFilters(Map<String, String> filters) {
+                    selectedFilters = filters;
+                    applyFilters(filters); // Your existing method
+                }
+
+                @Override
+                public void onClearFilters() {
+                    movieAdapter.updateMovies(allMovies); // Reset
+                    emptyStateMessage.setVisibility(allMovies.isEmpty() ? View.VISIBLE : View.GONE);
+                    moviesRecyclerView.setVisibility(allMovies.isEmpty() ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            bottomSheet.show(getSupportFragmentManager(), "MoviesFilterBottomSheet");
+        });
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(title.getText());  // Change the title dynamically
@@ -168,6 +189,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 if (newMovie != null) {
                     allMovies.add(newMovie);
                     movieAdapter.updateMovies(allMovies);
+                    searchEditText.setText("");
                 }
 
                 Log.d("Movies Action", "List count:" + allMovies.size());
@@ -266,6 +288,43 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
 
         movieAdapter.updateMovies(filtered);
 
+        emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
+        moviesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
+    }
+
+    private void applyFilters(Map<String, String> filters) {
+        List<EntertainmentWithMovies> filtered = allMovies.stream().filter(entertainmentWithMovies -> {
+            Entertainment e = entertainmentWithMovies.entertainment;
+            Movie m = entertainmentWithMovies.movie;
+
+            boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || m.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
+            boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
+            boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || m.getGenre().contains(MovieGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == m.isBacklog();
+            boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == m.isWishlist();
+
+            return status && language && genre && backlog && watchlist;
+        }).collect(Collectors.toList());
+
+        // Sorting Logic
+        String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "Name":
+                    filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
+                    break;
+                case "Language":
+                    filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
+                    break;
+                default:
+                    movieAdapter.sortMovie();
+                    break;
+            }
+        } else {
+            movieAdapter.sortMovie();
+        }
+
+        movieAdapter.updateMovies(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         moviesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

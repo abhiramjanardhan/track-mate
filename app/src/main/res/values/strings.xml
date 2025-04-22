@@ -284,4 +284,9 @@
     <string name="no_applications_available">No Applications Available</string>
     <string name="can_add_sub_applications">Can Add Sub-Applications?</string>
     <string name="search">Search</string>
+    <string name="sort_by">Sort By</string>
+    <string name="filter_by">Filter By</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="watchlist">Watchlist</string>
 </resources>

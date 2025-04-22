@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/filterBarContainer"
+              android:padding="@dimen/fab_margin"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:clickable="true"
+              android:focusable="true"
+              android:paddingBottom="16dp">
+
+    <!-- Filter & Sort Section -->
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/filter_by"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="RtlSymmetry"/>
+
+    <!-- Status Filter -->
+    <LinearLayout
+            android:id="@+id/statusFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/status"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/statusFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Purchase Mode Filter -->
+    <LinearLayout
+            android:id="@+id/purchaseModeFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/purchase_mode"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/purchaseModeFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Purchase Type Filter -->
+    <LinearLayout
+            android:id="@+id/purchaseTypeFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/purchase_type"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/purchaseTypeFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Currency Filter -->
+    <LinearLayout
+            android:id="@+id/currencyFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/currency"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/currencyFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Language Filter -->
+    <LinearLayout
+            android:id="@+id/languageFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/language"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/languageFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Genre Filter -->
+    <LinearLayout
+            android:id="@+id/genreFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/select_genre"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/genreFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Watchlist Filter -->
+    <LinearLayout
+            android:id="@+id/watchlistFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/watchlist"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/watchlistFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Backlog Filter -->
+    <LinearLayout
+            android:id="@+id/backlogFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/backlog"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/backlogFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Year Filter -->
+    <LinearLayout
+            android:id="@+id/yearFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/year"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <EditText
+                android:id="@+id/yearFilterText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:autofillHints=""
+                android:inputType="number"
+                android:hint="@string/year" />
+
+    </LinearLayout>
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@android:color/darker_gray"
+            android:layout_marginVertical="8dp"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sort_by"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="RtlSymmetry"/>
+
+    <Spinner
+            android:id="@+id/sortingSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+    <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:dividerColor="@android:color/darker_gray"
+            android:layout_marginVertical="8dp"/>
+
+    <!-- Buttons Row -->
+    <LinearLayout
+            android:id="@+id/buttonsRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            android:gravity="end"
+            tools:ignore="RtlSymmetry">
+
+        <Button
+                android:id="@+id/clearFiltersButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="4dp"
+                android:text="@string/clear_filters"
+                android:padding="@dimen/fab_margin"
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp"
+                android:textAllCaps="false"
+                android:textColor="#0C0C0C"/>
+
+        <Button
+                android:id="@+id/applyFiltersButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="4dp"
+                android:text="@string/apply_filters"
+                android:padding="@dimen/fab_margin"
+                android:layout_gravity="end"
+                android:layout_marginTop="12dp"
+                android:textAllCaps="false"
+                android:textColor="#0C0C0C"/>
+
+    </LinearLayout>
+</LinearLayout>

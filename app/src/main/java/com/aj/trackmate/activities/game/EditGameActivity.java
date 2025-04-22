@@ -481,6 +481,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                 if (newGame != null) {
                     allDLCs.add(newGame);
                     gameDLCAdapter.updateGames(allDLCs);
+                    searchEditText.setText("");
                 }
 
                 Log.d("Game DLC Action", "List count:" + allDLCs.size());

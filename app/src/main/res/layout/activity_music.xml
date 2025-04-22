@@ -40,4 +40,14 @@
             android:layout_marginBottom="16dp"
             app:srcCompat="@android:drawable/ic_input_add"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/advancedMusicFilters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="@dimen/fab_margin"
+            android:layout_marginBottom="16dp"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@drawable/baseline_filter_list_alt_24"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

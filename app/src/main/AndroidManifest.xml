@@ -15,6 +15,9 @@
             tools:ignore="HardcodedDebugMode"
             tools:targetApi="31">
         <activity
+                android:name=".activities.utils.AdvancedFilterActivity"
+                android:exported="false"/>
+        <activity
                 android:name=".activities.settings.RelatedSubApplicationSettingsActivity"
                 android:exported="false"/>
         <activity

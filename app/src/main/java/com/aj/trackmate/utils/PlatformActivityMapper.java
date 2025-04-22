@@ -97,6 +97,7 @@ public class PlatformActivityMapper {
         if (activityClass != null) {
             Intent intent = new Intent(context, activityClass);
             intent.putExtra("CATEGORY", category);
+            intent.putExtra("PLATFORM", applicationName);
             context.startActivity(intent);
         } else {
             // Handle the case where no activity is mapped for the platform

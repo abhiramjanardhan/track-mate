@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.game.Game;
+import com.aj.trackmate.models.game.GameStatus;
 import com.aj.trackmate.models.game.relations.GameWithDownloadableContent;
 
 import java.util.List;
@@ -79,6 +80,16 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             games.remove(position);
             notifyItemRemoved(position);
         }
+    }
+
+    public void sortGames() {
+        // Default sort based on status priority
+        games.sort((a, b) -> {
+            int aPriority = GameStatus.getStatusPriority().getOrDefault(a.game.getStatus(), Integer.MAX_VALUE);
+            int bPriority = GameStatus.getStatusPriority().getOrDefault(b.game.getStatus(), Integer.MAX_VALUE);
+            return Integer.compare(aPriority, bPriority);
+        });
+        updateGames(games);
     }
 
     // ViewHolder class to hold the views for each item

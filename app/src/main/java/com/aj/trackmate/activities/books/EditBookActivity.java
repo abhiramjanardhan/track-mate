@@ -379,6 +379,7 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                 if (newBookNote != null) {
                     allNotes.add(newBookNote);
                     bookNotesAdapter.updateBookNotes(allNotes);
+                    searchEditText.setText("");
                 }
 
                 Log.d("Book Note Action", "List count:" + allNotes.size());
