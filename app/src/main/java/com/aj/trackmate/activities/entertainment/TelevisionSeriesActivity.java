@@ -149,6 +149,18 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                     }, (view, position) -> {
                         LongPressCallBack longPressCallBack = new LongPressCallBack(televisionSeriesAdapter, this, this, this);
                         longPressCallBack.handleLongPress(view, position, "TV Series");
+                    }, (series, isFavorite) -> {
+                        // Perform database update in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            series.setFavorite(isFavorite);
+                            EntertainmentDatabase.getInstance(this).televisionSeriesDao().update(series);
+                            String message = isFavorite ? "Marked as Favorite" : "Removed as Favorite";
+
+                            // Show a Toast on the main thread after the update is successful
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            });
+                        });
                     });
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                     televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
@@ -184,7 +196,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 Log.d("Television Series Action", "Save:" + newTvSeries);
 
                 if (televisionSeriesAdapter == null) {
-                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, allTelevisionSeries, null, null);
+                    televisionSeriesAdapter = new TelevisionSeriesAdapter(this, allTelevisionSeries, null, null, null);
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                 }
 

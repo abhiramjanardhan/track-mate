@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -20,12 +21,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private List<BookWithNotes> books;
     private final OnBookClickListener onBookClickListener;
     private final OnBookLongClickListener onBookLongClickListener;
+    private final OnFavoriteClickListener onFavoriteClickListener;
 
-    public BookAdapter(Context context, List<BookWithNotes> books, OnBookClickListener listener, OnBookLongClickListener onBookLongClickListener) {
+    public BookAdapter(Context context, List<BookWithNotes> books, OnBookClickListener listener, OnBookLongClickListener onBookLongClickListener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
         this.books = books;
         this.onBookClickListener = listener;
         this.onBookLongClickListener = onBookLongClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
@@ -63,6 +66,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
             }
             return true; // Long press handled
         });
+
+        boolean isFavorite = book.isFavorite(); // From your model
+
+        holder.favoriteStar.setImageResource(
+                isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.baseline_favorite_border_24
+        );
+
+        holder.favoriteStar.setOnClickListener(v -> {
+            if (onFavoriteClickListener != null) {
+                onFavoriteClickListener.onFavoriteStarClick(book, !isFavorite);
+            }
+        });
     }
 
     @Override
@@ -97,11 +112,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         TextView bookName;
         TextView bookStatus;
+        ImageView favoriteStar;
 
         public BookViewHolder(View itemView) {
             super(itemView);
             bookName = itemView.findViewById(R.id.bookName);
             bookStatus = itemView.findViewById(R.id.bookStatus);
+            favoriteStar = itemView.findViewById(R.id.favoriteStar);
         }
     }
 
@@ -111,5 +128,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     public interface OnBookLongClickListener {
         void onBookClick(View view, int position);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteStarClick(Book book, boolean isFavorite);
     }
 }

@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="my_light_primary">#6200EE</color> <!-- Purple for light theme -->
     <color name="buttonBackground">#090909</color>
+    <color name="favoriteYes">#FFC107</color>
 </resources>

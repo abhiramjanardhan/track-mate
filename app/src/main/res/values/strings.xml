@@ -290,4 +290,5 @@
     <string name="apply_filters">Apply Filters</string>
     <string name="watchlist">Watchlist</string>
     <string name="favorite">Favorite</string>
+    <string name="mark_as_favorite">Mark as Favorite</string>
 </resources>

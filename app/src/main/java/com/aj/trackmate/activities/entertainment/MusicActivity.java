@@ -145,6 +145,18 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                         intent.putExtra("MUSIC_NAME", entertainmentWithMusic.entertainment.getName());
                         intent.putExtra("MUSIC_LANGUAGE", entertainmentWithMusic.entertainment.getLanguage().getLanguage());
                         startActivityForResult(intent, REQUEST_CODE_ENTERTAINMENT_MUSIC_EDIT);
+                    }, (music, isFavorite) -> {
+                        // Perform database update in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            music.setFavorite(isFavorite);
+                            EntertainmentDatabase.getInstance(this).musicDao().update(music);
+                            String message = isFavorite ? "Marked as Favorite" : "Removed as Favorite";
+
+                            // Show a Toast on the main thread after the update is successful
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            });
+                        });
                     });
                     musicRecyclerView.setAdapter(musicAdapter);
                     musicAdapter.updateMusics(musics);  // Notify adapter of new data
@@ -174,7 +186,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                 Log.d("Music Action", "Save:" + newMusic);
 
                 if (musicAdapter == null) {
-                    musicAdapter = new MusicAdapter(this, allMusics, null);
+                    musicAdapter = new MusicAdapter(this, allMusics, null, null);
                     musicRecyclerView.setAdapter(musicAdapter);
                 }
 

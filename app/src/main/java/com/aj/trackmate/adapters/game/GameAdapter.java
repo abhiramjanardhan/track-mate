@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -20,12 +21,14 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
     private List<GameWithDownloadableContent> games;
     private final OnGameClickListener onGameClickListener;
     private final OnGameLongClickListener onGameLongClickListener;
+    private final OnFavoriteClickListener onFavoriteClickListener;
 
-    public GameAdapter(Context context, List<GameWithDownloadableContent> games, OnGameClickListener listener, OnGameLongClickListener onGameLongClickListener) {
+    public GameAdapter(Context context, List<GameWithDownloadableContent> games, OnGameClickListener listener, OnGameLongClickListener onGameLongClickListener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
         this.games = games;
         this.onGameClickListener = listener;
         this.onGameLongClickListener = onGameLongClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
@@ -63,6 +66,18 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
             }
             return true; // Long press handled
         });
+
+        boolean isFavorite = game.isFavorite(); // From your model
+
+        holder.favoriteStar.setImageResource(
+                isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.baseline_favorite_border_24
+        );
+
+        holder.favoriteStar.setOnClickListener(v -> {
+            if (onFavoriteClickListener != null) {
+                onFavoriteClickListener.onFavoriteStarClick(game, !isFavorite);
+            }
+        });
     }
 
     @Override
@@ -97,11 +112,13 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
         TextView gameName;
         TextView gameStatus;
+        ImageView favoriteStar;
 
         public GameViewHolder(View itemView) {
             super(itemView);
             gameName = itemView.findViewById(R.id.gameName);
             gameStatus = itemView.findViewById(R.id.gameStatus);
+            favoriteStar = itemView.findViewById(R.id.favoriteStar);
         }
     }
 
@@ -111,5 +128,9 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
 
     public interface OnGameLongClickListener {
         void onGameClick(View view, int position);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteStarClick(Game game, boolean isFavorite);
     }
 }

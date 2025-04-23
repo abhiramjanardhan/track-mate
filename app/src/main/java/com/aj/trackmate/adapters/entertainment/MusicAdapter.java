@@ -6,11 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
 import com.aj.trackmate.models.entertainment.Entertainment;
-import com.aj.trackmate.models.entertainment.MovieStatus;
 import com.aj.trackmate.models.entertainment.Music;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMusic;
 
@@ -20,11 +20,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
     private final Context context;
     private List<EntertainmentWithMusic> entertainmentWithMusics;
     private final OnMusicClickListener onMusicClickListener;
+    private final OnFavoriteClickListener onFavoriteClickListener;
 
-    public MusicAdapter(Context context, List<EntertainmentWithMusic> entertainmentWithMusic, OnMusicClickListener listener) {
+    public MusicAdapter(Context context, List<EntertainmentWithMusic> entertainmentWithMusic, OnMusicClickListener listener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
         this.entertainmentWithMusics = entertainmentWithMusic;
         this.onMusicClickListener = listener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
@@ -53,6 +55,18 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
             Log.d("ItemClicked", "Item clicked: " + entertainment.getName());
             if (onMusicClickListener != null) {
                 onMusicClickListener.onMusicClick(entertainmentWithMusic);
+            }
+        });
+
+        boolean isFavorite = music.isFavorite(); // From your model
+
+        holder.favoriteStar.setImageResource(
+                isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.baseline_favorite_border_24
+        );
+
+        holder.favoriteStar.setOnClickListener(v -> {
+            if (onFavoriteClickListener != null) {
+                onFavoriteClickListener.onFavoriteStarClick(music, !isFavorite);
             }
         });
     }
@@ -85,15 +99,21 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
 
         TextView musicName;
         TextView musicStatus;
+        ImageView favoriteStar;
 
         public MusicViewHolder(View itemView) {
             super(itemView);
             musicName = itemView.findViewById(R.id.musicName);
             musicStatus = itemView.findViewById(R.id.musicStatus);
+            favoriteStar = itemView.findViewById(R.id.favoriteStar);
         }
     }
 
     public interface OnMusicClickListener {
         void onMusicClick(EntertainmentWithMusic entertainmentWithMusic);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteStarClick(Music music, boolean isFavorite);
     }
 }

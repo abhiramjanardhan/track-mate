@@ -151,6 +151,18 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                     }, (view, position) -> {
                         LongPressCallBack longPressCallBack = new LongPressCallBack(gameAdapter, this, this, this);
                         longPressCallBack.handleLongPress(view, position, "Game");
+                    }, (game, isFavorite) -> {
+                        // Perform database update in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            game.setFavorite(isFavorite);
+                            GameDatabase.getInstance(this).gameDao().update(game);
+                            String message = isFavorite ? "Marked as Favorite" : "Removed as Favorite";
+
+                            // Show a Toast on the main thread after the update is successful
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            });
+                        });
                     });
                     gamesRecyclerView.setAdapter(gameAdapter);
                     gameAdapter.updateGames(games);  // Notify adapter of new data
@@ -176,7 +188,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 Log.d("Game Action", "Save:" + newGame);
 
                 if (gameAdapter == null) {
-                    gameAdapter = new GameAdapter(this, allGames, null, null);
+                    gameAdapter = new GameAdapter(this, allGames, null, null, null);
                     gamesRecyclerView.setAdapter(gameAdapter);
                 }
 

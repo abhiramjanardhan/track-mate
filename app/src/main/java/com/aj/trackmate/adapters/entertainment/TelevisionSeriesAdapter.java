@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -21,12 +22,14 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
     private List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries;
     private final OnTelevisionSeriesClickListener onTelevisionSeriesClickListener;
     private final OnTelevisionSeriesLongClickListener onTelevisionSeriesLongClickListener;
+    private final OnFavoriteClickListener onFavoriteClickListener;
 
-    public TelevisionSeriesAdapter(Context context, List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries, OnTelevisionSeriesClickListener listener, OnTelevisionSeriesLongClickListener onTelevisionSeriesLongClickListener) {
+    public TelevisionSeriesAdapter(Context context, List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries, OnTelevisionSeriesClickListener listener, OnTelevisionSeriesLongClickListener onTelevisionSeriesLongClickListener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
         this.entertainmentWithTelevisionSeries = entertainmentWithTelevisionSeries;
         this.onTelevisionSeriesClickListener = listener;
         this.onTelevisionSeriesLongClickListener = onTelevisionSeriesLongClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
@@ -67,6 +70,18 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
             }
             return true; // Long press handled
         });
+
+        boolean isFavorite = series.isFavorite(); // From your model
+
+        holder.favoriteStar.setImageResource(
+                isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.baseline_favorite_border_24
+        );
+
+        holder.favoriteStar.setOnClickListener(v -> {
+            if (onFavoriteClickListener != null) {
+                onFavoriteClickListener.onFavoriteStarClick(series, !isFavorite);
+            }
+        });
     }
 
     @Override
@@ -101,11 +116,13 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
 
         TextView tvSeriesName;
         TextView tvSeriesStatus;
+        ImageView favoriteStar;
 
         public TelevisionSeriesViewHolder(View itemView) {
             super(itemView);
             tvSeriesName = itemView.findViewById(R.id.tvSeriesName);
             tvSeriesStatus = itemView.findViewById(R.id.tvSeriesStatus);
+            favoriteStar = itemView.findViewById(R.id.favoriteStar);
         }
     }
 
@@ -115,5 +132,9 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
 
     public interface OnTelevisionSeriesLongClickListener {
         void onTelevisionSeriesClick(View view, int position);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteStarClick(TelevisionSeries televisionSeries, boolean isFavorite);
     }
 }

@@ -147,6 +147,18 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                     }, (view, position) -> {
                         LongPressCallBack longPressCallBack = new LongPressCallBack(bookAdapter, this, this, this);
                         longPressCallBack.handleLongPress(view, position, "Book");
+                    }, (book, isFavorite) -> {
+                        // Perform database update in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            book.setFavorite(isFavorite);
+                            BookDatabase.getInstance(this).bookDao().update(book);
+                            String message = isFavorite ? "Marked as Favorite" : "Removed as Favorite";
+
+                            // Show a Toast on the main thread after the update is successful
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            });
+                        });
                     });
                     booksRecyclerView.setAdapter(bookAdapter);
                     bookAdapter.updateBooks(books);  // Notify adapter of new data
@@ -172,7 +184,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 Log.d("Book Action", "Save:" + newBook);
 
                 if (bookAdapter == null) {
-                    bookAdapter = new BookAdapter(this, allBooks, null, null);
+                    bookAdapter = new BookAdapter(this, allBooks, null, null, null);
                     booksRecyclerView.setAdapter(bookAdapter);
                 }
 

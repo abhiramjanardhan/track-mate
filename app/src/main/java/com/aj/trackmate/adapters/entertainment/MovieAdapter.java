@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.aj.trackmate.R;
@@ -21,12 +22,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
     private List<EntertainmentWithMovies> entertainmentWithMovies;
     private final OnMovieClickListener onMovieClickListener;
     private final OnMovieLongClickListener onMovieLongClickListener;
+    private final OnFavoriteClickListener onFavoriteClickListener;
 
-    public MovieAdapter(Context context, List<EntertainmentWithMovies> entertainmentWithMovies, OnMovieClickListener listener, OnMovieLongClickListener onMovieLongClickListener) {
+    public MovieAdapter(Context context, List<EntertainmentWithMovies> entertainmentWithMovies, OnMovieClickListener listener, OnMovieLongClickListener onMovieLongClickListener, OnFavoriteClickListener onFavoriteClickListener) {
         this.context = context;
         this.entertainmentWithMovies = entertainmentWithMovies;
         this.onMovieClickListener = listener;
         this.onMovieLongClickListener = onMovieLongClickListener;
+        this.onFavoriteClickListener = onFavoriteClickListener;
     }
 
     @Override
@@ -66,6 +69,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             }
             return true; // Long press handled
         });
+
+        boolean isFavorite = movie.isFavorite(); // From your model
+
+        holder.favoriteStar.setImageResource(
+                isFavorite ? R.drawable.baseline_favorite_24 : R.drawable.baseline_favorite_border_24
+        );
+
+        holder.favoriteStar.setOnClickListener(v -> {
+            if (onFavoriteClickListener != null) {
+                onFavoriteClickListener.onFavoriteStarClick(movie, !isFavorite);
+            }
+        });
     }
 
     @Override
@@ -100,11 +115,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
         TextView movieName;
         TextView movieStatus;
+        ImageView favoriteStar;
 
         public MovieViewHolder(View itemView) {
             super(itemView);
             movieName = itemView.findViewById(R.id.movieName);
             movieStatus = itemView.findViewById(R.id.movieStatus);
+            favoriteStar = itemView.findViewById(R.id.favoriteStar);
         }
     }
 
@@ -114,5 +131,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
 
     public interface OnMovieLongClickListener {
         void onMovieClick(View view, int position);
+    }
+
+    public interface OnFavoriteClickListener {
+        void onFavoriteStarClick(Movie movie, boolean isFavorite);
     }
 }

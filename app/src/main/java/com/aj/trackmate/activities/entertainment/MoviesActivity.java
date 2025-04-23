@@ -149,6 +149,18 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                     }, (view, position) -> {
                         LongPressCallBack longPressCallBack = new LongPressCallBack(movieAdapter, this, this, this);
                         longPressCallBack.handleLongPress(view, position, "Movie");
+                    }, (movie, isFavorite) -> {
+                        // Perform database update in a background thread
+                        Executors.newSingleThreadExecutor().execute(() -> {
+                            movie.setFavorite(isFavorite);
+                            EntertainmentDatabase.getInstance(this).movieDao().update(movie);
+                            String message = isFavorite ? "Marked as Favorite" : "Removed as Favorite";
+
+                            // Show a Toast on the main thread after the update is successful
+                            runOnUiThread(() -> {
+                                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+                            });
+                        });
                     });
                     moviesRecyclerView.setAdapter(movieAdapter);
                     movieAdapter.updateMovies(movies);
@@ -183,7 +195,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 newMovie = data.getParcelableExtra("NEW_MOVIE", EntertainmentWithMovies.class);
 
                 if (movieAdapter == null) {
-                    movieAdapter = new MovieAdapter(this, allMovies, null, null);
+                    movieAdapter = new MovieAdapter(this, allMovies, null, null, null);
                     moviesRecyclerView.setAdapter(movieAdapter);
                 }
 
