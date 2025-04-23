@@ -23,6 +23,7 @@ public class Music implements Parcelable {
     private String artist;
     private String album;
     private String platform;
+    private boolean favorite;
 
     public int getId() {
         return id;
@@ -64,10 +65,19 @@ public class Music implements Parcelable {
         this.platform = platform;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     // Blank Constructor
     public Music() {
         this.album = "";
         this.artist = "";
+        this.favorite = false;
     }
 
     // Parcelable Implementation
@@ -78,6 +88,7 @@ public class Music implements Parcelable {
         artist = in.readString();
         album = in.readString();
         platform = in.readString();
+        favorite = in.readByte() != 0;
     }
 
     public static final Creator<Music> CREATOR = new Creator<Music>() {
@@ -101,6 +112,7 @@ public class Music implements Parcelable {
         dest.writeString(artist);
         dest.writeString(album);
         dest.writeString(platform);
+        dest.writeByte((byte) (favorite ? 1 : 0));
     }
 
     @Override

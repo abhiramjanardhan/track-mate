@@ -23,6 +23,7 @@ public class AddMoviesActivity extends AppCompatActivity {
     private EditText movieNameEditText;
     private Spinner movieLanguageSpinner, movieStatusSpinner;
     private TextView movieGenreMultiSelect;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
     private RadioButton completedYes, completedNo;
@@ -63,6 +64,9 @@ public class AddMoviesActivity extends AppCompatActivity {
 
         movieGenreMultiSelect = findViewById(R.id.movieGenreMultiSelect);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         wishlistYes = findViewById(R.id.wishlistYes);
         wishlistNo = findViewById(R.id.wishlistNo);
 
@@ -86,6 +90,7 @@ public class AddMoviesActivity extends AppCompatActivity {
 
         selectedGenres = new boolean[genreArray.length];
 
+        favoriteNo.setChecked(true);
         wishlistNo.setChecked(true);
         startedNo.setChecked(true);
         completedNo.setChecked(true);
@@ -119,6 +124,7 @@ public class AddMoviesActivity extends AppCompatActivity {
                 return;
             }
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -138,6 +144,7 @@ public class AddMoviesActivity extends AppCompatActivity {
                 movie.setGenre(selectedGenreList);
                 movie.setPlatform(platform);
                 movie.setStatus(MovieStatus.fromStatus(movieStatus));
+                movie.setFavorite(isFavorite);
                 movie.setWishlist(isWishlist);
                 movie.setStarted(isStarted);
                 movie.setCompleted(isCompleted);

@@ -68,6 +68,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+    <!-- Favorite Radio Group -->
+    <TextView
+            android:id="@+id/favoriteTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/favorite"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/favoriteTelevisionSeriesGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/favoriteYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/favoriteNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
     <!-- Wishlist Radio Group -->
     <TextView
             android:id="@+id/wishlistTextLabel"
@@ -233,7 +257,7 @@
             android:id="@+id/editTelevisionSeriesButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/edit_movie"/>
+            android:text="@string/edit_television_series"/>
     <Button
             android:id="@+id/saveTelevisionSeriesButton"
             android:layout_width="match_parent"

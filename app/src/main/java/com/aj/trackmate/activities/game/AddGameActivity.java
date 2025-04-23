@@ -23,6 +23,7 @@ public class AddGameActivity extends AppCompatActivity {
 
     private EditText gameNameEditText, gameAmount, gameYear;
     private Spinner gameStatusSpinner, currencySpinner;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
@@ -60,6 +61,9 @@ public class AddGameActivity extends AppCompatActivity {
         gameNameEditText = findViewById(R.id.gameNameEditText);
         gameStatusSpinner = findViewById(R.id.gameStatusSpinner);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         purchasedYes = findViewById(R.id.purchasedYes);
         purchasedNo = findViewById(R.id.purchasedNo);
 
@@ -92,6 +96,7 @@ public class AddGameActivity extends AppCompatActivity {
 
         saveButton = findViewById(R.id.saveButton);
 
+        favoriteNo.setChecked(true);
         purchasedNo.setChecked(true);
         wishlistNo.setChecked(true);
         purchaseTypeNotDecided.setChecked(true);
@@ -172,6 +177,7 @@ public class AddGameActivity extends AppCompatActivity {
                 }
             }
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isPurchased = purchasedYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
@@ -199,6 +205,7 @@ public class AddGameActivity extends AppCompatActivity {
             Game newGame = new Game();
             newGame.setName(gameName);
             newGame.setPlatform(Platform.fromName(platform));  // Convert string to enum
+            newGame.setFavorite(isFavorite);
             newGame.setPurchased(isPurchased);
             newGame.setWishlist(isWishlist);
             newGame.setPurchaseMode(gamePurchaseMode);

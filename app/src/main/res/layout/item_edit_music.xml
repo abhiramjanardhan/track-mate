@@ -54,6 +54,30 @@
             android:hint="@string/album_name"
             android:inputType="text" />
 
+    <!-- Favorite Radio Group -->
+    <TextView
+            android:id="@+id/favoriteTextLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/favorite"
+            android:layout_marginBottom="8dp" />
+    <RadioGroup
+            android:id="@+id/favoriteMusicsGroup"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/favoriteYes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/yes" />
+        <RadioButton
+                android:id="@+id/favoriteNo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/no" />
+    </RadioGroup>
+
     <!-- Save Button -->
     <!-- Add Button -->
     <Button

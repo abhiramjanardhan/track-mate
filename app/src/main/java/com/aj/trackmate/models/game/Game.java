@@ -22,6 +22,7 @@ public class Game implements Parcelable {
     private String name;
     @TypeConverters(GamePlatformConverter.class)
     private Platform platform;
+    private boolean favorite;
     private boolean purchased;
     private boolean wishlist;
     @TypeConverters(GamePurchaseModeConverter.class)
@@ -78,6 +79,14 @@ public class Game implements Parcelable {
 
     public void setPurchaseType(GamePurchaseType purchaseType) {
         this.purchaseType = purchaseType;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public boolean isPurchased() {
@@ -164,6 +173,7 @@ public class Game implements Parcelable {
     public Game() {
         // Initialize fields to default values if needed
         this.name = "";
+        this.favorite = false;
         this.purchased = false;
         this.wishlist = false;
         this.started = false;
@@ -183,6 +193,7 @@ public class Game implements Parcelable {
         id = in.readInt();
         name = in.readString();
         platform = Platform.fromName(in.readString());
+        favorite = in.readByte() != 0;
         purchased = in.readByte() != 0;
         wishlist = in.readByte() != 0;
         purchaseMode = GamePurchaseMode.fromMode(in.readString());
@@ -214,6 +225,7 @@ public class Game implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(platform.getName());
+        dest.writeByte((byte) (favorite ? 1 : 0));
         dest.writeByte((byte) (purchased ? 1 : 0));
         dest.writeByte((byte) (wishlist ? 1 : 0));
         dest.writeString(purchaseMode.getPurchaseMode());

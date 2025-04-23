@@ -29,6 +29,8 @@ public class EditMusicActivity extends AppCompatActivity {
     private TextView editMusicHeading;
     private EditText musicNameEditText, musicArtistNameEditText, musicAlbumNameEditText;
     private Spinner musicLanguageSpinner;
+    private RadioButton favoriteYes, favoriteNo;
+    private RadioGroup favoriteMusicGroup;
     private Button saveButton, cancelButton, editButton;
 
     @SuppressLint("SetTextI18n")
@@ -65,6 +67,11 @@ public class EditMusicActivity extends AppCompatActivity {
         editMusicHeading = findViewById(R.id.editMusicHeading);
         musicLanguageSpinner = findViewById(R.id.musicLanguageSpinner);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
+        favoriteMusicGroup = findViewById(R.id.favoriteMusicsGroup);
+
         editButton = findViewById(R.id.editMusicButton);
         saveButton = findViewById(R.id.saveMusicButton);
         cancelButton = findViewById(R.id.cancelMusicButton);
@@ -84,6 +91,12 @@ public class EditMusicActivity extends AppCompatActivity {
                 musicNameEditText.setText(musicName);
                 musicArtistNameEditText.setText(entertainmentWithMusic.music.getArtist());
                 musicAlbumNameEditText.setText(entertainmentWithMusic.music.getAlbum());
+
+                if (entertainmentWithMusic.music.isFavorite()) {
+                    favoriteYes.setChecked(true);
+                } else {
+                    favoriteNo.setChecked(true);
+                }
 
                 ArrayAdapter musicLanguageSpinnerAdapter = (ArrayAdapter) musicLanguageSpinner.getAdapter();
                 int languagePosition = musicLanguageSpinnerAdapter.getPosition(entertainmentWithMusic.entertainment.getLanguage().getLanguage());
@@ -124,6 +137,10 @@ public class EditMusicActivity extends AppCompatActivity {
         musicArtistNameEditText.setEnabled(enabled);
         musicAlbumNameEditText.setEnabled(enabled);
 
+        favoriteMusicGroup.setEnabled(enabled);
+        favoriteYes.setEnabled(enabled);
+        favoriteNo.setEnabled(enabled);
+
         editButton.setVisibility(enabled ? View.GONE : View.VISIBLE);
         saveButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
         cancelButton.setVisibility(enabled ? View.VISIBLE : View.GONE);
@@ -137,6 +154,8 @@ public class EditMusicActivity extends AppCompatActivity {
             String musicAlbumName = musicAlbumNameEditText.getText().toString().trim();
             String musicLanguage = musicLanguageSpinner.getSelectedItem().toString();
 
+            boolean isFavorite = favoriteYes.isChecked();
+
             entertainmentWithMusic.entertainment.setName(musicName);
             entertainmentWithMusic.entertainment.setLanguage(Language.fromLanguage(musicLanguage));
 
@@ -145,6 +164,7 @@ public class EditMusicActivity extends AppCompatActivity {
 
                 entertainmentWithMusic.music.setArtist(musicArtistName);
                 entertainmentWithMusic.music.setAlbum(musicAlbumName);
+                entertainmentWithMusic.music.setFavorite(isFavorite);
 
                 EntertainmentDatabase.getInstance(this).musicDao().update(entertainmentWithMusic.music);
 

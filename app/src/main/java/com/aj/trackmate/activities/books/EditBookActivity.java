@@ -44,12 +44,13 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
     private EditText bookNameEditText, bookAuthorNameEditText, bookPublicationNameEditText;
     private Spinner bookStatusSpinner;
     private TextView editBookHeading, bookGenreMultiSelect, bookNotesEmptyStateMessage;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
     private RadioButton completedYes, completedNo;
     private RadioButton backlogYes, backlogNo;
-    private RadioGroup purchasedBookGroup, wishlistBookGroup, startedBookGroup, completedBookGroup, backlogBookGroup;
+    private RadioGroup favoriteBookGroup, purchasedBookGroup, wishlistBookGroup, startedBookGroup, completedBookGroup, backlogBookGroup;
     private Button saveButton, cancelButton, editButton, addBookNoteButton;
     private RecyclerView recyclerViewBookNotes;
 
@@ -95,6 +96,9 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
         bookGenreMultiSelect = findViewById(R.id.bookGenreMultiSelect);
         editBookHeading = findViewById(R.id.editBookHeading);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         purchasedYes = findViewById(R.id.purchasedYes);
         purchasedNo = findViewById(R.id.purchasedNo);
 
@@ -114,6 +118,7 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
         editButton = findViewById(R.id.editBookButton);
         cancelButton = findViewById(R.id.cancelBookButton);
 
+        favoriteBookGroup = findViewById(R.id.favoriteBookGroup);
         purchasedBookGroup = findViewById(R.id.purchasedBookGroup);
         wishlistBookGroup = findViewById(R.id.wishlistBookGroup);
         startedBookGroup = findViewById(R.id.startedBookGroup);
@@ -224,6 +229,12 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
                 // Update the UI to reflect the selected genres
                 updateGenreText();
 
+                if (book.isFavorite()) {
+                    favoriteYes.setChecked(true);
+                } else {
+                    favoriteNo.setChecked(true);
+                }
+
                 if (book.isPurchased()) {
                     purchasedYes.setChecked(true);
                 } else {
@@ -290,6 +301,10 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
         bookStatusSpinner.setEnabled(enabled);
         bookGenreMultiSelect.setEnabled(enabled);
 
+        favoriteBookGroup.setEnabled(enabled);
+        favoriteYes.setEnabled(enabled);
+        favoriteNo.setEnabled(enabled);
+
         wishlistBookGroup.setEnabled(enabled);
         wishlistYes.setEnabled(enabled);
         wishlistNo.setEnabled(enabled);
@@ -323,6 +338,7 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
             String bookPublicationName = bookPublicationNameEditText.getText().toString().trim();
             String bookStatus = bookStatusSpinner.getSelectedItem().toString();
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -334,6 +350,7 @@ public class EditBookActivity extends AppCompatActivity implements ItemRemovalLi
             currentBook.book.setPublication(bookPublicationName);
             currentBook.book.setStatus(BookStatus.fromStatus(bookStatus));
             currentBook.book.setGenre(selectedGenreList);
+            currentBook.book.setFavorite(isFavorite);
             currentBook.book.setWishlist(isWishlist);
             currentBook.book.setStarted(isStarted);
             currentBook.book.setCompleted(isCompleted);

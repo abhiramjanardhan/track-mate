@@ -24,6 +24,7 @@ public class Book implements Parcelable {
     private List<BookGenre> genre;
     private String author;
     private String publication;
+    private boolean favorite;
     private boolean purchased;
     private boolean wishlist;
     private boolean started;
@@ -88,6 +89,14 @@ public class Book implements Parcelable {
         this.publication = publication;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public boolean isPurchased() {
         return purchased;
     }
@@ -142,6 +151,7 @@ public class Book implements Parcelable {
         this.name = "";
         this.author = "";
         this.publication = "";
+        this.favorite = false;
         this.purchased = false;
         this.wishlist = false;
         this.started = false;
@@ -161,6 +171,7 @@ public class Book implements Parcelable {
                 .map(BookGenre::valueOf)
                 .toList();
         publication = in.readString();
+        favorite = in.readByte() != 0;
         purchased = in.readByte() != 0;
         wishlist = in.readByte() != 0;
         started = in.readByte() != 0;
@@ -191,6 +202,7 @@ public class Book implements Parcelable {
         dest.writeString(bookFor.getBookFor());
         dest.writeStringList(genre.stream().map(Enum::name).toList());
         dest.writeString(publication);
+        dest.writeByte((byte) (favorite ? 1 : 0));
         dest.writeByte((byte) (purchased ? 1 : 0));
         dest.writeByte((byte) (wishlist ? 1 : 0));
         dest.writeByte((byte) (started ? 1 : 0));

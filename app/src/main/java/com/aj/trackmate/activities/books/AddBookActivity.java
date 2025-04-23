@@ -25,6 +25,7 @@ public class AddBookActivity extends AppCompatActivity {
     private EditText bookNameEditText, bookAuthorNameEditText, bookPublicationNameEditText;
     private Spinner bookStatusSpinner;
     private TextView bookGenreMultiSelect;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
@@ -67,6 +68,9 @@ public class AddBookActivity extends AppCompatActivity {
 
         bookGenreMultiSelect = findViewById(R.id.bookGenreMultiSelect);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         purchasedYes = findViewById(R.id.purchasedYes);
         purchasedNo = findViewById(R.id.purchasedNo);
 
@@ -84,6 +88,7 @@ public class AddBookActivity extends AppCompatActivity {
 
         saveButton = findViewById(R.id.saveBookButton);
 
+        favoriteNo.setChecked(true);
         purchasedNo.setChecked(true);
         wishlistNo.setChecked(true);
         startedNo.setChecked(true);
@@ -122,6 +127,7 @@ public class AddBookActivity extends AppCompatActivity {
                 return;
             }
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -137,6 +143,7 @@ public class AddBookActivity extends AppCompatActivity {
             book.setPublication(bookPublicationName);
             book.setStatus(BookStatus.fromStatus(bookStatus));
             book.setGenre(selectedGenreList);
+            book.setFavorite(isFavorite);
             book.setWishlist(isWishlist);
             book.setStarted(isStarted);
             book.setCompleted(isCompleted);

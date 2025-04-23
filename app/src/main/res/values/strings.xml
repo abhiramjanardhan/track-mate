@@ -289,4 +289,5 @@
     <string name="clear_filters">Clear Filters</string>
     <string name="apply_filters">Apply Filters</string>
     <string name="watchlist">Watchlist</string>
+    <string name="favorite">Favorite</string>
 </resources>

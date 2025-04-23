@@ -9,16 +9,15 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.aj.trackmate.database.migrations.game.DatabaseMigration1to2;
 import com.aj.trackmate.database.migrations.game.DatabaseMigration2to3;
 import com.aj.trackmate.database.migrations.game.DatabaseMigration3to4;
+import com.aj.trackmate.database.migrations.game.DatabaseMigration4to5;
 import com.aj.trackmate.models.game.DownloadableContent;
 import com.aj.trackmate.models.game.Game;
-import com.aj.trackmate.models.game.Platform;
 import com.aj.trackmate.models.game.dao.GameDao;
 import com.aj.trackmate.utils.ConfigManager;
 
-import java.util.Arrays;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Game.class, DownloadableContent.class}, version = 4, exportSchema = false)
+@Database(entities = {Game.class, DownloadableContent.class}, version = 5, exportSchema = false)
 public abstract class GameDatabase extends RoomDatabase {
     private static GameDatabase instance;
 
@@ -34,7 +33,8 @@ public abstract class GameDatabase extends RoomDatabase {
                     GameDatabase.class, "game_database"
             ).addMigrations(DatabaseMigration1to2.MIGRATION_1_2)
                     .addMigrations(DatabaseMigration2to3.MIGRATION_2_3)
-                    .addMigrations(DatabaseMigration3to4.MIGRATION_3_4);
+                    .addMigrations(DatabaseMigration3to4.MIGRATION_3_4)
+                    .addMigrations(DatabaseMigration4to5.MIGRATION_4_5);
 
             // Enable foreign key constraints
             builder.addCallback(new RoomDatabase.Callback() {

@@ -4,10 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +18,7 @@ public class AddMusicActivity extends AppCompatActivity {
 
     private EditText musicNameEditText, musicArtistNameEditText, musicAlbumNameEditText;
     private Spinner musicLanguageSpinner;
+    private RadioButton favoriteYes, favoriteNo;
     private Button saveButton;
 
     @Override
@@ -52,6 +50,9 @@ public class AddMusicActivity extends AppCompatActivity {
         musicAlbumNameEditText = findViewById(R.id.musicAlbumNameEditText);
         musicLanguageSpinner = findViewById(R.id.musicLanguageSpinner);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         saveButton = findViewById(R.id.saveMusicButton);
 
         // Set up the Music Language Spinner (Dropdown)
@@ -60,6 +61,8 @@ public class AddMusicActivity extends AppCompatActivity {
         languageAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         musicLanguageSpinner.setAdapter(languageAdapter);
 
+        favoriteNo.setChecked(true);
+
         // Save button click listener
         saveButton.setOnClickListener(v -> {
             // Read values from input fields
@@ -67,6 +70,8 @@ public class AddMusicActivity extends AppCompatActivity {
             String musicArtistName = musicArtistNameEditText.getText().toString().trim();
             String musicAlbumName = musicAlbumNameEditText.getText().toString().trim();
             String musicLanguage = musicLanguageSpinner.getSelectedItem().toString();
+
+            boolean isFavorite = favoriteYes.isChecked();
 
             if (musicName.isEmpty()) {
                 musicNameEditText.setError("Music Name is required");
@@ -87,6 +92,7 @@ public class AddMusicActivity extends AppCompatActivity {
                 music.setPlatform(platform);
                 music.setArtist(musicArtistName);
                 music.setAlbum(musicAlbumName);
+                music.setFavorite(isFavorite);
 
                 Log.d("Add Music", "Platform: " + music.getPlatform());
 

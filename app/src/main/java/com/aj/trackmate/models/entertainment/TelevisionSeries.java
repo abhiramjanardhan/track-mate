@@ -28,6 +28,7 @@ public class TelevisionSeries implements Parcelable {
     private String platform;
     @TypeConverters(TelevisionSeriesStatusConverter.class)
     private TelevisionSeriesStatus status;
+    private boolean favorite;
     private boolean wishlist;
     private int totalSeasons;
     private int currentSeason;
@@ -75,6 +76,14 @@ public class TelevisionSeries implements Parcelable {
 
     public void setStatus(TelevisionSeriesStatus status) {
         this.status = status;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public boolean isWishlist() {
@@ -142,6 +151,7 @@ public class TelevisionSeries implements Parcelable {
     }
 
     public TelevisionSeries() {
+        favorite = false;
         wishlist = false;
         started = false;
         completed = false;
@@ -165,6 +175,7 @@ public class TelevisionSeries implements Parcelable {
         genre = in.createStringArrayList().stream()
                 .map(TelevisionSeriesGenre::valueOf)
                 .toList();
+        favorite = in.readByte() != 0;
         wishlist = in.readByte() != 0;
         started = in.readByte() != 0;
         completed = in.readByte() != 0;
@@ -196,6 +207,7 @@ public class TelevisionSeries implements Parcelable {
         dest.writeInt(currentEpisodeNumber);
         dest.writeString(platform);
         dest.writeStringList(genre.stream().map(Enum::name).toList());
+        dest.writeByte((byte) (favorite ? 1 : 0));
         dest.writeByte((byte) (wishlist ? 1 : 0));
         dest.writeByte((byte) (started ? 1 : 0));
         dest.writeByte((byte) (completed ? 1 : 0));

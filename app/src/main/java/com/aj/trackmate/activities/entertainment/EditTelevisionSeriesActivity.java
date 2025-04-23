@@ -34,13 +34,14 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
     private EditText televisionSeriesNameEditText;
     private Spinner televisionSeriesLanguageSpinner, televisionSeriesStatusSpinner;
     private TextView editTelevisionSeriesHeading, televisionSeriesGenreMultiSelect;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
     private RadioButton completedYes, completedNo;
     private RadioButton backlogYes, backlogNo;
     private EditText televisionSeriesTotalSeasons, televisionSeriesTotalSeasonsEpisodes, televisionSeriesCurrentSeason, televisionSeriesCurrentSeasonEpisodeNumber;
     private Button saveButton, editButton, cancelButton;
-    private RadioGroup wishlistTelevisionSeriesGroup, startedTelevisionSeriesGroup, completedTelevisionSeriesGroup, backlogTelevisionSeriesGroup;
+    private RadioGroup favoriteTelevisionSeriesGroup, wishlistTelevisionSeriesGroup, startedTelevisionSeriesGroup, completedTelevisionSeriesGroup, backlogTelevisionSeriesGroup;
 
     private boolean[] selectedGenres;
     private List<TelevisionSeriesGenre> selectedGenreList = new ArrayList<>();
@@ -80,6 +81,9 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
 
         televisionSeriesGenreMultiSelect = findViewById(R.id.televisionSeriesGenreEditMultiSelect);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         wishlistYes = findViewById(R.id.wishlistYes);
         wishlistNo = findViewById(R.id.wishlistNo);
 
@@ -101,6 +105,7 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelTelevisionSeriesButton);
         editButton = findViewById(R.id.editTelevisionSeriesButton);
 
+        favoriteTelevisionSeriesGroup = findViewById(R.id.favoriteTelevisionSeriesGroup);
         wishlistTelevisionSeriesGroup = findViewById(R.id.wishlistTelevisionSeriesGroup);
         startedTelevisionSeriesGroup = findViewById(R.id.startedTelevisionSeriesGroup);
         completedTelevisionSeriesGroup = findViewById(R.id.completedTelevisionSeriesGroup);
@@ -163,6 +168,12 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
 
                 // Update the UI to reflect the selected genres
                 updateGenreText();
+
+                if (entertainmentWithTelevisionSeries.televisionSeries.isFavorite()) {
+                    favoriteYes.setChecked(true);
+                } else {
+                    favoriteNo.setChecked(true);
+                }
 
                 if (entertainmentWithTelevisionSeries.televisionSeries.isWishlist()) {
                     wishlistYes.setChecked(true);
@@ -229,6 +240,10 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
         televisionSeriesStatusSpinner.setEnabled(enabled);
         televisionSeriesGenreMultiSelect.setEnabled(enabled);
 
+        favoriteTelevisionSeriesGroup.setEnabled(enabled);
+        favoriteYes.setEnabled(enabled);
+        favoriteNo.setEnabled(enabled);
+
         wishlistTelevisionSeriesGroup.setEnabled(enabled);
         wishlistYes.setEnabled(enabled);
         wishlistNo.setEnabled(enabled);
@@ -262,6 +277,7 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
             String televisionSeriesLanguage = televisionSeriesLanguageSpinner.getSelectedItem().toString();
             String televisionSeriesStatus = televisionSeriesStatusSpinner.getSelectedItem().toString();
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -279,6 +295,7 @@ public class EditTelevisionSeriesActivity extends AppCompatActivity {
 
                 entertainmentWithTelevisionSeries.televisionSeries.setGenre(selectedGenreList);
                 entertainmentWithTelevisionSeries.televisionSeries.setStatus(TelevisionSeriesStatus.fromStatus(televisionSeriesStatus));
+                entertainmentWithTelevisionSeries.televisionSeries.setFavorite(isFavorite);
                 entertainmentWithTelevisionSeries.televisionSeries.setWishlist(isWishlist);
                 entertainmentWithTelevisionSeries.televisionSeries.setStarted(isStarted);
                 entertainmentWithTelevisionSeries.televisionSeries.setCompleted(isCompleted);

@@ -29,6 +29,7 @@ public class Movie implements Parcelable {
     private String platform;
     @TypeConverters(MovieStatusConverter.class)
     private MovieStatus status;
+    private boolean favorite;
     private boolean wishlist;
     private boolean started;
     private boolean completed;
@@ -74,6 +75,14 @@ public class Movie implements Parcelable {
         this.status = status;
     }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
     public boolean isWishlist() {
         return wishlist;
     }
@@ -112,6 +121,7 @@ public class Movie implements Parcelable {
         started = false;
         completed = false;
         backlog = false;
+        favorite = false;
     }
 
     // Parcelable Implementation
@@ -124,6 +134,7 @@ public class Movie implements Parcelable {
         genre = in.createStringArrayList().stream()
                 .map(MovieGenre::valueOf)
                 .toList();
+        favorite = in.readByte() != 0;
         wishlist = in.readByte() != 0;
         started = in.readByte() != 0;
         completed = in.readByte() != 0;
@@ -151,6 +162,7 @@ public class Movie implements Parcelable {
         dest.writeString(status.getStatus());  // Write status first
         dest.writeString(platform);  // Write platform second
         dest.writeStringList(genre.stream().map(Enum::name).toList()); // Convert enum list to string list
+        dest.writeByte((byte) (favorite ? 1 : 0));
         dest.writeByte((byte) (wishlist ? 1 : 0));
         dest.writeByte((byte) (started ? 1 : 0));
         dest.writeByte((byte) (completed ? 1 : 0));

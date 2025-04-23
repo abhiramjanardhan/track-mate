@@ -6,8 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
-import com.aj.trackmate.models.application.Application;
-import com.aj.trackmate.models.application.SubApplication;
+import com.aj.trackmate.database.migrations.entertainment.DatabaseMigration1to2;
 import com.aj.trackmate.models.entertainment.Entertainment;
 import com.aj.trackmate.models.entertainment.Movie;
 import com.aj.trackmate.models.entertainment.Music;
@@ -20,7 +19,7 @@ import com.aj.trackmate.utils.ConfigManager;
 
 import java.util.concurrent.Executors;
 
-@Database(entities = {Entertainment.class, Movie.class, Music.class, TelevisionSeries.class}, version = 1, exportSchema = false)
+@Database(entities = {Entertainment.class, Movie.class, Music.class, TelevisionSeries.class}, version = 2, exportSchema = false)
 public abstract class EntertainmentDatabase extends RoomDatabase {
     private static EntertainmentDatabase instance;
 
@@ -37,7 +36,7 @@ public abstract class EntertainmentDatabase extends RoomDatabase {
             Builder<EntertainmentDatabase> builder = Room.databaseBuilder(
                     context.getApplicationContext(),
                     EntertainmentDatabase.class, "entertainment_database"
-            );
+            ).addMigrations(DatabaseMigration1to2.MIGRATION_1_2);
 
             // Enable foreign key constraints
             builder.addCallback(new RoomDatabase.Callback() {

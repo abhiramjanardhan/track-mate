@@ -35,12 +35,13 @@ public class EditMoviesActivity extends AppCompatActivity {
     private EditText movieNameEditText;
     private Spinner movieLanguageSpinner, movieStatusSpinner;
     private TextView editMoviesHeading, movieGenreMultiSelect;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
     private RadioButton completedYes, completedNo;
     private RadioButton backlogYes, backlogNo;
     private Button saveButton, editButton, cancelButton;
-    private RadioGroup wishlistMovieGroup, startedMovieGroup, completedMovieGroup, backlogMovieGroup;
+    private RadioGroup favoriteMovieGroup, wishlistMovieGroup, startedMovieGroup, completedMovieGroup, backlogMovieGroup;
 
     private boolean[] selectedGenres;
     private List<MovieGenre> selectedGenreList = new ArrayList<>();
@@ -81,6 +82,9 @@ public class EditMoviesActivity extends AppCompatActivity {
         editMoviesHeading = findViewById(R.id.editMoviesHeading);
         movieGenreMultiSelect = findViewById(R.id.movieGenreMultiSelect);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         wishlistYes = findViewById(R.id.wishlistYes);
         wishlistNo = findViewById(R.id.wishlistNo);
 
@@ -97,6 +101,7 @@ public class EditMoviesActivity extends AppCompatActivity {
         editButton = findViewById(R.id.editMovieButton);
         cancelButton = findViewById(R.id.cancelMovieButton);
 
+        favoriteMovieGroup = findViewById(R.id.favoriteMovieGroup);
         wishlistMovieGroup = findViewById(R.id.wishlistMovieGroup);
         startedMovieGroup = findViewById(R.id.startedMovieGroup);
         completedMovieGroup = findViewById(R.id.completedMovieGroup);
@@ -159,6 +164,12 @@ public class EditMoviesActivity extends AppCompatActivity {
                 // Update the UI to reflect the selected genres
                 updateGenreText();
 
+                if (entertainmentWithMovie.movie.isFavorite()) {
+                    favoriteYes.setChecked(true);
+                } else {
+                    favoriteNo.setChecked(true);
+                }
+
                 if (entertainmentWithMovie.movie.isWishlist()) {
                     wishlistYes.setChecked(true);
                 } else {
@@ -218,6 +229,10 @@ public class EditMoviesActivity extends AppCompatActivity {
         movieStatusSpinner.setEnabled(enabled);
         movieGenreMultiSelect.setEnabled(enabled);
 
+        favoriteMovieGroup.setEnabled(enabled);
+        favoriteYes.setEnabled(enabled);
+        favoriteNo.setEnabled(enabled);
+
         wishlistMovieGroup.setEnabled(enabled);
         wishlistYes.setEnabled(enabled);
         wishlistNo.setEnabled(enabled);
@@ -246,6 +261,7 @@ public class EditMoviesActivity extends AppCompatActivity {
             String movieLanguage = movieLanguageSpinner.getSelectedItem().toString();
             String movieStatus = movieStatusSpinner.getSelectedItem().toString();
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -259,6 +275,7 @@ public class EditMoviesActivity extends AppCompatActivity {
 
                 entertainmentWithMovie.movie.setGenre(selectedGenreList);
                 entertainmentWithMovie.movie.setStatus(MovieStatus.fromStatus(movieStatus));
+                entertainmentWithMovie.movie.setFavorite(isFavorite);
                 entertainmentWithMovie.movie.setWishlist(isWishlist);
                 entertainmentWithMovie.movie.setStarted(isStarted);
                 entertainmentWithMovie.movie.setCompleted(isCompleted);

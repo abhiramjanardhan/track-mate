@@ -22,6 +22,7 @@ public class AddTelevisionSeriesActivity extends AppCompatActivity {
     private EditText televisionSeriesNameEditText;
     private Spinner televisionSeriesLanguageSpinner, televisionSeriesStatusSpinner;
     private TextView televisionSeriesGenreMultiSelect;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
     private RadioButton completedYes, completedNo;
@@ -63,6 +64,9 @@ public class AddTelevisionSeriesActivity extends AppCompatActivity {
 
         televisionSeriesGenreMultiSelect = findViewById(R.id.televisionSeriesGenreMultiSelect);
 
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
+
         wishlistYes = findViewById(R.id.wishlistYes);
         wishlistNo = findViewById(R.id.wishlistNo);
 
@@ -91,6 +95,7 @@ public class AddTelevisionSeriesActivity extends AppCompatActivity {
 
         selectedGenres = new boolean[genreArray.length];
 
+        favoriteNo.setChecked(true);
         wishlistNo.setChecked(true);
         startedNo.setChecked(true);
         completedNo.setChecked(true);
@@ -124,6 +129,7 @@ public class AddTelevisionSeriesActivity extends AppCompatActivity {
                 return;
             }
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
             boolean isCompleted = completedYes.isChecked();
@@ -147,6 +153,7 @@ public class AddTelevisionSeriesActivity extends AppCompatActivity {
                 televisionSeries.setGenre(selectedGenreList);
                 televisionSeries.setPlatform(platform);
                 televisionSeries.setStatus(TelevisionSeriesStatus.fromStatus(televisionSeriesStatus));
+                televisionSeries.setFavorite(isFavorite);
                 televisionSeries.setWishlist(isWishlist);
                 televisionSeries.setStarted(isStarted);
                 televisionSeries.setCompleted(isCompleted);

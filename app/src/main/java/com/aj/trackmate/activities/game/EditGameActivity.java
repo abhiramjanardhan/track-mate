@@ -43,6 +43,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
     private RecyclerView gameDLCsRecyclerView;
     private EditText gameNameEditText, gameAmount, gameYear;
     private Spinner gameStatusSpinner, currencySpinner;
+    private RadioButton favoriteYes, favoriteNo;
     private RadioButton purchasedYes, purchasedNo;
     private RadioButton wishlistYes, wishlistNo;
     private RadioButton startedYes, startedNo;
@@ -51,7 +52,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
     private RadioButton backlogYes, backlogNo;
     private RadioButton purchaseTypePhysical, purchaseTypeDigital, purchaseTypeNotDecided;
     private RadioButton purchaseModePurchase, purchaseModeSubscription, purchaseModeNotYet;
-    private RadioGroup purchasedGroup, wishlistGroup, purchaseModeGroup, purchaseTypeGroup, startedGroup, completedGroup, full100Group, backlogGroup;
+    private RadioGroup favoriteGroup, purchasedGroup, wishlistGroup, purchaseModeGroup, purchaseTypeGroup, startedGroup, completedGroup, full100Group, backlogGroup;
     private Button editButton, cancelButton, saveButton, addDLCButton;
     private boolean isEditMode = false;
     private String originalGameName, originalGameStatus; // Store original values for cancel functionality
@@ -78,6 +79,9 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         // Initialize Views
         gameNameEditText = findViewById(R.id.gameNameEditText);
         gameStatusSpinner = findViewById(R.id.gameStatusSpinner);
+
+        favoriteYes = findViewById(R.id.favoriteYes);
+        favoriteNo = findViewById(R.id.favoriteNo);
 
         purchasedYes = findViewById(R.id.purchasedYes);
         purchasedNo = findViewById(R.id.purchasedNo);
@@ -132,6 +136,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencySpinner.setAdapter(adapter);
 
+        favoriteGroup = findViewById(R.id.favoriteRadioGroup);
         purchasedGroup = findViewById(R.id.purchasedRadioGroup);
         wishlistGroup = findViewById(R.id.wishlistRadioGroup);
         purchaseModeGroup = findViewById(R.id.purchaseModeRadioGroup);
@@ -239,6 +244,12 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                     purchaseTypeNotDecided.setChecked(true);
                 }
 
+                if (game.isFavorite()) {
+                    favoriteYes.setChecked(true);
+                } else {
+                    favoriteNo.setChecked(true);
+                }
+
                 if (game.isPurchased()) {
                     purchasedYes.setChecked(true);
                 } else {
@@ -307,6 +318,10 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
     private void setEditMode(boolean enabled) {
         gameNameEditText.setEnabled(enabled);
         gameStatusSpinner.setEnabled(enabled);
+
+        favoriteGroup.setEnabled(enabled);
+        favoriteYes.setEnabled(enabled);
+        favoriteNo.setEnabled(enabled);
 
         purchasedGroup.setEnabled(enabled);
         purchasedYes.setEnabled(enabled);
@@ -397,6 +412,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
                 }
             }
 
+            boolean isFavorite = favoriteYes.isChecked();
             boolean isPurchased = purchasedYes.isChecked();
             boolean isWishlist = wishlistYes.isChecked();
             boolean isStarted = startedYes.isChecked();
@@ -423,6 +439,7 @@ public class EditGameActivity extends AppCompatActivity implements ItemRemovalLi
             currentGame.game.setWishlist(isWishlist);
             currentGame.game.setPurchaseMode(gamePurchaseMode);
             currentGame.game.setPurchaseType(gamePurchaseType);
+            currentGame.game.setFavorite(isFavorite);
             currentGame.game.setStarted(isStarted);
             currentGame.game.setCompleted(isCompleted);
             currentGame.game.setStatus(GameStatus.fromStatus(gameStatus));  // Convert string to enum
