@@ -15,6 +15,7 @@ import com.aj.trackmate.models.game.GameStatus;
 import com.aj.trackmate.models.game.relations.GameWithDownloadableContent;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder> {
     private Context context;
@@ -97,13 +98,19 @@ public class GameAdapter extends RecyclerView.Adapter<GameAdapter.GameViewHolder
         }
     }
 
-    public void sortGames() {
+    public List<GameWithDownloadableContent> sortGames(List<GameWithDownloadableContent> games) {
+        return games.stream()
+                .sorted((a, b) -> {
+                    int aPriority = GameStatus.getStatusPriority().getOrDefault(a.game.getStatus(), Integer.MAX_VALUE);
+                    int bPriority = GameStatus.getStatusPriority().getOrDefault(b.game.getStatus(), Integer.MAX_VALUE);
+                    return Integer.compare(aPriority, bPriority);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public void defaultSortGames() {
         // Default sort based on status priority
-        games.sort((a, b) -> {
-            int aPriority = GameStatus.getStatusPriority().getOrDefault(a.game.getStatus(), Integer.MAX_VALUE);
-            int bPriority = GameStatus.getStatusPriority().getOrDefault(b.game.getStatus(), Integer.MAX_VALUE);
-            return Integer.compare(aPriority, bPriority);
-        });
+        games = sortGames(games);
         updateGames(games);
     }
 

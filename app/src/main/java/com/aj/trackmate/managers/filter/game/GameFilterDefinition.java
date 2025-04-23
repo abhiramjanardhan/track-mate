@@ -24,6 +24,7 @@ public class GameFilterDefinition extends FilterDefinition {
         showPurchaseMode = true;
         showPurchaseType = true;
         showCurrency = true;
+        showFavorite = true;
         showBacklog = true;
         showWatchlist = true;
         showYear = true;
@@ -54,6 +55,7 @@ public class GameFilterDefinition extends FilterDefinition {
         spinnerOptions.put(R.id.purchaseTypeFilterSpinner, purchaseTypeFilters);
         spinnerOptions.put(R.id.purchaseModeFilterSpinner, purchaseModeFilters);
         spinnerOptions.put(R.id.currencyFilterSpinner, currencyFilters);
+        spinnerOptions.put(R.id.favoriteFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.watchlistFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.backlogFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.sortingSpinner, getSortingOptions());

@@ -164,6 +164,30 @@
 
     </LinearLayout>
 
+    <!-- Favorite Filter -->
+    <LinearLayout
+            android:id="@+id/favoriteFilterRow"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/fab_margin"
+            tools:ignore="RtlSymmetry">
+
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/favorite"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+        <Spinner
+                android:id="@+id/favoriteFilterSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
     <!-- Watchlist Filter -->
     <LinearLayout
             android:id="@+id/watchlistFilterRow"

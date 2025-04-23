@@ -20,6 +20,7 @@ public class BooksFilterDefinition extends FilterDefinition {
     public void defineFilters() {
         showStatus = true;
         showGenre = true;
+        showFavorite = true;
         showWatchlist = true;
         showBacklog = true;
         showSorting = true;
@@ -39,6 +40,7 @@ public class BooksFilterDefinition extends FilterDefinition {
 
         spinnerOptions.put(R.id.statusFilterSpinner, booksStatusFilters);
         spinnerOptions.put(R.id.genreFilterSpinner, booksGenreFilters);
+        spinnerOptions.put(R.id.favoriteFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.backlogFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.watchlistFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.sortingSpinner, getSortingOptions());

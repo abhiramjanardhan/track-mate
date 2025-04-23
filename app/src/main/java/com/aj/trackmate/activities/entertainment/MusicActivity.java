@@ -103,7 +103,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                 @Override
                 public void onClearFilters() {
                     musicAdapter.updateMusics(allMusics); // Reset
-                    musicAdapter.sortMusics();
+                    musicAdapter.defaultSortMusics();
                     emptyStateMessage.setVisibility(allMusics.isEmpty() ? View.VISIBLE : View.GONE);
                     musicRecyclerView.setVisibility(allMusics.isEmpty() ? View.GONE : View.VISIBLE);
                 }
@@ -160,7 +160,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                     });
                     musicRecyclerView.setAdapter(musicAdapter);
                     musicAdapter.updateMusics(musics);  // Notify adapter of new data
-                    musicAdapter.sortMusics();
+                    musicAdapter.defaultSortMusics();
                 }
 
                 // Setup the swipe-to-delete functionality
@@ -281,14 +281,18 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
             Music m = entertainmentWithMusic.music;
 
             boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
+            boolean favorite = Objects.equals(filters.get(FilterBarManager.FILTER_FAVORITE), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_FAVORITE)).equalsIgnoreCase("Yes") == m.isFavorite();
 
-            return language;
+            return language && favorite;
         }).collect(Collectors.toList());
 
         // Sorting Logic
         String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
         if (sortBy != null) {
             switch (sortBy) {
+                case "Default":
+                    filtered = musicAdapter.sortMusic(filtered);
+                    break;
                 case "Name":
                     filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
                     break;
@@ -296,11 +300,11 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                     filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
                     break;
                 default:
-                    musicAdapter.sortMusics();
+                    musicAdapter.defaultSortMusics();
                     break;
             }
         } else {
-            musicAdapter.sortMusics();
+            musicAdapter.defaultSortMusics();
         }
 
         musicAdapter.updateMusics(filtered);

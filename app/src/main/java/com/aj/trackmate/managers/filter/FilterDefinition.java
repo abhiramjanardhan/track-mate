@@ -19,6 +19,7 @@ public abstract class FilterDefinition {
     public boolean showCurrency = false;
     public boolean showLanguage = false;
     public boolean showGenre = false;
+    public boolean showFavorite = false;
     public boolean showWatchlist = false;
     public boolean showBacklog = false;
     public boolean showYear = false;

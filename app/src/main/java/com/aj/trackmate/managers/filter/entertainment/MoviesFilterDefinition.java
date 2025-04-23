@@ -19,6 +19,7 @@ public class MoviesFilterDefinition extends FilterDefinition {
     public void defineFilters() {
         showLanguage = true;
         showGenre = true;
+        showFavorite = true;
         showWatchlist = true;
         showBacklog = true;
         showStatus = true;
@@ -44,6 +45,7 @@ public class MoviesFilterDefinition extends FilterDefinition {
         spinnerOptions.put(R.id.languageFilterSpinner, languageFilters);
         spinnerOptions.put(R.id.statusFilterSpinner, moviesStatusFilters);
         spinnerOptions.put(R.id.genreFilterSpinner, moviesGenreFilters);
+        spinnerOptions.put(R.id.favoriteFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.backlogFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.watchlistFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.sortingSpinner, getSortingOptions());

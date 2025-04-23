@@ -16,6 +16,7 @@ import com.aj.trackmate.models.entertainment.MovieStatus;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMovies;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
     private final Context context;
@@ -100,13 +101,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         }
     }
 
-    public void sortMovie() {
+    public List<EntertainmentWithMovies> sortMovie(List<EntertainmentWithMovies> entertainmentWithMovies) {
+        return entertainmentWithMovies.stream()
+                .sorted((a, b) -> {
+                    int aPriority = MovieStatus.getStatusPriority().getOrDefault(a.movie.getStatus(), Integer.MAX_VALUE);
+                    int bPriority = MovieStatus.getStatusPriority().getOrDefault(b.movie.getStatus(), Integer.MAX_VALUE);
+                    return Integer.compare(aPriority, bPriority);
+                }).collect(Collectors.toList());
+    }
+
+    public void defaultSortMovie() {
         // Default sort based on status priority
-        entertainmentWithMovies.sort((a, b) -> {
-            int aPriority = MovieStatus.getStatusPriority().getOrDefault(a.movie.getStatus(), Integer.MAX_VALUE);
-            int bPriority = MovieStatus.getStatusPriority().getOrDefault(b.movie.getStatus(), Integer.MAX_VALUE);
-            return Integer.compare(aPriority, bPriority);
-        });
+        entertainmentWithMovies = sortMovie(entertainmentWithMovies);
         updateMovies(entertainmentWithMovies);
     }
 

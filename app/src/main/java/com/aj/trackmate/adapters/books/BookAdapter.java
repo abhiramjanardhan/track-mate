@@ -15,6 +15,7 @@ import com.aj.trackmate.models.books.BookStatus;
 import com.aj.trackmate.models.books.relations.BookWithNotes;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
     private final Context context;
@@ -97,13 +98,18 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         }
     }
 
-    public void sortBooks() {
+    public List<BookWithNotes> sortBooks(List<BookWithNotes> bookWithNotes) {
+        return bookWithNotes.stream()
+                .sorted((a, b) -> {
+                    int aPriority = BookStatus.getStatusPriority().getOrDefault(a.book.getStatus(), Integer.MAX_VALUE);
+                    int bPriority = BookStatus.getStatusPriority().getOrDefault(b.book.getStatus(), Integer.MAX_VALUE);
+                    return Integer.compare(aPriority, bPriority);
+                }).collect(Collectors.toList());
+    }
+
+    public void defaultSortBooks() {
         // Default sort based on status priority
-        books.sort((a, b) -> {
-            int aPriority = BookStatus.getStatusPriority().getOrDefault(a.book.getStatus(), Integer.MAX_VALUE);
-            int bPriority = BookStatus.getStatusPriority().getOrDefault(b.book.getStatus(), Integer.MAX_VALUE);
-            return Integer.compare(aPriority, bPriority);
-        });
+        books = sortBooks(books);
         updateBooks(books);
     }
 

@@ -104,7 +104,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                 @Override
                 public void onClearFilters() {
                     televisionSeriesAdapter.updateTelevisionSeries(allTelevisionSeries); // Reset
-                    televisionSeriesAdapter.sortTelevisionSeries();
+                    televisionSeriesAdapter.defaultSortTelevisionSeries();
                     emptyStateMessage.setVisibility(allTelevisionSeries.isEmpty() ? View.VISIBLE : View.GONE);
                     televisionSeriesRecyclerView.setVisibility(allTelevisionSeries.isEmpty() ? View.GONE : View.VISIBLE);
                 }
@@ -164,7 +164,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                     });
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                     televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
-                    televisionSeriesAdapter.sortTelevisionSeries();
+                    televisionSeriesAdapter.defaultSortTelevisionSeries();
                 }
             });
         } else {
@@ -315,16 +315,20 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
             boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || t.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
             boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
             boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || t.getGenre().contains(TelevisionSeriesGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean favorite = Objects.equals(filters.get(FilterBarManager.FILTER_FAVORITE), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_FAVORITE)).equalsIgnoreCase("Yes") == t.isFavorite();
             boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == t.isBacklog();
             boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == t.isWishlist();
 
-            return status && language && genre && backlog && watchlist;
+            return status && language && genre && favorite && backlog && watchlist;
         }).collect(Collectors.toList());
 
         // Sorting Logic
         String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
         if (sortBy != null) {
             switch (sortBy) {
+                case "Default":
+                    filtered = televisionSeriesAdapter.sortTelevisionSeries(filtered);
+                    break;
                 case "Name":
                     filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
                     break;
@@ -332,11 +336,11 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                     filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
                     break;
                 default:
-                    televisionSeriesAdapter.sortTelevisionSeries();
+                    televisionSeriesAdapter.defaultSortTelevisionSeries();
                     break;
             }
         } else {
-            televisionSeriesAdapter.sortTelevisionSeries();
+            televisionSeriesAdapter.defaultSortTelevisionSeries();
         }
 
         televisionSeriesAdapter.updateTelevisionSeries(filtered);

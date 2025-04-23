@@ -104,7 +104,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                 @Override
                 public void onClearFilters() {
                     movieAdapter.updateMovies(allMovies); // Reset
-                    movieAdapter.sortMovie();
+                    movieAdapter.defaultSortMovie();
                     emptyStateMessage.setVisibility(allMovies.isEmpty() ? View.VISIBLE : View.GONE);
                     moviesRecyclerView.setVisibility(allMovies.isEmpty() ? View.GONE : View.VISIBLE);
                 }
@@ -164,7 +164,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                     });
                     moviesRecyclerView.setAdapter(movieAdapter);
                     movieAdapter.updateMovies(movies);
-                    movieAdapter.sortMovie();
+                    movieAdapter.defaultSortMovie();
                 }
             });
         } else {
@@ -314,16 +314,20 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
             boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || m.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
             boolean language = Objects.equals(filters.get(FilterBarManager.FILTER_LANGUAGE), "All") || e.getLanguage().getLanguage().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_LANGUAGE));
             boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || m.getGenre().contains(MovieGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean favorite = Objects.equals(filters.get(FilterBarManager.FILTER_FAVORITE), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_FAVORITE)).equalsIgnoreCase("Yes") == m.isFavorite();
             boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == m.isBacklog();
             boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == m.isWishlist();
 
-            return status && language && genre && backlog && watchlist;
+            return status && language && genre && favorite && backlog && watchlist;
         }).collect(Collectors.toList());
 
         // Sorting Logic
         String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
         if (sortBy != null) {
             switch (sortBy) {
+                case "Default":
+                    filtered = movieAdapter.sortMovie(filtered);
+                    break;
                 case "Name":
                     filtered.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
                     break;
@@ -331,11 +335,11 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                     filtered.sort((a, b) -> a.entertainment.getLanguage().getLanguage().compareToIgnoreCase(b.entertainment.getLanguage().getLanguage()));
                     break;
                 default:
-                    movieAdapter.sortMovie();
+                    movieAdapter.defaultSortMovie();
                     break;
             }
         } else {
-            movieAdapter.sortMovie();
+            movieAdapter.defaultSortMovie();
         }
 
         movieAdapter.updateMovies(filtered);

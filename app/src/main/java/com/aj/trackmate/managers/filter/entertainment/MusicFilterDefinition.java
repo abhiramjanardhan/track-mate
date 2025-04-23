@@ -13,6 +13,7 @@ public class MusicFilterDefinition extends FilterDefinition {
     @Override
     public void defineFilters() {
         showLanguage = true;
+        showFavorite = true;
         showSorting = true;
     }
 
@@ -22,7 +23,10 @@ public class MusicFilterDefinition extends FilterDefinition {
         languageFilters.add("All");
         languageFilters.addAll(Arrays.stream(Language.values()).map(Language::getLanguage).collect(Collectors.toList()));
 
+        List<String> booleanFilters = getBooleanFilters();
+
         spinnerOptions.put(R.id.languageFilterSpinner, languageFilters);
+        spinnerOptions.put(R.id.favoriteFilterSpinner, booleanFilters);
         spinnerOptions.put(R.id.sortingSpinner, getSortingOptions());
     }
 

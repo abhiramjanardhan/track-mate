@@ -16,6 +16,7 @@ import com.aj.trackmate.models.entertainment.TelevisionSeriesStatus;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithTelevisionSeries;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeriesAdapter.TelevisionSeriesViewHolder> {
     private final Context context;
@@ -101,13 +102,18 @@ public class TelevisionSeriesAdapter extends RecyclerView.Adapter<TelevisionSeri
         }
     }
 
-    public void sortTelevisionSeries() {
+    public List<EntertainmentWithTelevisionSeries> sortTelevisionSeries(List<EntertainmentWithTelevisionSeries> entertainmentWithTelevisionSeries) {
+        return entertainmentWithTelevisionSeries.stream()
+                .sorted((a, b) -> {
+                    int aPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(a.televisionSeries.getStatus(), Integer.MAX_VALUE);
+                    int bPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(b.televisionSeries.getStatus(), Integer.MAX_VALUE);
+                    return Integer.compare(aPriority, bPriority);
+                }).collect(Collectors.toList());
+    }
+
+    public void defaultSortTelevisionSeries() {
         // Default sort based on status priority
-        entertainmentWithTelevisionSeries.sort((a, b) -> {
-            int aPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(a.televisionSeries.getStatus(), Integer.MAX_VALUE);
-            int bPriority = TelevisionSeriesStatus.getStatusPriority().getOrDefault(b.televisionSeries.getStatus(), Integer.MAX_VALUE);
-            return Integer.compare(aPriority, bPriority);
-        });
+        entertainmentWithTelevisionSeries = sortTelevisionSeries(entertainmentWithTelevisionSeries);
         updateTelevisionSeries(entertainmentWithTelevisionSeries);
     }
 

@@ -100,7 +100,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                 @Override
                 public void onClearFilters() {
                     bookAdapter.updateBooks(allBooks); // Reset
-                    bookAdapter.sortBooks();
+                    bookAdapter.defaultSortBooks();
                     emptyStateMessage.setVisibility(allBooks.isEmpty() ? View.VISIBLE : View.GONE);
                     booksRecyclerView.setVisibility(allBooks.isEmpty() ? View.GONE : View.VISIBLE);
                 }
@@ -162,7 +162,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                     });
                     booksRecyclerView.setAdapter(bookAdapter);
                     bookAdapter.updateBooks(books);  // Notify adapter of new data
-                    bookAdapter.sortBooks();
+                    bookAdapter.defaultSortBooks();
                 }
             });
         } else {
@@ -314,25 +314,29 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
 
             boolean status = Objects.equals(filters.get(FilterBarManager.FILTER_STATUS), "All") || b.getStatus().getStatus().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_STATUS));
             boolean genre = Objects.equals(filters.get(FilterBarManager.FILTER_GENRE), "All") || b.getGenre().contains(BookGenre.fromGenre(filters.get(FilterBarManager.FILTER_GENRE)));
+            boolean favorite = Objects.equals(filters.get(FilterBarManager.FILTER_FAVORITE), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_FAVORITE)).equalsIgnoreCase("Yes") == b.isFavorite();
             boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == b.isBacklog();
             boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == b.isWishlist();
 
-            return status && genre && backlog && watchlist;
+            return status && genre && favorite && backlog && watchlist;
         }).collect(Collectors.toList());
 
         // Sorting Logic
         String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
         if (sortBy != null) {
             switch (sortBy) {
+                case "Default":
+                    filtered = bookAdapter.sortBooks(filtered);
+                    break;
                 case "Name":
                     filtered.sort((a, b) -> a.book.getName().compareToIgnoreCase(b.book.getName()));
                     break;
                 default:
-                    bookAdapter.sortBooks();
+                    bookAdapter.defaultSortBooks();
                     break;
             }
         } else {
-            bookAdapter.sortBooks();
+            bookAdapter.defaultSortBooks();
         }
 
         bookAdapter.updateBooks(filtered);

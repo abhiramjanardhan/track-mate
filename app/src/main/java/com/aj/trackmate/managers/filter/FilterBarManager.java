@@ -25,6 +25,7 @@ public class FilterBarManager {
     public static final String FILTER_CURRENCY = "currency";
     public static final String FILTER_LANGUAGE = "language";
     public static final String FILTER_GENRE = "genre";
+    public static final String FILTER_FAVORITE = "favorite";
     public static final String FILTER_BACKLOG = "backlog";
     public static final String FILTER_WATCHLIST = "watchlist";
     public static final String FILTER_YEAR = "year";
@@ -46,6 +47,7 @@ public class FilterBarManager {
                 FILTER_PURCHASE_MODE,
                 FILTER_CURRENCY,
                 FILTER_BACKLOG,
+                FILTER_FAVORITE,
                 FILTER_WATCHLIST,
                 FILTER_YEAR,
                 FILTER_LANGUAGE,
@@ -61,6 +63,7 @@ public class FilterBarManager {
         toggleVisibility(R.id.currencyFilterRow, def.showCurrency);
         toggleVisibility(R.id.languageFilterRow, def.showLanguage);
         toggleVisibility(R.id.genreFilterRow, def.showGenre);
+        toggleVisibility(R.id.favoriteFilterRow, def.showFavorite);
         toggleVisibility(R.id.watchlistFilterRow, def.showWatchlist);
         toggleVisibility(R.id.backlogFilterRow, def.showBacklog);
         toggleVisibility(R.id.yearFilterRow, def.showYear);
@@ -93,6 +96,7 @@ public class FilterBarManager {
         setSpinnerSelection(R.id.languageFilterSpinner, selectedFilters.get(FILTER_LANGUAGE));
         setSpinnerSelection(R.id.genreFilterSpinner, selectedFilters.get(FILTER_GENRE));
         setSpinnerSelection(R.id.currencyFilterSpinner, selectedFilters.get(FILTER_CURRENCY));
+        setSpinnerSelection(R.id.favoriteFilterSpinner, selectedFilters.get(FILTER_FAVORITE));
         setSpinnerSelection(R.id.watchlistFilterSpinner, selectedFilters.get(FILTER_WATCHLIST));
         setSpinnerSelection(R.id.backlogFilterSpinner, selectedFilters.get(FILTER_BACKLOG));
         setSpinnerSelection(R.id.sortingSpinner, selectedFilters.get(FILTER_SORTING));
@@ -117,6 +121,7 @@ public class FilterBarManager {
         clearSpinner(R.id.currencyFilterSpinner);
         clearSpinner(R.id.languageFilterSpinner);
         clearSpinner(R.id.genreFilterSpinner);
+        clearSpinner(R.id.favoriteFilterSpinner);
         clearSpinner(R.id.watchlistFilterSpinner);
         clearSpinner(R.id.backlogFilterSpinner);
         clearSpinner(R.id.sortingSpinner);
@@ -144,6 +149,7 @@ public class FilterBarManager {
         filters.put(FILTER_LANGUAGE, getSpinnerValue(R.id.languageFilterSpinner));
         filters.put(FILTER_GENRE, getSpinnerValue(R.id.genreFilterSpinner));
         filters.put(FILTER_WATCHLIST, getSpinnerValue(R.id.watchlistFilterSpinner));
+        filters.put(FILTER_FAVORITE, getSpinnerValue(R.id.favoriteFilterSpinner));
         filters.put(FILTER_BACKLOG, getSpinnerValue(R.id.backlogFilterSpinner));
         filters.put(FILTER_SORTING, getSpinnerValue(R.id.sortingSpinner));
 
@@ -176,6 +182,7 @@ public class FilterBarManager {
         filters.put(FILTER_WATCHLIST, intent.getStringExtra(FILTER_WATCHLIST));
         filters.put(FILTER_LANGUAGE, intent.getStringExtra(FILTER_LANGUAGE));
         filters.put(FILTER_GENRE, intent.getStringExtra(FILTER_GENRE));
+        filters.put(FILTER_FAVORITE, intent.getStringExtra(FILTER_FAVORITE));
         filters.put(FILTER_BACKLOG, intent.getStringExtra(FILTER_BACKLOG));
         filters.put(FILTER_YEAR, intent.getStringExtra(FILTER_YEAR));
         filters.put(FILTER_SORTING, intent.getStringExtra(FILTER_SORTING));

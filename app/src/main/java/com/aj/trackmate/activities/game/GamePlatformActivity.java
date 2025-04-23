@@ -100,7 +100,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                 @Override
                 public void onClearFilters() {
                     gameAdapter.updateGames(allGames); // Reset
-                    gameAdapter.sortGames();
+                    gameAdapter.defaultSortGames();
                     emptyStateMessage.setVisibility(allGames.isEmpty() ? View.VISIBLE : View.GONE);
                     gamesRecyclerView.setVisibility(allGames.isEmpty() ? View.GONE : View.VISIBLE);
                 }
@@ -166,7 +166,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                     });
                     gamesRecyclerView.setAdapter(gameAdapter);
                     gameAdapter.updateGames(games);  // Notify adapter of new data
-                    gameAdapter.sortGames();
+                    gameAdapter.defaultSortGames();
                 }
             });
         } else {
@@ -326,17 +326,21 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
             boolean type = Objects.equals(filters.get(FilterBarManager.FILTER_PURCHASE_TYPE), "All") || g.getPurchaseType().getPurchaseType().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_PURCHASE_TYPE));
             boolean mode = Objects.equals(filters.get(FilterBarManager.FILTER_PURCHASE_MODE), "All") || g.getPurchaseMode().getPurchaseMode().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_PURCHASE_MODE));
             boolean currency = Objects.equals(filters.get(FilterBarManager.FILTER_CURRENCY), "All") || g.getCurrency().getCurrency().equalsIgnoreCase(filters.get(FilterBarManager.FILTER_CURRENCY));
+            boolean favorite = Objects.equals(filters.get(FilterBarManager.FILTER_FAVORITE), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_FAVORITE)).equalsIgnoreCase("Yes") == g.isFavorite();
             boolean backlog = Objects.equals(filters.get(FilterBarManager.FILTER_BACKLOG), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_BACKLOG)).equalsIgnoreCase("Yes") == g.isBacklog();
             boolean watchlist = Objects.equals(filters.get(FilterBarManager.FILTER_WATCHLIST), "All") || Objects.requireNonNull(filters.get(FilterBarManager.FILTER_WATCHLIST)).equalsIgnoreCase("Yes") == g.isWishlist();
             boolean year = Objects.requireNonNull(filters.get(FilterBarManager.FILTER_YEAR)).isEmpty() || String.valueOf(g.getYear()).equals(filters.get(FilterBarManager.FILTER_YEAR));
 
-            return status && mode && type && currency && backlog && watchlist && year;
+            return status && mode && type && currency && favorite && backlog && watchlist && year;
         }).collect(Collectors.toList());
 
         // Sorting Logic
         String sortBy = filters.get(FilterBarManager.FILTER_SORTING);
         if (sortBy != null) {
             switch (sortBy) {
+                case "Default":
+                    filtered = gameAdapter.sortGames(filtered);
+                    break;
                 case "Name":
                     filtered.sort((a, b) -> a.game.getName().compareToIgnoreCase(b.game.getName()));
                     break;
@@ -347,11 +351,11 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                     filtered.sort(Comparator.comparingDouble(a -> a.game.getAmount()));
                     break;
                 default:
-                    gameAdapter.sortGames();
+                    gameAdapter.defaultSortGames();
                     break;
             }
         } else {
-            gameAdapter.sortGames();
+            gameAdapter.defaultSortGames();
         }
 
         gameAdapter.updateGames(filtered);

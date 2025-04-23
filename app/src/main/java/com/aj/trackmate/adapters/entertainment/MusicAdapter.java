@@ -15,6 +15,7 @@ import com.aj.trackmate.models.entertainment.Music;
 import com.aj.trackmate.models.entertainment.relations.EntertainmentWithMusic;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHolder> {
     private final Context context;
@@ -88,9 +89,15 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MusicViewHol
         }
     }
 
-    public void sortMusics() {
+    public List<EntertainmentWithMusic> sortMusic(List<EntertainmentWithMusic> entertainmentWithMusics) {
+        return entertainmentWithMusics.stream()
+                .sorted((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()))
+                .collect(Collectors.toList());
+    }
+
+    public void defaultSortMusics() {
         // Default sort based on status priority
-        entertainmentWithMusics.sort((a, b) -> a.entertainment.getName().compareToIgnoreCase(b.entertainment.getName()));
+        entertainmentWithMusics = sortMusic(entertainmentWithMusics);
         updateMusics(entertainmentWithMusics);
     }
 
