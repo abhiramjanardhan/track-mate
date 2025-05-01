@@ -50,11 +50,13 @@
             android:id="@+id/recyclerViewMusic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:focusable="true"
-            android:padding="16dp"
+            android:paddingBottom="80dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
             android:clickable="true"
-            android:isScrollContainer="true"
+            android:focusable="true"
             android:layout_marginTop="@dimen/fab_margin"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:isScrollContainer="true"/>
 
 </LinearLayout>
