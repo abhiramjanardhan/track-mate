@@ -161,6 +161,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
                     musicRecyclerView.setAdapter(musicAdapter);
                     musicAdapter.updateMusics(musics);  // Notify adapter of new data
                     musicAdapter.defaultSortMusics();
+                    musics = musicAdapter.sortMusic(musics);
                 }
 
                 // Setup the swipe-to-delete functionality
@@ -313,6 +314,7 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
         }
 
         musicAdapter.updateMusics(filtered);
+        musics = filtered;
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         musicRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

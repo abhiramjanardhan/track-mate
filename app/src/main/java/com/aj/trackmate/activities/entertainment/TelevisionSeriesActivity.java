@@ -165,6 +165,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
                     televisionSeriesRecyclerView.setAdapter(televisionSeriesAdapter);
                     televisionSeriesAdapter.updateTelevisionSeries(televisionSeries);
                     televisionSeriesAdapter.defaultSortTelevisionSeries();
+                    televisionSeries = televisionSeriesAdapter.sortTelevisionSeries(televisionSeries);
                 }
             });
         } else {
@@ -349,6 +350,7 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
         }
 
         televisionSeriesAdapter.updateTelevisionSeries(filtered);
+        televisionSeries = filtered;
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         televisionSeriesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

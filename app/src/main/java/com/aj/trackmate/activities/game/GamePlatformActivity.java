@@ -167,6 +167,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
                     gamesRecyclerView.setAdapter(gameAdapter);
                     gameAdapter.updateGames(games);  // Notify adapter of new data
                     gameAdapter.defaultSortGames();
+                    games = gameAdapter.sortGames(games);
                 }
             });
         } else {
@@ -364,6 +365,7 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
         }
 
         gameAdapter.updateGames(filtered);
+        games = filtered;
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         gamesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

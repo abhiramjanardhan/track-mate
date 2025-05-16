@@ -165,6 +165,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
                     moviesRecyclerView.setAdapter(movieAdapter);
                     movieAdapter.updateMovies(movies);
                     movieAdapter.defaultSortMovie();
+                    movies = movieAdapter.sortMovie(movies);
                 }
             });
         } else {
@@ -348,6 +349,7 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
         }
 
         movieAdapter.updateMovies(filtered);
+        movies = filtered;
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         moviesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }

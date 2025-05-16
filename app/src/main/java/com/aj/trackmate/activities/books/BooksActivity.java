@@ -163,6 +163,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
                     booksRecyclerView.setAdapter(bookAdapter);
                     bookAdapter.updateBooks(books);  // Notify adapter of new data
                     bookAdapter.defaultSortBooks();
+                    books = bookAdapter.sortBooks(books);
                 }
             });
         } else {
@@ -345,6 +346,7 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
         }
 
         bookAdapter.updateBooks(filtered);
+        books = filtered;
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         booksRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
     }
