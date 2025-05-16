@@ -358,6 +358,11 @@ public class GamePlatformActivity extends AppCompatActivity implements ItemRemov
             gameAdapter.defaultSortGames();
         }
 
+        String descendingOrder = filters.get(FilterBarManager.FILTER_DESCENDING_ORDER);
+        if (FilterBarManager.isSwitchOn(descendingOrder)) {
+            Collections.reverse(filtered);
+        }
+
         gameAdapter.updateGames(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         gamesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);

@@ -307,6 +307,11 @@ public class MusicActivity extends AppCompatActivity implements ItemRemovalListe
             musicAdapter.defaultSortMusics();
         }
 
+        String descendingOrder = filters.get(FilterBarManager.FILTER_DESCENDING_ORDER);
+        if (FilterBarManager.isSwitchOn(descendingOrder)) {
+            Collections.reverse(filtered);
+        }
+
         musicAdapter.updateMusics(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         musicRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);

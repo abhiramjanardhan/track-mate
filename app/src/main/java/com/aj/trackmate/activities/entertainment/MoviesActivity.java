@@ -342,6 +342,11 @@ public class MoviesActivity extends AppCompatActivity implements ItemRemovalList
             movieAdapter.defaultSortMovie();
         }
 
+        String descendingOrder = filters.get(FilterBarManager.FILTER_DESCENDING_ORDER);
+        if (FilterBarManager.isSwitchOn(descendingOrder)) {
+            Collections.reverse(filtered);
+        }
+
         movieAdapter.updateMovies(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         moviesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);

@@ -343,6 +343,11 @@ public class TelevisionSeriesActivity extends AppCompatActivity implements ItemR
             televisionSeriesAdapter.defaultSortTelevisionSeries();
         }
 
+        String descendingOrder = filters.get(FilterBarManager.FILTER_DESCENDING_ORDER);
+        if (FilterBarManager.isSwitchOn(descendingOrder)) {
+            Collections.reverse(filtered);
+        }
+
         televisionSeriesAdapter.updateTelevisionSeries(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         televisionSeriesRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);

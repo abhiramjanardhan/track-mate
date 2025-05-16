@@ -6,12 +6,10 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
+import android.widget.Switch;
 import com.aj.trackmate.R;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class FilterBarManager {
     private final Context context;
@@ -30,6 +28,10 @@ public class FilterBarManager {
     public static final String FILTER_WATCHLIST = "watchlist";
     public static final String FILTER_YEAR = "year";
     public static final String FILTER_SORTING = "sorting";
+    public static final String FILTER_DESCENDING_ORDER = "descendingOrder";
+
+    public static final String FILTER_SWITCH_VALUE_YES = "Yes";
+    public static final String FILTER_SWITCH_VALUE_NO = "No";
 
     public FilterBarManager(Context context, View view, String platform) {
         this.context = context;
@@ -52,7 +54,8 @@ public class FilterBarManager {
                 FILTER_YEAR,
                 FILTER_LANGUAGE,
                 FILTER_GENRE,
-                FILTER_SORTING
+                FILTER_SORTING,
+                FILTER_DESCENDING_ORDER
         );
     }
 
@@ -68,6 +71,7 @@ public class FilterBarManager {
         toggleVisibility(R.id.backlogFilterRow, def.showBacklog);
         toggleVisibility(R.id.yearFilterRow, def.showYear);
         toggleVisibility(R.id.sortingSpinner, def.showSorting);
+        toggleVisibility(R.id.descendingOrderSwitch, def.showSorting);
 
         for (Map.Entry<Integer, List<String>> entry : def.spinnerOptions.entrySet()) {
             Spinner spinner = rootView.findViewById(entry.getKey());
@@ -105,6 +109,11 @@ public class FilterBarManager {
         if (yearEditText != null && selectedFilters.get(FILTER_YEAR) != null) {
             yearEditText.setText(selectedFilters.get(FILTER_YEAR));
         }
+
+        Switch descendingOrderSwitch = rootView.findViewById(R.id.descendingOrderSwitch);
+        if (descendingOrderSwitch != null && selectedFilters.get(FILTER_DESCENDING_ORDER) != null) {
+            descendingOrderSwitch.setChecked(Objects.requireNonNull(selectedFilters.get(FILTER_DESCENDING_ORDER)).equalsIgnoreCase(FILTER_SWITCH_VALUE_YES));
+        }
     }
 
     private void toggleVisibility(int viewId, boolean show) {
@@ -130,6 +139,11 @@ public class FilterBarManager {
         if (yearEditText != null) {
             yearEditText.setText("");
         }
+
+        Switch descendingOrderSwitch = rootView.findViewById(R.id.descendingOrderSwitch);
+        if (descendingOrderSwitch != null) {
+            descendingOrderSwitch.setChecked(false);
+        }
     }
 
     private void clearSpinner(int spinnerId) {
@@ -152,6 +166,7 @@ public class FilterBarManager {
         filters.put(FILTER_FAVORITE, getSpinnerValue(R.id.favoriteFilterSpinner));
         filters.put(FILTER_BACKLOG, getSpinnerValue(R.id.backlogFilterSpinner));
         filters.put(FILTER_SORTING, getSpinnerValue(R.id.sortingSpinner));
+        filters.put(FILTER_DESCENDING_ORDER, getSwitchValue(R.id.descendingOrderSwitch));
 
         EditText yearEditText = rootView.findViewById(R.id.yearFilterText);
         filters.put(FILTER_YEAR, yearEditText != null ? yearEditText.getText().toString().trim() : "");
@@ -164,6 +179,11 @@ public class FilterBarManager {
         return spinner != null && spinner.getSelectedItem() != null ? spinner.getSelectedItem().toString() : "";
     }
 
+    private String getSwitchValue(int switchId) {
+        Switch fieldSwitch = rootView.findViewById(switchId);
+        return fieldSwitch != null ? (fieldSwitch.isChecked() ? FILTER_SWITCH_VALUE_YES : FILTER_SWITCH_VALUE_NO) : FILTER_SWITCH_VALUE_NO;
+    }
+
     public Intent createFilterResultIntent() {
         Intent result = new Intent();
         Map<String, String> filters = getSelectedFilters();
@@ -171,6 +191,10 @@ public class FilterBarManager {
             result.putExtra(entry.getKey(), entry.getValue());
         }
         return result;
+    }
+
+    public static boolean isSwitchOn(String filterValue) {
+        return filterValue != null && filterValue.equalsIgnoreCase(FILTER_SWITCH_VALUE_YES);
     }
 
     public static Map<String, String> extractFiltersFromIntent(Intent intent) {
@@ -186,6 +210,7 @@ public class FilterBarManager {
         filters.put(FILTER_BACKLOG, intent.getStringExtra(FILTER_BACKLOG));
         filters.put(FILTER_YEAR, intent.getStringExtra(FILTER_YEAR));
         filters.put(FILTER_SORTING, intent.getStringExtra(FILTER_SORTING));
+        filters.put(FILTER_DESCENDING_ORDER, intent.getStringExtra(FILTER_DESCENDING_ORDER));
         return filters;
     }
 }

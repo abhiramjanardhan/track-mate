@@ -339,6 +339,11 @@ public class BooksActivity extends AppCompatActivity implements ItemRemovalListe
             bookAdapter.defaultSortBooks();
         }
 
+        String descendingOrder = filters.get(FilterBarManager.FILTER_DESCENDING_ORDER);
+        if (FilterBarManager.isSwitchOn(descendingOrder)) {
+            Collections.reverse(filtered);
+        }
+
         bookAdapter.updateBooks(filtered);
         emptyStateMessage.setVisibility(filtered.isEmpty() ? View.VISIBLE : View.GONE);
         booksRecyclerView.setVisibility(filtered.isEmpty() ? View.GONE : View.VISIBLE);
